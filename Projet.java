@@ -122,9 +122,8 @@ public class Projet
 			tache.setDateMin(null);
 			tache.setDateMax(null);
 		}
-		
-		calculerDatesAuPlusTot();
-		calculerDatesAuPlusTard();
+		this.calculerDatesAuPlusTot();
+		this.calculerDatesAuPlusTard();
 	}
 
 	/**
