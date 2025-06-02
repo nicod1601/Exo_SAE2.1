@@ -24,9 +24,6 @@ public class CheminCritique
 
     public CheminCritique()
     {
-       /*
-        
-       */ 
 
     }
 }
