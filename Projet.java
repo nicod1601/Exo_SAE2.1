@@ -117,22 +117,14 @@ public class Projet
 	 */
 	private void majDate()
 	{
-		initialiserDates();
-		calculerDatesAuPlusTot();
-		calculerDatesAuPlusTard();
-	}
-
-	/**
-	 * Initialise toutes les dates des tâches à null.
-	 * Première étape avant le calcul des dates de planification.
-	 */
-	private void initialiserDates()
-	{
 		for (Tache tache : lstTache)
 		{
 			tache.setDateMin(null);
 			tache.setDateMax(null);
 		}
+		
+		calculerDatesAuPlusTot();
+		calculerDatesAuPlusTard();
 	}
 
 	/**
