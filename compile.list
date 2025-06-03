@@ -1,0 +1,10 @@
+./MPM/metier/Projet.java
+./MPM/metier/Tache.java
+./MPM/metier/DateFr.java
+./MPM/metier/CheminCritique.java
+
+./MPM/ihm/FrameMPM.java
+./MPM/ihm/PanelMPM.java
+./MPM/ihm/MaBarre.java
+
+./MPM/Controleur.java

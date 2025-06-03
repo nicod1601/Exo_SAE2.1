@@ -1,3 +1,5 @@
+package MPM.metier;
+
 /**
  * Représente une tâche dans un projet, avec une durée, une date de début au plus tôt, 
  * une date de fin au plus tard, et des dépendances de tâches (précédentes et suivantes).

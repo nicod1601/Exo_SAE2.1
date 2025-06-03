@@ -1,3 +1,5 @@
+package MPM.metier;
+
 /**
  * Cette classe créer les chemins critiques
  * 
