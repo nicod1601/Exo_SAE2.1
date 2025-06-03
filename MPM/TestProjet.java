@@ -1,3 +1,6 @@
+package MPM;
+import MPM.metier.*;
+
 public class TestProjet
 {
     public static void main(String[] arg)

@@ -27,6 +27,10 @@ public class FrameMPM extends JFrame
 
         this.add(this.panelMPM);
 
+        /*--------------------------------------*/
+        /*     Activation des composants        */
+        /*--------------------------------------*/
+
 
         this.setVisible(true);
     }

@@ -20,9 +20,9 @@ public class Tache
 {
 
 	private String nom;
-	private int duree;
-	private DateFr dateMin;
-	private DateFr dateMax;
+	private int    duree;
+	private int    dateMin;
+	private int    dateMax;
 
 	private ArrayList<Tache> lstPrc;
 	private ArrayList<Tache> lstSvt;
@@ -39,8 +39,8 @@ public class Tache
 	{
 		this.nom     = nom;
 		this.duree   = duree;
-		this.dateMin = new DateFr();
-		this.dateMax = new DateFr();
+		this.dateMin = -1;
+		this.dateMax = -1;
 		this.lstPrc  = new ArrayList<Tache>();
 		this.lstSvt  = new ArrayList<Tache>();
 	}
@@ -55,8 +55,8 @@ public class Tache
 	{
 		this.nom     = t.nom;
 		this.duree   = t.duree;
-		this.dateMin = new DateFr(t.dateMin);
-		this.dateMax = new DateFr(t.dateMax);
+		this.dateMin = t.dateMin;
+		this.dateMax = t.dateMax;
 		this.lstPrc  = new ArrayList<>(t.lstPrc);
 		this.lstSvt  = new ArrayList<>(t.lstSvt);
 	}
@@ -79,10 +79,10 @@ public class Tache
 	}
 
 	/** @return la date au plus tôt pour commencer la tâche */
-	public DateFr getDateMin() { return this.dateMin; }
+	public int getDateMin() { return this.dateMin; }
 
 	/** @return la date au plus tard pour finir la tâche */
-	public DateFr getDateMax() { return this.dateMax; }
+	public int getDateMax() { return this.dateMax; }
 
 	/** @return la liste des tâches précédentes */
 	public ArrayList<Tache> getLstPrc() { return this.lstPrc; }
@@ -90,19 +90,46 @@ public class Tache
 	/** @return la liste des tâches suivantes */
 	public ArrayList<Tache> getLstSvt() { return this.lstSvt; }
 
+	/** @return le nombre de tâche précédentes */
+
+	public int getNbPrc()  {return this.lstPrc.size()  ;}
+
+	/** @return le nombre de tâche suivantes */
+	public int getNbSvt()  {return this.lstSvt.size()  ;}
+
+	/** @return la tâche suivante à l'indice sélectionné */
+
+	public Tache getSvt(int index){return this.lstSvt.get(index); }
+
+	/** @return la tâche précédente à l'indice sélectionné */
+
+	public Tache getPrc(int index){return this.lstPrc.get(index); }
+
 	/**
 	 * Définit la date au plus tôt pour cette tâche.
 	 * 
 	 * @param dateMin la nouvelle date minimale
 	 */
-	public void setDateMin(DateFr dateMin) { this.dateMin = dateMin; }
+	public void setDateMin(int val)
+	{ 
+		if(this.dateMin == -1 || val > dateMin)
+		{
+			this.dateMin = val;
+		}
+	}
 
 	/**
 	 * Définit la date au plus tard pour cette tâche.
 	 * 
 	 * @param dateMax la nouvelle date maximale
 	 */
-	public void setDateMax(DateFr dateMax) { this.dateMax = dateMax; }
+	public void setDateMax(int val) 
+	{ 
+		if(this.dateMax == -1 || val > dateMax)
+		{
+			this.dateMax = val;
+		}
+	}
 
 	/**
 	 * Calcule et retourne la marge de la tâche (différence entre dateMax et dateMin).
@@ -111,7 +138,7 @@ public class Tache
 	 */
 	public int getMarge()
 	{
-		return dateMax.differenceEnJours(dateMin);
+		return this.dateMax-this.dateMin;
 	}
 
 	/**
@@ -124,16 +151,6 @@ public class Tache
 	{
 		this.lstPrc.add(t);
 		t.lstSvt.add(this);
-	}
-
-	/**
-	 * Ajoute une tâche comme suivante sans modifier l'autre tâche.
-	 * 
-	 * @param t la tâche suivante à ajouter
-	 */
-	public void addSuivant(Tache t)
-	{
-		this.lstSvt.add(t);
 	}
 
 	/**
@@ -150,44 +167,62 @@ public class Tache
 		sRet += this.duree + " jour" + (this.duree > 1 ? "s" : "");
 
 		sRet += "\n" + String.format("%20s", "  date au plus tôt  : ") +
-				String.format("%02d", this.dateMin.get(DateFr.DAY_OF_MONTH)) + "/" +
-				String.format("%02d", this.dateMin.get(DateFr.MONTH));
+				String.format("%02d", this.dateMin );
 
 		sRet += "\n" + String.format("%20s", "  date au plus tard : ") +
-				String.format("%02d", this.dateMax.get(DateFr.DAY_OF_MONTH)) + "/" +
-				String.format("%02d", this.dateMax.get(DateFr.MONTH));
+				String.format("%02d", this.dateMax);
+		sRet += "\n  marge" + String.format("%16s", " : " + this.getMarge());
 
-		sRet += "\n  marge" + String.format("%17s", " : " + this.getMarge());
+		if (this.lstPrc.isEmpty() || this.lstPrc.get(0).nom.equals("Début") )
+		{
+			sRet += "\n" + String.format("%25s", "pas de tâche précédente");
+		} 
 
-		if (this.lstPrc.size() != 0)
+		else
 		{
 			sRet += "\n" + String.format("%34s", "liste des tâches précédentes : \n") + "     ";
 			for (int cpt = 0; cpt < this.lstPrc.size(); cpt++)
+
 				sRet += this.lstPrc.get(cpt).getNom() + (cpt < this.lstPrc.size() - 1 ? ", " : "");
-		} 
-		else
+		}
+			
+		if ( this.lstSvt.isEmpty() || this.lstSvt.get(0).nom.equals("Fin") ) 
 		{
-			sRet += "\n" + String.format("%25s", "pas de tâche précédente");
+			sRet += "\n" + String.format("%23s", "pas de tâche suivante");	
 		}
 
-		if (this.lstSvt.size() != 0) 
+		else
 		{
 			sRet += "\n" + String.format("%32s", "liste des tâches suivantes : \n") + "     ";
 			for (int cpt = 0; cpt < this.lstSvt.size(); cpt++)
+
 				sRet += this.lstSvt.get(cpt).getNom() + (cpt < this.lstSvt.size() - 1 ? ", " : "");
 		}
-		else
-		{
-			sRet += "\n" + String.format("%23s", "pas de tâche suivante");
-		}
+		
+			
+		
 
 		return sRet;
 	}
 
+
+	//
 	/*
 	public static void main(String[] args) {
 		Tache t1 = new Tache("Test", 12);
 		System.out.println(t1);
 	}
+	*/
+
+	/* À AJOUTER/MODIFIER
+
+
+		dateMin/Date Max --> int au lieu de DateFr
+
+		void setDateTot/Tard
+		{
+			if (this.dateMin)
+		}
+	
 	*/
 }

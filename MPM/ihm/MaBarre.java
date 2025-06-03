@@ -57,7 +57,15 @@ public class MaBarre extends JMenuBar implements ActionListener
 
 	public void actionPerformed ( ActionEvent e )
 	{
-
+		if ( e.getSource() == this.menuiOuvrir )
+		{
+			System.out.println("Ouvrir");
+		}
+		
+		if ( e.getSource() == this.menuiQuitter )
+		{
+			System.out.println("Quitter");
+		}
 		
 	}
 }

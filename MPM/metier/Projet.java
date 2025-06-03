@@ -9,9 +9,9 @@ package MPM.metier;
  * @author Groupe 09 - DELPECH Nicolas, FOYER Emilien, GUTU Nichita, KULPA Clément
  */
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File;
 
 public class Projet
 {
@@ -34,8 +34,31 @@ public class Projet
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
 
+		Tache debut = new Tache("Debut", 0);
+		debut.setDateMin(0);
+		this.lstTache.add(debut);
+
 		this.lireFichier();
+
+		Tache fin = new Tache("Fin", 0);
+		for(Tache t : this.lstTache) {
+			if(t.getNbSvt() == 0 && !t.getNom().equals("Debut")) {
+				fin.addPrecedent(t);
+			}
+		}
+		this.lstTache.add(fin);
+
+		for(Tache t : this.lstTache) {
+			if(t.getNbPrc() == 0 && !t.getNom().equals("Debut") && !t.getNom().equals("Fin")) {
+				t.addPrecedent(debut);
+			}
+		}
+
+
+
+
 		this.majDate();
+		
 	}
 
 	/**
@@ -43,21 +66,21 @@ public class Projet
 	 * 
 	 * @return true si le projet ne contient aucune tâche, false sinon
 	 */
-	public boolean estVide(){return this.lstTache.size() == 0;}
+	public boolean estVide(){return this.lstTache.isEmpty() ;}
 	
 	/**
 	 * Retourne le nombre de tâches dans le projet.
 	 * 
 	 * @return le nombre de tâches
 	 */
-	public int getTaille(){return this.lstTache.size();}
+	public int getTaille() {return this.lstTache.size();}
 
 	/**
 	 * Détermine la durée totale du projet.
 	 * 
 	 * @return la durée du projet en jours
 	 */
-	public int determinerDuree(){return this.dureeProjet;}
+	public int determinerDuree() {return this.dureeProjet;}
 
 	/**
 	 * Calcule et retourne le chemin critique du projet.
@@ -65,10 +88,7 @@ public class Projet
 	 * @return une chaîne représentant le chemin critique (non implémenté)
 	 * @todo Implémenter le calcul du chemin critique
 	 */
-	public String getCheminCritique()
-	{
-		return " ";
-	}
+	public String getCheminCritique() { return " "; }
 
 	/**
 	 * Lit le fichier de données du projet (mpm.txt) et construit la liste des tâches.
@@ -76,11 +96,11 @@ public class Projet
 	 * 
 	 * @throws Exception si le fichier n'est pas trouvé ou mal formaté
 	 */
-	private void lireFichier()
+	public void lireFichier() 
 	{
 		try
 		{
-			Scanner sc = new Scanner ( new File ( "mpm.txt" ), "UTF-8" );
+			Scanner sc = new Scanner ( new File ( "./MPM/donnee/mpm.txt" ), "UTF-8" );
 
 			while ( sc.hasNextLine() )
 			{
@@ -119,13 +139,8 @@ public class Projet
 	 */
 	private void majDate()
 	{
-		for (Tache tache : lstTache)
-		{
-			tache.setDateMin(null);
-			tache.setDateMax(null);
-		}
-		this.calculerDatesAuPlusTot();
-		this.calculerDatesAuPlusTard();
+		this.setDateMin();
+		this.setDateMax();
 	}
 
 	/**
@@ -133,31 +148,16 @@ public class Projet
 	 * Les tâches sans précédent commencent le 02/06/2025.
 	 * Les autres tâches commencent après la fin de leurs prédécesseurs.
 	 */
-	private void calculerDatesAuPlusTot()
+	private void setDateMin()
 	{
-		for (Tache tache : lstTache)
+		Tache tSvt;
+
+		for(Tache t : this.lstTache)
 		{
-			if(tache.getLstPrc().size() == 0)
+			for(int cpt = 0; cpt < t.getNbSvt(); cpt++)
 			{
-				tache.setDateMin(new DateFr(2, 6, 2025));
-			}
-		}
-		
-		boolean changed = true;
-		while(changed)
-		{
-			changed = false;
-			for (Tache tache : lstTache)
-			{
-				if(tache.getLstPrc().size() > 0 && tache.getDateMin() == null)
-				{
-					DateFr nouvelleDateMin = calculerDateMinimale(tache);
-					if(nouvelleDateMin != null)
-					{
-						tache.setDateMin(nouvelleDateMin);
-						changed = true;
-					}
-				}
+				tSvt = t.getSvt(cpt); 
+				tSvt.setDateMin(t.getDateMin() + t.getDuree());
 			}
 		}
 	}
@@ -169,167 +169,32 @@ public class Projet
 	 * @param tache la tâche pour laquelle calculer la date minimale
 	 * @return la date minimale de début, ou null si les précédents ne sont pas encore calculés
 	 */
-	private DateFr calculerDateMinimale(Tache tache)
+	private void setDateMax()
 	{
-		DateFr datePlusTot = new DateFr(2, 6, 2025);
-		
-		for (Tache precedent : tache.getLstPrc())
-		{
-			if(precedent.getDateMin() == null)
-			{
-				return null;
-			}
-			
-			DateFr finPrecedent = new DateFr(precedent.getDateMin());
-			finPrecedent.addJours(precedent.getDuree());
-			
-			if(finPrecedent.compareTo(datePlusTot) > 0)
-			{
-				datePlusTot = finPrecedent;
-			}
-		}
-		
-		return datePlusTot;
-	}
+		Tache t, tPrc;
 
-	/**
-	 * Calcule les dates au plus tard pour toutes les tâches du projet.
-	 * Commence par déterminer la fin du projet, puis propage vers l'arrière.
-	 */
-	private void calculerDatesAuPlusTard()
-	{
-		DateFr finProjet = determinerFinProjet();
-		this.dureeProjet = calculerDureeProjet(finProjet);
-		
-		initialiserTachesFinales(finProjet);
-		propagerDatesAuPlusTard();
-	}
+		t = this.lstTache.get(this.lstTache.size()-1);
+		t.setDateMax(t.getDateMin());
 
-	/**
-	 * Détermine la date de fin du projet.
-	 * Correspond à la date de fin la plus tardive parmi toutes les tâches.
-	 * 
-	 * @return la date de fin du projet
-	 */
-	private DateFr determinerFinProjet()
-	{
-		DateFr finProjet = new DateFr(2, 6, 2025);
-		
-		for (Tache tache : lstTache)
+		for(int cptP = this.lstTache.size()-1; cptP > 0; cptP--)
 		{
-			if(tache.getDateMin() != null)
+			t = this.lstTache.get(cptP);
+
+			for(int cpt = 0; cpt < t.getNbPrc(); cpt++)
 			{
-				DateFr finTache = new DateFr(tache.getDateMin());
-				finTache.addJours(tache.getDuree());
+				tPrc = t.getPrc(cpt);
+
+				int nouvelleDateMax = t.getDateMax() - tPrc.getDuree();
 				
-				if(finTache.compareTo(finProjet) > 0)
+				if(tPrc.getDateMax() == -1 || nouvelleDateMax < tPrc.getDateMax())
 				{
-					finProjet = finTache;
-				}
-			}
-		}
-		
-		return finProjet;
-	}
-
-	/**
-	 * Calcule la durée totale du projet en jours.
-	 * La durée correspond au nombre de jours entre le début du projet et sa fin.
-	 * 
-	 * @param finProjet la date de fin du projet
-	 * @return la durée du projet en jours depuis le 02/06/2025
-	 */
-	private int calculerDureeProjet(DateFr finProjet)
-	{
-		DateFr dateDebut = new DateFr(2, 6, 2025);
-		return finProjet.differenceEnJours(dateDebut);
-	}
-
-	/**
-	 * Initialise les dates au plus tard pour les tâches finales.
-	 * Les tâches finales (sans successeur) doivent finir à la date de fin du projet.
-	 * 
-	 * @param finProjet la date de fin du projet
-	 */
-	private void initialiserTachesFinales(DateFr finProjet)
-	{
-		for (Tache tache : lstTache)
-		{
-			if(tache.getLstSvt().size() == 0)
-			{
-				DateFr dateMax = new DateFr(finProjet);
-				dateMax.addJours(-tache.getDuree());
-				tache.setDateMax(dateMax);
-			}
-		}
-	}
-
-	/**
-	 * Propage les dates au plus tard vers l'arrière dans le réseau de tâches.
-	 * Chaque tâche doit finir avant que ses successeurs ne commencent.
-	 */
-	private void propagerDatesAuPlusTard()
-	{
-		boolean changed = true;
-		while(changed)
-		{
-			changed = false;
-			for (Tache tache : lstTache)
-			{
-				if(tache.getLstSvt().size() > 0 && tache.getDateMax() == null)
-				{
-					DateFr nouvelleDateMax = calculerDateMaximale(tache);
-					if(nouvelleDateMax != null)
-					{
-						tache.setDateMax(nouvelleDateMax);
-						changed = true;
-					}
+					tPrc.setDateMax(nouvelleDateMax);
 				}
 			}
 		}
 	}
 
-	/**
-	 * Calcule la date maximale de début pour une tâche donnée.
-	 * Cette date correspond au début le plus précoce de ses tâches suivantes,
-	 * moins la durée de la tâche courante.
-	 * 
-	 * @param tache la tâche pour laquelle calculer la date maximale
-	 * @return la date maximale de début, ou null si les successeurs ne sont pas encore calculés
-	 */
-	private DateFr calculerDateMaximale(Tache tache)
-	{
-		DateFr datePlusTard = null;
-		
-		for (Tache suivant : tache.getLstSvt())
-		{
-			if(suivant.getDateMax() == null)
-			{
-				return null; 
-			}
-			
-			DateFr debutSuivant = new DateFr(suivant.getDateMax());
-			
-			if(datePlusTard == null || debutSuivant.compareTo(datePlusTard) < 0)
-			{
-				datePlusTard = debutSuivant;
-			}
-		}
-		
-		if(datePlusTard != null)
-		{
-			datePlusTard.addJours(-tache.getDuree());
-		}
-		
-		return datePlusTard;
-	}
 
-	/**
-	 * Retourne une représentation textuelle du projet.
-	 * Affiche toutes les tâches avec leurs informations de planification.
-	 * 
-	 * @return une chaîne contenant la description de toutes les tâches
-	 */
 	public String toString()
 	{
 		String sRet ="";
