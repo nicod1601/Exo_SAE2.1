@@ -1,12 +1,14 @@
 package MPM.ihm;
 
 import javax.swing.*;
+import MPM.Controleur;
 
 public class FrameMPM extends JFrame
 {
     private PanelMPM panelMPM;
+    private Controleur ctrl;
     
-    public FrameMPM()
+    public FrameMPM(Controleur ctrl)
     {
         this.setTitle("MPM");
         this.setSize(800, 600);
@@ -18,7 +20,9 @@ public class FrameMPM extends JFrame
         /*        Création des composants       */
         /*--------------------------------------*/
 
-        this.panelMPM = new PanelMPM(this);
+        this.ctrl = ctrl;
+
+        this.panelMPM = new PanelMPM(this, this.ctrl);
 
 
         /*--------------------------------------*/
@@ -34,4 +38,9 @@ public class FrameMPM extends JFrame
 
         this.setVisible(true);
     }
+
+    public void majList()
+    {
+        this.panelMPM.majList();
+    }   
 }

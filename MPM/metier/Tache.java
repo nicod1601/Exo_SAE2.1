@@ -1,4 +1,5 @@
 package MPM.metier;
+import java.util.ArrayList;
 
 /**
  * Représente une tâche dans un projet, avec une durée, une date de début au plus tôt, 
@@ -14,7 +15,6 @@ package MPM.metier;
  * Date de création : 02/06/2025 16h42
  */
 
-import java.util.ArrayList;
 
 public class Tache
 {
@@ -24,13 +24,16 @@ public class Tache
 	private int    dateMin;
 	private int    dateMax;
 
+	private int niveau = 0;
+
 	private ArrayList<Tache> lstPrc;
 	private ArrayList<Tache> lstSvt;
 
 	/**
 	 * Crée une nouvelle tâche avec un nom et une durée.
 	 * Initialise les dates min et max à des valeurs par défaut,
-	 * et les listes de précédents et suivants comme vides.
+	 * et les listes de précédents et suivants comme vides et le niveau
+	 * qui est initialiser correctement.
 	 * 
 	 * @param nom   le nom de la tâche
 	 * @param duree la durée de la tâche en jours
@@ -118,6 +121,30 @@ public class Tache
 		}
 	}
 
+	public void setNiveau()
+	{
+		//System.out.println("coucou");
+		
+		//System.out.println(! this.lstPrc.isEmpty() );
+		
+		if (! this.lstPrc.isEmpty())
+		{
+			int nivTemp =0 ;
+			for (Tache t : this.lstPrc)
+			{
+				if(nivTemp < t.getNiveau()+1)
+					nivTemp = t.getNiveau()+1;
+			}
+				this.niveau = nivTemp;
+			
+			//System.out.println("il a un precedent");
+			
+		}
+			
+	}
+
+	public int getNiveau() { return this.niveau;}
+
 	/**
 	 * Définit la date au plus tard pour cette tâche.
 	 * 
@@ -125,7 +152,7 @@ public class Tache
 	 */
 	public void setDateMax(int val) 
 	{ 
-		if(this.dateMax == -1 || val > dateMax)
+		if(this.dateMax == -1 || val < dateMax)
 		{
 			this.dateMax = val;
 		}
@@ -155,7 +182,7 @@ public class Tache
 
 	/**
 	 * Retourne une représentation textuelle détaillée de la tâche :
-	 * nom, durée, dates au plus tôt et au plus tard, marge, dépendances.
+	 * nom, durée, dates au plus tôt et au plus tard, marge, dépendances, niveau.
 	 * 
 	 * @return la description de la tâche
 	 */
@@ -200,7 +227,7 @@ public class Tache
 		}
 		
 			
-		
+		sRet += "\nNiveau : " + niveau + "\n\n";
 
 		return sRet;
 	}

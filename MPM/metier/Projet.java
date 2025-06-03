@@ -13,8 +13,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class Projet
 {
+
+
 	/** Liste des tâches composant le projet */
 	private ArrayList<Tache> lstTache;
 	
@@ -24,12 +27,22 @@ public class Projet
 	/** Durée totale du projet en jours */
 	private int dureeProjet; 
 
+
 	/**
 	 * Constructeur de la classe Projet.
 	 * Initialise un nouveau projet en lisant les données depuis un fichier
 	 * et calcule automatiquement les dates de planification.
 	 */
 	public Projet()
+	{
+
+		this.lstTache    = new ArrayList<Tache>();
+		this.dureeProjet = 0;
+
+	}
+
+
+	/*public Projet()
 	{
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
@@ -51,15 +64,15 @@ public class Projet
 		for(Tache t : this.lstTache) {
 			if(t.getNbPrc() == 0 && !t.getNom().equals("Début") && !t.getNom().equals("Fin")) {
 				t.addPrecedent(debut);
+				
 			}
+			t.setNiveau();
 		}
-
-
-
 
 		this.majDate();
 		
-	}
+		
+	}*/
 
 	/**
 	 * Vérifie si le projet est vide (aucune tâche).
@@ -74,6 +87,26 @@ public class Projet
 	 * @return le nombre de tâches
 	 */
 	public int getTaille() {return this.lstTache.size();}
+
+	public int[] getNbParNiveau(int niv,String nom)
+	{
+		int[] nb = new int[2];
+		for (Tache t : this.lstTache)
+		{
+			if(t.getNiveau() == niv)
+				nb[0]++;
+
+			if(nom.equals(t.getNom()))
+				nb[1] = nb[0];
+			
+			
+		}
+
+		return nb;
+	}
+
+
+	public ArrayList<Tache> getLstTache() {return this.lstTache;}
 
 	/**
 	 * Détermine la durée totale du projet.
@@ -96,7 +129,7 @@ public class Projet
 	 * 
 	 * @throws Exception si le fichier n'est pas trouvé ou mal formaté
 	 */
-	public void lireFichier() 
+	/*public void lireFichier() 
 	{
 		try
 		{
@@ -136,6 +169,76 @@ public class Projet
 			}
 		}
 		catch ( Exception e ){ e.printStackTrace(); }
+	}*/
+
+
+
+	public void lireFichier(String chemin) 
+	{
+		Tache debut = new Tache("Début", 0);
+		debut.setDateMin(0);
+		this.lstTache.add(debut);
+
+		try
+		{
+			Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
+
+			while ( sc.hasNextLine() )
+			{
+				String ligne    = sc.nextLine();
+				String[] partie = ligne.split("\\|");
+
+				String nom = partie[0];
+				int duree  = Integer.parseInt(partie[1]);
+
+				Tache tmp = new Tache(nom, duree);
+
+				if(partie.length > 2 && ! partie[2].isEmpty() )
+				{
+					String[] prc = partie[2].split(",");
+
+					for(int cpt =0; cpt < prc.length; cpt++)
+					{
+						for (Tache t : this.lstTache)
+						{
+							if(prc[cpt].equals(t.getNom()))
+								tmp.addPrecedent(t);
+						}
+					}
+				}
+				else
+				{
+					if(!tmp.getNom().equals("Début"))
+						tmp.addPrecedent(this.lstTache.get(0));
+				}
+
+				this.lstTache.add(tmp);
+				this.nbTache++;
+			}
+
+			Tache fin = new Tache("Fin", 0);
+			for(Tache t : this.lstTache)
+			{
+				if(t.getNbSvt() == 0 && !t.getNom().equals("Début")) 
+				{
+					fin.addPrecedent(t);
+				}
+			}
+			this.lstTache.add(fin);
+
+			for(Tache t : this.lstTache)
+			{
+				if(t.getNbPrc() == 0 && !t.getNom().equals("Début") && !t.getNom().equals("Fin"))
+				{
+					t.addPrecedent(debut);
+				}
+				t.setNiveau();
+			}
+
+			this.majDate();
+		}
+		
+		catch ( Exception e ){ e.printStackTrace(); }
 	}
 
 	/**
@@ -147,6 +250,9 @@ public class Projet
 		this.setDateMin();
 		this.setDateMax();
 	}
+
+
+
 
 	/**
 	 * Calcule les dates au plus tôt pour toutes les tâches du projet.
@@ -176,6 +282,7 @@ public class Projet
 	 */
 	private void setDateMax()
 	{
+
 		Tache t, tPrc;
 
 		t = this.lstTache.get(this.lstTache.size()-1);
@@ -191,14 +298,25 @@ public class Projet
 
 				int nouvelleDateMax = t.getDateMax() - tPrc.getDuree();
 				
-				if(tPrc.getDateMax() == -1 || nouvelleDateMax < tPrc.getDateMax())
+				if(tPrc.getDateMax() == -1 )
 				{
 					tPrc.setDateMax(nouvelleDateMax);
 				}
+
+				if(nouvelleDateMax < tPrc.getDateMax())
+				{
+					System.out.println("12 > 0 PUTAIN DE MERDE");
+					tPrc.setDateMax(nouvelleDateMax);
+				}
+				
+				System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
 			}
 		}
 	}
+	
 
+
+	
 
 	public String toString()
 	{
