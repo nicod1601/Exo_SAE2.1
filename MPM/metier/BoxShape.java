@@ -1,7 +1,7 @@
 package MPM.metier;
+import MPM.Controleur;
 import java.awt.*;
 import javax.swing.*;
-import MPM.Controleur;
 
 /**
  * Classe métier représentant une forme de boîte avec une case supérieure
@@ -17,6 +17,9 @@ public class BoxShape
     private String txtNom;
     private String txtDateMin;
     private String txtDateMax;
+
+    private int x;
+    private int y;
 
     private Controleur ctrl;
 
@@ -72,6 +75,9 @@ public class BoxShape
     public void setNom(String txtNom)         { this.txtNom = txtNom;         }
     public void setDateMin(String txtDateMin) { this.txtDateMin = txtDateMin; }
     public void setDateMax(String txtDateMax) { this.txtDateMax = txtDateMax; }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
     
     /**
      * Méthode pour dessiner la forme sur un Graphics2D
@@ -79,13 +85,16 @@ public class BoxShape
      * @param x position x de départ
      * @param y position y de départ
      */
-    public void dessiner(Graphics2D g2d, int x, int y) 
+    public void dessiner(Graphics2D g2d) 
     {
 
         int[] nbParNiveau  = this.ctrl.getNbParNiveau(this.niveau,this.txtNom);
 
         int xb = this.largeur + ( (2*this.largeur)*this.niveau );
         int yb = (this.hauteur) + ((int)(1.5*this.hauteur)*nbParNiveau[1]) ;
+
+        this.x = xb;
+        this.y = yb;
 
 
 
@@ -166,7 +175,7 @@ public class BoxShape
             protected void paintComponent(Graphics g) 
             {
                 super.paintComponent(g);
-                dessiner((Graphics2D) g, 10, 10);
+                dessiner((Graphics2D) g);
             }
             
             public Dimension getPreferredSize() {return new Dimension(largeur + 20, hauteur + 20); }

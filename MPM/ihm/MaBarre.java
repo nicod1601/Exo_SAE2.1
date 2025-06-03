@@ -1,12 +1,9 @@
 package MPM.ihm;
 
+import MPM.Controleur;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
-import java.util.ArrayList;
-
-import MPM.Controleur;
-import MPM.metier.*;
 
 
 
@@ -64,6 +61,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 	{
 		if(e.getSource() == this.menuiOuvrir)
 		{
+			this.frame.reinitialiser();
 			JFileChooser fileChooser = new JFileChooser();
 			int retour = fileChooser.showOpenDialog(this.frame); 
 			if(retour == JFileChooser.APPROVE_OPTION)

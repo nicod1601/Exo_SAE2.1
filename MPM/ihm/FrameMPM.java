@@ -1,7 +1,7 @@
 package MPM.ihm;
 
-import javax.swing.*;
 import MPM.Controleur;
+import javax.swing.*;
 
 public class FrameMPM extends JFrame
 {
@@ -11,7 +11,7 @@ public class FrameMPM extends JFrame
     public FrameMPM(Controleur ctrl)
     {
         this.setTitle("MPM");
-        this.setSize(800, 600);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -42,5 +42,10 @@ public class FrameMPM extends JFrame
     public void majList()
     {
         this.panelMPM.majList();
-    }   
+    }
+
+    public void reinitialiser()
+    {
+        this.panelMPM.reinitialiser();
+    }
 }

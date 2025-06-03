@@ -1,6 +1,8 @@
 ./MPM/metier/Projet.java
 ./MPM/metier/Tache.java
 ./MPM/metier/CheminCritique.java
+./MPM/metier/Fleche.java
+./MPM/metier/BoxShape.java
 
 ./MPM/ihm/FrameMPM.java
 ./MPM/ihm/PanelMPM.java
