@@ -34,7 +34,7 @@ public class Projet
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
 
-		Tache debut = new Tache("Debut", 0);
+		Tache debut = new Tache("Début", 0);
 		debut.setDateMin(0);
 		this.lstTache.add(debut);
 
@@ -42,14 +42,14 @@ public class Projet
 
 		Tache fin = new Tache("Fin", 0);
 		for(Tache t : this.lstTache) {
-			if(t.getNbSvt() == 0 && !t.getNom().equals("Debut")) {
+			if(t.getNbSvt() == 0 && !t.getNom().equals("Début")) {
 				fin.addPrecedent(t);
 			}
 		}
 		this.lstTache.add(fin);
 
 		for(Tache t : this.lstTache) {
-			if(t.getNbPrc() == 0 && !t.getNom().equals("Debut") && !t.getNom().equals("Fin")) {
+			if(t.getNbPrc() == 0 && !t.getNom().equals("Début") && !t.getNom().equals("Fin")) {
 				t.addPrecedent(debut);
 			}
 		}
@@ -124,6 +124,11 @@ public class Projet
 								tmp.addPrecedent(t);
 						}
 					}
+				}
+				else
+				{
+					if(!tmp.getNom().equals("Début"))
+						tmp.addPrecedent(this.lstTache.get(0));
 				}
 
 				this.lstTache.add(tmp);
