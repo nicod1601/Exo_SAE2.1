@@ -1,26 +1,35 @@
 package MPM.ihm;
 
-import java.awt.*;
-import javax.swing.*;
 import MPM.Controleur;
 import MPM.metier.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
+import javax.swing.*;
 
-public class PanelMPM extends JPanel 
+public class PanelMPM extends JPanel implements ActionListener
 {
 	private MaBarre maBarre;
-	private FrameMPM frame;
+	private JButton btnDateMin;
+	private JButton btnDateMax;
+	private JButton btnAfficherTout;
+	private JButton btnAfficherRien;
+	
 
 	private ArrayList<Tache> listTache;
 	private ArrayList<BoxShape> lstBoxShape;
+	private int niveauPrc;
+	private int niveauSvt;
 
 	private Controleur ctrl;
+	private FrameMPM frame;
 	private Fleche fleche;
 
 
 	public PanelMPM(FrameMPM frame, Controleur ctrl) 
 	{
 		this.setLayout(new BorderLayout());
+		this.setPreferredSize(new Dimension(5000, 5000));
 		
 		/*--------------------------------------*/
 		/*        Création des composants       */
@@ -29,17 +38,123 @@ public class PanelMPM extends JPanel
 		this.frame   = frame;
 		this.ctrl    = ctrl;
 
+		JPanel panelFonction = new JPanel(new GridLayout(1, 5));
+
 		this.listTache   = new ArrayList<Tache>();
 		this.lstBoxShape = new ArrayList<BoxShape>();
+		this.niveauPrc   = 0;
+		this.niveauSvt   = 0;
 
-		this.maBarre = new MaBarre(this.frame, this.ctrl);
+		this.maBarre         = new MaBarre(this.frame, this.ctrl);
+		this.btnDateMin      = new JButton("-");
+		this.btnDateMax      = new JButton("+");
+		this.btnAfficherTout = new JButton("Afficher tout");
+		this.btnAfficherRien = new JButton("Afficher rien");
+
+		this.desactiverBouton();
 		
 
 
 		/*--------------------------------------*/
 		/*     Positionnement des composants    */
 		/*--------------------------------------*/
-		this.add(this.maBarre, BorderLayout.NORTH);
+		panelFonction.add(this.maBarre);
+		panelFonction.add(this.btnDateMin);
+		panelFonction.add(this.btnDateMax);
+		panelFonction.add(this.btnAfficherTout);
+		panelFonction.add(this.btnAfficherRien);
+
+		this.add(panelFonction, BorderLayout.NORTH);
+
+		/*--------------------------------------*/
+		/*       Activation des composants      */
+		/*--------------------------------------*/
+		this.btnDateMax.addActionListener(this);
+		this.btnDateMin.addActionListener(this);
+		this.btnAfficherTout.addActionListener(this);
+		this.btnAfficherRien.addActionListener(this);
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource() == this.btnDateMin)
+		{
+			for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+			{
+				if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauPrc)
+				{
+					//System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
+					this.lstBoxShape.get(cpt).setDateMin(" " + this.listTache.get(cpt).getDateMin());
+					//System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
+
+				}
+			}
+			this.niveauPrc++;
+
+			this.repaint();
+		}
+
+		if(e.getSource() == this.btnDateMax)
+		{
+			for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+			{
+				if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
+				{
+					System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauSvt);
+					this.lstBoxShape.get(cpt).setDateMax(" " + this.listTache.get(cpt).getDateMax());
+					System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauSvt);
+
+				}
+			}
+			this.niveauSvt++;
+
+			this.repaint();
+		}
+
+		if(e.getSource() == this.btnAfficherTout)
+		{
+			for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+			{
+				this.lstBoxShape.get(cpt).setDateMin(" " + this.listTache.get(cpt).getDateMin());
+				this.lstBoxShape.get(cpt).setDateMax(" " + this.listTache.get(cpt).getDateMax());
+			}
+
+			this.repaint();
+		}
+
+		if(e.getSource() == this.btnAfficherRien)
+		{
+			for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+			{
+				this.lstBoxShape.get(cpt).setDateMin(" " );
+				this.lstBoxShape.get(cpt).setDateMax(" " );
+			}
+
+			this.repaint();
+			this.resetNiveau();
+		}
+	}
+
+	public void activerBouton()
+	{
+		this.btnDateMin.setEnabled(true);
+		this.btnDateMax.setEnabled(true);
+		this.btnAfficherTout.setEnabled(true);
+		this.btnAfficherRien.setEnabled(true);
+	}
+
+	public void desactiverBouton()
+	{
+		this.btnDateMin.setEnabled(false);
+		this.btnDateMax.setEnabled(false);
+		this.btnAfficherTout.setEnabled(false);
+		this.btnAfficherRien.setEnabled(false);
+	}
+
+	public void resetNiveau()
+	{
+		this.niveauPrc = 0;
+		this.niveauSvt = 0;
 	}
 
 	public void majList()
@@ -53,6 +168,12 @@ public class PanelMPM extends JPanel
 		{
 			this.lstBoxShape.add(new BoxShape( t.getNom(),   String.valueOf( t.getDateMin()), String.valueOf( t.getDateMax()), t.getNiveau(), this.ctrl ) );
 		}
+
+		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+		{
+			this.lstBoxShape.get(cpt).setDateMax("");
+			this.lstBoxShape.get(cpt).setDateMin("");
+		}
 		
 		//System.out.println("Liste des BoxShape : \n" + this.lstBoxShape);
 
@@ -63,6 +184,9 @@ public class PanelMPM extends JPanel
 	{
 		this.listTache.clear();
 		this.lstBoxShape.clear();
+		this.niveauPrc = 0;
+		this.niveauSvt = 0;
+		this.desactiverBouton();
 		this.repaint();
 	}
 
@@ -71,14 +195,14 @@ public class PanelMPM extends JPanel
 		super.paintComponent(g);
 
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
-		{
+		{	
 			this.lstBoxShape.get(cpt).dessiner((Graphics2D) g);
 		}
 
-		for (int i = 0; i < this.listTache.size(); i++) 
+		for (int cpt = 0; cpt < this.listTache.size(); cpt++) 
     	{
-			BoxShape boxShape = this.lstBoxShape.get(i);
-			Tache t = this.listTache.get(i);
+			BoxShape boxShape = this.lstBoxShape.get(cpt);
+			Tache t = this.listTache.get(cpt);
 
 			ArrayList<Tache> tachesSuivantes = t.getLstSvt();
 			

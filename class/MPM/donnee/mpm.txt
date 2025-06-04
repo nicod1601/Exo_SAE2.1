@@ -1,6 +1,9 @@
 A|2|
-F|4|
 B|4|
 C|3|A
 D|2|B
 E|10|C,D
+F|4|
+G|15|F,C
+H|3|E
+Construction|45|G,F,H

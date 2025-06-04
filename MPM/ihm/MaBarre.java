@@ -16,6 +16,8 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private FrameMPM      frame;
 	private Controleur    ctrl;
 
+	private JFileChooser fileChooser = new JFileChooser();
+
 
 	public MaBarre(FrameMPM frame, Controleur ctrl)
 	{
@@ -62,20 +64,46 @@ public class MaBarre extends JMenuBar implements ActionListener
 		if(e.getSource() == this.menuiOuvrir)
 		{
 			this.frame.reinitialiser();
-			JFileChooser fileChooser = new JFileChooser();
+			this.fileChooser.setCurrentDirectory(this.fileChooser.getCurrentDirectory() );
+
 			int retour = fileChooser.showOpenDialog(this.frame); 
 			if(retour == JFileChooser.APPROVE_OPTION)
 			{
 				File fichier  = fileChooser.getSelectedFile();
+
+				System.out.print("Nom du fichier : " + fichier.getName() + "\n");
+				
 				
 				String path   = fichier.getPath(); 
 
+				String ext = fichier.getName().substring(fichier.getName().lastIndexOf(".")); 
+				/*try
+				{
+					
+				}
+				catch(Exception ex)
+				{
+
+				}*/
+				
+				if (!ext.equals(".txt") )
+				{
+					JOptionPane.showMessageDialog(this.frame, "Le fichier doit avoir l'extension .txt", "Erreur", JOptionPane.ERROR_MESSAGE);
+					
+				}
+				else 
+				{
+					this.ctrl.lireFichier(path);
+					this.frame.activerBoutons();
+					this.frame.majList();
+				}
+				
+
 				//System.out.println("Path : " + path);
-				this.ctrl.lireFichier(path);
+				
 				//System.out.println("lecture du fichier...");
 				//System.out.println("Affichage du projet : \n" + this.ctrl.afficherProjet());
 				
-				this.frame.majList();
 			} 
 		}
 

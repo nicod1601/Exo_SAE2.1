@@ -64,6 +64,11 @@ public class BoxShape
     public int getHauteurCasesInferieures() { return hauteur - hauteurCaseSuperieure; }
     public int getLargeurCaseInferieure()   { return largeur / 2;                     }
 
+    public String getNom()                  { return txtNom;                          }
+    public String getDateMin()              { return txtDateMin;                      }
+    public String getDateMax()              { return txtDateMax;                      }
+    public int getNiveau()                  { return niveau;                          }
+
     
     
     // Setters avec validation
@@ -73,7 +78,10 @@ public class BoxShape
     public void setHauteurCaseSuperieure(int hauteurCaseSuperieure) {this.hauteurCaseSuperieure = hauteurCaseSuperieure;}
 
     public void setNom(String txtNom)         { this.txtNom = txtNom;         }
-    public void setDateMin(String txtDateMin) { this.txtDateMin = txtDateMin; }
+    public void setDateMin(String txtDateMin)
+    { 
+        this.txtDateMin = txtDateMin; 
+    }
     public void setDateMax(String txtDateMax) { this.txtDateMax = txtDateMax; }
 
     public int getX() { return x; }
@@ -88,10 +96,23 @@ public class BoxShape
     public void dessiner(Graphics2D g2d) 
     {
 
+        int xb;
+        int yb;
+
         int[] nbParNiveau  = this.ctrl.getNbParNiveau(this.niveau,this.txtNom);
 
-        int xb = this.largeur + ( (2*this.largeur)*this.niveau );
-        int yb = (this.hauteur) + ((int)(1.5*this.hauteur)*nbParNiveau[1]) ;
+        xb = this.largeur + ( (2*this.largeur)*this.niveau );
+        yb = ((int)(1.5*this.hauteur)*nbParNiveau[1]) ;
+
+
+        if(this.txtNom.equals("Début") || this.txtNom.equals("Fin"))
+        {
+
+            yb = (this.hauteur) + (  (int)(1.5 * this.hauteur) * this.ctrl.getTailleNivMax()/2 );
+            System.out.println(yb);
+        }
+
+
 
         this.x = xb;
         this.y = yb;

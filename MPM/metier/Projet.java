@@ -25,7 +25,9 @@ public class Projet
 	private int nbTache;
 	
 	/** Durée totale du projet en jours */
-	private int dureeProjet; 
+	private int dureeProjet;
+
+	private int nbTacheMaxNiveau;
 
 
 	/**
@@ -38,6 +40,8 @@ public class Projet
 
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
+		this.nbTacheMaxNiveau = 0;
+		
 
 	}
 
@@ -87,6 +91,21 @@ public class Projet
 	 * @return le nombre de tâches
 	 */
 	public int getTaille() {return this.lstTache.size();}
+
+	public int getTailleNivMax()
+	{
+		int nbNiv =0;
+		int max   =0;
+		for(Tache t : this.lstTache)
+		{
+			nbNiv = this.getNbParNiveau(t.getNiveau(), t.getNom())[0];
+			System.out.println(nbNiv);
+			if(max < nbNiv)
+				max = nbNiv;
+		}
+		return max;
+		
+	}
 
 	public int[] getNbParNiveau(int niv,String nom)
 	{

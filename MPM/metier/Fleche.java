@@ -1,5 +1,6 @@
 package MPM.metier;
 
+
 import java.awt.*;
 import java.awt.geom.*;
 
@@ -25,17 +26,17 @@ public class Fleche
         this(new Point(x1, y1), new Point(x2, y2));
     }
     
-    public Fleche(Point origine, Point destination, String etiquette)
+    /*public Fleche(Point origine, Point destination, String etiquette)
     {
         this(origine, destination);
         this.etiquette = etiquette;
-    }
+    }*/
     
     // Méthode pour dessiner la flèche
     public void dessiner(Graphics2D g2d)
     {
         Color couleurOriginale = g2d.getColor();
-        Stroke strokeOriginal = g2d.getStroke();
+        Stroke strokeOriginal  = g2d.getStroke();
         
         // Appliquer les paramètres de la flèche
         g2d.setStroke(new BasicStroke(epaisseur));
@@ -54,7 +55,7 @@ public class Fleche
         
         // Calculer les points de la tête de flèche
         double angleGauche = angle + Math.PI - Math.PI/6;
-        double angleDroit = angle + Math.PI + Math.PI/6;
+        double angleDroit  = angle + Math.PI + Math.PI/6;
         
         int[] xPoints = {
             destinationAjustee.x,
@@ -122,7 +123,7 @@ public class Fleche
         int millieuX = (p1.x + p2.x) / 2;
         int millieuY = (p1.y + p2.y) / 2;
         
-        FontMetrics fm = g2d.getFontMetrics();
+        FontMetrics fm   = g2d.getFontMetrics();
         int largeurTexte = fm.stringWidth(etiquette);
         int hauteurTexte = fm.getHeight();
         
