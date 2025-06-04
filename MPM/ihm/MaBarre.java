@@ -77,21 +77,15 @@ public class MaBarre extends JMenuBar implements ActionListener
 				String path   = fichier.getPath(); 
 
 				String ext = fichier.getName().substring(fichier.getName().lastIndexOf(".")); 
-				/*try
-				{
-					
-				}
-				catch(Exception ex)
-				{
-
-				}*/
-				
+			
+				// Vérification de l'extension du fichier
+				// Si le fichier n'a pas l'extension .txt, on affiche un message d'erreur
 				if (!ext.equals(".txt") )
 				{
 					JOptionPane.showMessageDialog(this.frame, "Le fichier doit avoir l'extension .txt", "Erreur", JOptionPane.ERROR_MESSAGE);
 					
 				}
-				else 
+				else // Sinon on lit le fichier
 				{
 					this.ctrl.lireFichier(path);
 					this.frame.activerBoutons();

@@ -63,9 +63,11 @@ public class Tache
 		this.lstPrc  = new ArrayList<>(t.lstPrc);
 		this.lstSvt  = new ArrayList<>(t.lstSvt);
 	}
+	
 
 	/** @return le nom de la tâche */
 	public String getNom() { return this.nom; }
+
 
 	/** @return la durée de la tâche en jours */
 	public int getDuree() { return this.duree; }
@@ -77,32 +79,38 @@ public class Tache
 	 * @param lst    la liste contenant les tâches
 	 * @return la tâche à l’indice spécifié
 	 */
-	public Tache getTache(int indice, ArrayList<Tache> lst) {
-		return lst.get(indice);
-	}
+	public Tache getTache(int indice, ArrayList<Tache> lst) { return lst.get(indice); }
+
 
 	/** @return la date au plus tôt pour commencer la tâche */
 	public int getDateMin() { return this.dateMin; }
 
+
 	/** @return la date au plus tard pour finir la tâche */
 	public int getDateMax() { return this.dateMax; }
+
 
 	/** @return la liste des tâches précédentes */
 	public ArrayList<Tache> getLstPrc() { return this.lstPrc; }
 
+
 	/** @return la liste des tâches suivantes */
 	public ArrayList<Tache> getLstSvt() { return this.lstSvt; }
+
 
 	/** @return le nombre de tâche précédentes */
 
 	public int getNbPrc()  {return this.lstPrc.size()  ;}
 
+
 	/** @return le nombre de tâche suivantes */
 	public int getNbSvt()  {return this.lstSvt.size()  ;}
+
 
 	/** @return la tâche suivante à l'indice sélectionné */
 
 	public Tache getSvt(int index){return this.lstSvt.get(index); }
+
 
 	/** @return la tâche précédente à l'indice sélectionné */
 

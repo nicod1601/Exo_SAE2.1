@@ -153,6 +153,7 @@ public class Fleche
         int ctrlX = (origine.x + destination.x) / 2 + courbure;
         int ctrlY = (origine.y + destination.y) / 2 + courbure;
         
+        // Dessiner la courbe quadratique
         QuadCurve2D curve = new QuadCurve2D.Float(origine.x, origine.y, 
                                                   ctrlX, ctrlY, 
                                                   destination.x, destination.y);

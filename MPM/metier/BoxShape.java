@@ -101,19 +101,17 @@ public class BoxShape
 
         int[] nbParNiveau  = this.ctrl.getNbParNiveau(this.niveau,this.txtNom);
 
+        // Calcul de la largeur et de la hauteur
         xb = this.largeur + ( (2*this.largeur)*this.niveau );
         yb = ((int)(1.5*this.hauteur)*nbParNiveau[1]) ;
 
-
+        // Ajustement de la position en fonction du nom
         if(this.txtNom.equals("Début") || this.txtNom.equals("Fin"))
         {
-
-            yb = (this.hauteur) + (  (int)(1.5 * this.hauteur) * this.ctrl.getTailleNivMax()/2 );
-            System.out.println(yb);
+            yb = (  (  (int)(1.5 * this.hauteur) * this.ctrl.getTailleNivMax() ) + (  (int)(1.5*this.hauteur)) )    /2 ;
         }
 
-
-
+        // Positionnement de la forme
         this.x = xb;
         this.y = yb;
 

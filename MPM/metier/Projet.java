@@ -92,6 +92,11 @@ public class Projet
 	 */
 	public int getTaille() {return this.lstTache.size();}
 
+	/**
+	 * Retourne le nombre de tâches dans le projet.
+	 * 
+	 * @return le nombre de tâches
+	 */
 	public int getTailleNivMax()
 	{
 		int nbNiv =0;
@@ -99,7 +104,6 @@ public class Projet
 		for(Tache t : this.lstTache)
 		{
 			nbNiv = this.getNbParNiveau(t.getNiveau(), t.getNom())[0];
-			System.out.println(nbNiv);
 			if(max < nbNiv)
 				max = nbNiv;
 		}
@@ -107,6 +111,13 @@ public class Projet
 		
 	}
 
+	/**
+	 * Retourne le nombre de tâches à un niveau donné et le nombre de tâches avec un nom spécifique à ce niveau.
+	 * 
+	 * @param niv le niveau des tâches
+	 * @param nom le nom des tâches à compter
+	 * @return un tableau contenant le nombre de tâches au niveau spécifié et le nombre de tâches avec le nom spécifié
+	 */
 	public int[] getNbParNiveau(int niv,String nom)
 	{
 		int[] nb = new int[2];
@@ -124,7 +135,11 @@ public class Projet
 		return nb;
 	}
 
-
+	/**
+	 * Retourne la liste des tâches du projet.
+	 * 
+	 * @return la liste des tâches
+	 */
 	public ArrayList<Tache> getLstTache() {return this.lstTache;}
 
 	/**
@@ -191,7 +206,12 @@ public class Projet
 	}*/
 
 
-
+	/**
+	 * Lit un fichier de données du projet et construit la liste des tâches.
+	 * Le fichier doit respecter le format : nom|durée|précédents (séparés par des virgules).
+	 * 
+	 * @param chemin le chemin du fichier à lire
+	 */
 	public void lireFichier(String chemin) 
 	{
 		Tache debut = new Tache("Début", 0);
@@ -336,7 +356,12 @@ public class Projet
 
 
 	
-
+	/**
+	 * Retourne une représentation textuelle du projet, incluant toutes les tâches et leurs détails.
+	 * 
+	 * @return une chaîne de caractères représentant le projet
+	 */
+	
 	public String toString()
 	{
 		String sRet ="";
