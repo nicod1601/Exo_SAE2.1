@@ -11,7 +11,7 @@ public class PanelNouveau extends JPanel implements ActionListener
 
     private JTextField txtNom;
     private JTextField txtDuree;
-    private JButton btnValider;
+    private JButton btnCreerTache;
 
     private JPanel panelBox;
 
@@ -30,16 +30,17 @@ public class PanelNouveau extends JPanel implements ActionListener
 
         JPanel panelInformation = new JPanel(new GridLayout(3, 1) );
 
-        JLabel lblNom   = new JLabel("Nom :"  , JLabel.RIGHT);
-        JLabel lblDuree = new JLabel("Duree :", JLabel.RIGHT);
+        JLabel lblNom   = new JLabel("Nom Tache :"  , JLabel.RIGHT);
+        JLabel lblDuree = new JLabel("Duree Tache :", JLabel.RIGHT);
 
-        JPanel panelNom = new JPanel(new GridLayout(1,2));
-        JPanel panelDuree = new JPanel(new GridLayout(1,2));
+        JPanel panelNom    = new JPanel(new GridLayout(1,2));
+        JPanel panelDuree  = new JPanel(new GridLayout(1,2));
+        JPanel panelAction = new JPanel();
 
 
-        this.txtNom     = new JTextField(10);
-        this.txtDuree   = new JTextField(3);
-        this.btnValider = new JButton("Valider");
+        this.txtNom        = new JTextField(10);
+        this.txtDuree      = new JTextField(3);
+        this.btnCreerTache = new JButton("Creer Tache");
 
         this.boxShape = new BoxShape(this.ctrl);
         this.panelBox = this.boxShape.creerPanel(this.boxShape);
@@ -54,9 +55,11 @@ public class PanelNouveau extends JPanel implements ActionListener
         panelDuree.add(lblDuree);
         panelDuree.add(this.txtDuree);
 
+        panelAction.add(this.btnCreerTache);
+        
         panelInformation.add(panelNom);
         panelInformation.add(panelDuree);
-        panelInformation.add(this.btnValider);
+        panelInformation.add(panelAction);
         
         this.add(panelInformation);
         this.add(this.panelBox);
@@ -65,9 +68,9 @@ public class PanelNouveau extends JPanel implements ActionListener
         /*--------------------------------------*/
         /*         Ajout des listeners          */
         /*--------------------------------------*/
-        this.btnValider.addActionListener(this);
         this.txtNom.addActionListener(this);
         this.txtDuree.addActionListener(this);
+        this.btnCreerTache.addActionListener(this);
     }
 
     public void majPanelBoxShape()
@@ -81,6 +84,21 @@ public class PanelNouveau extends JPanel implements ActionListener
         {
             this.boxShape.setNom(this.txtNom.getText());
             this.majPanelBoxShape();
+        }
+
+        if(! this.txtDuree.getText().equals("") && ! this.txtNom.getText().equals(""))
+        {
+            if(e.getSource() == this.btnCreerTache)
+            {
+                System.out.println("Nom : " + this.txtNom.getText());
+                System.out.println("Duree : " + this.txtDuree.getText());
+                this.boxShape.setNom(this.txtNom.getText());
+                this.majPanelBoxShape();
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

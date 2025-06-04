@@ -107,6 +107,7 @@ public class BoxShape
             yb = (  (  (int)(1.5 * this.hauteur) * this.ctrl.getTailleNivMax() ) + (  (int)(1.5*this.hauteur)) )    /2 ;
         }
 
+
         // Positionnement de la forme
         this.x = xb;
         this.y = yb;
@@ -130,6 +131,14 @@ public class BoxShape
         
         // Dessin du texte
         dessinerTexte(g2d, xb, yb, hauteurInferieure, largeurCase);
+    }
+
+    private int getLargeurMaxPrc()
+    {
+        int max = 0;
+        for(Tache t : this.tache.getLstPrc())
+            
+        return max;
     }
     
     /**

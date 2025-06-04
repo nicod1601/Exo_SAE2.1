@@ -6,6 +6,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Compilation réussie"
-echo "Lancement du programme"
+echo "Lancement du programme..."
 cd class
 java MPM.Controleur

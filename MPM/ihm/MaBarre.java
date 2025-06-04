@@ -44,6 +44,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		
 		// Raccourci 
 		menuFichier       .setMnemonic('F');
+		this.menuiNouveau .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiImporter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiQuitter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
 	
@@ -64,9 +65,9 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/*-------------------------------*/
 		/* Activation des composants     */
 		/*-------------------------------*/
-		this.menuiImporter .addActionListener(this);
-		this.menuiQuitter.addActionListener(this);	
-		this.menuiNouveau.addActionListener(this);	
+		this.menuiImporter.addActionListener(this);
+		this.menuiQuitter .addActionListener(this);	
+		this.menuiNouveau .addActionListener(this);	
 
 	}
 

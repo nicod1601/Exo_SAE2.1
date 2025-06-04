@@ -12,9 +12,9 @@ public class FrameNouveau extends JFrame
 
     public FrameNouveau(Controleur ctrl)
     {
-        this.setTitle("Nouveau Projet");
+        this.setTitle("Nouvelle Tache");
         this.setExtendedState(JFrame.NORMAL);
-        this.setSize(300,300);
+        this.setSize(600,200);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     

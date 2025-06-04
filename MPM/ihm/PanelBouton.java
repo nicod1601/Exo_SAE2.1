@@ -42,8 +42,8 @@ public class PanelBouton extends JPanel implements ActionListener
 
         this.btnDateMin       = new JButton("-");
         this.btnDateMax       = new JButton("+");
-        this.btnAfficherTout  = new JButton("Afficher Tout");
-        this.btnAfficherRien  = new JButton("Afficher Rien");
+        this.btnAfficherTout  = new JButton("Tout Afficher");
+        this.btnAfficherRien  = new JButton("Tout Masquer");
 
         this.desactiverBouton();
 
