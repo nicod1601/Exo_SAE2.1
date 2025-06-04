@@ -1,4 +1,8 @@
 package MPM.metier;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -255,25 +259,4 @@ public class Tache
 
 		return sRet;
 	}
-
-
-	//
-	/*
-	public static void main(String[] args) {
-		Tache t1 = new Tache("Test", 12);
-		System.out.println(t1);
-	}
-	*/
-
-	/* À AJOUTER/MODIFIER
-
-
-		dateMin/Date Max --> int au lieu de DateFr
-
-		void setDateTot/Tard
-		{
-			if (this.dateMin)
-		}
-	
-	*/
 }

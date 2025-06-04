@@ -95,22 +95,30 @@ public class BoxShape
         int xb;
         int yb;
 
-        int[] nbParNiveau  = this.ctrl.getNbParNiveau(this.tache.getNiveau(),this.tache.getNom());
-
-        // Calcul de la largeur et de la hauteur
-        xb = 140 + ( (2*140)*this.tache.getNiveau() );
-        yb = ((int)(1.5*this.hauteur)*nbParNiveau[1]) ;
-
-        // Ajustement de la position en fonction du nom
-        if(this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin"))
+        // Si la position n'est pas définie manuellement, calculer automatiquement
+        if (!this.positionManuelle) 
         {
-            yb = (  (  (int)(1.5 * this.hauteur) * this.ctrl.getTailleNivMax() ) + (  (int)(1.5*this.hauteur)) )    /2 ;
+            int[] nbParNiveau = this.ctrl.getNbParNiveau(this.tache.getNiveau(), this.tache.getNom());
+
+            // Calcul de la largeur et de la hauteur
+            xb = 140 + ((2 * 140) * this.tache.getNiveau());
+            yb = ((int) (1.5 * this.hauteur) * nbParNiveau[1]);
+
+            // Ajustement de la position en fonction du nom
+            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) {
+                yb = (((int) (1.5 * this.hauteur) * this.ctrl.getTailleNivMax()) + ((int) (1.5 * this.hauteur))) / 2;
+            }
+
+            // Positionnement de la forme
+            this.x = xb;
+            this.y = yb;
+        } 
+        else 
+        {
+            // Utiliser la position manuelle
+            xb = this.x;
+            yb = this.y;
         }
-
-
-        // Positionnement de la forme
-        this.x = xb;
-        this.y = yb;
 
         // Configuration du style pour les bordures
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -133,13 +141,13 @@ public class BoxShape
         dessinerTexte(g2d, xb, yb, hauteurInferieure, largeurCase);
     }
 
-    private int getLargeurMaxPrc()
+    /*private int getLargeurMaxPrc()
     {
         int max = 0;
         for(Tache t : this.tache.getLstPrc())
             
         return max;
-    }
+    }*/
     
     /**
      * Méthode privée pour dessiner le texte dans les cases
@@ -216,6 +224,77 @@ public class BoxShape
      * @return périmètre en pixels
      */
     public int calculerPerimetre() {return 2 * largeur + 4 * hauteur - 2 * hauteurCaseSuperieure;}
+
+    /**
+     * Vérifie si un point est contenu dans cette BoxShape
+     * @param point Le point à vérifier
+     * @return true si le point est dans la BoxShape, false sinon
+     */
+    public boolean contient(Point point) 
+    {
+        return point.x >= this.x && point.x <= this.x + this.largeur &&
+               point.y >= this.y && point.y <= this.y + this.hauteur;
+    }
+
+    /**
+     * Définit la position de la BoxShape (remplace le calcul automatique)
+     * @param x nouvelle coordonnée X
+     * @param y nouvelle coordonnée Y
+     */
+    public void setPosition(int x, int y) 
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Définit la coordonnée X de la BoxShape
+     * @param x nouvelle coordonnée X
+     */
+    public void setX(int x) 
+    {
+        this.x = x;
+    }
+
+    /**
+     * Définit la coordonnée Y de la BoxShape
+     * @param y nouvelle coordonnée Y
+     */
+    public void setY(int y) 
+    {
+        this.y = y;
+    }
+
+    /**
+     * Indique si cette BoxShape utilise un positionnement manuel
+     */
+    private boolean positionManuelle = false;
+
+    /**
+     * Active/désactive le positionnement manuel
+     * @param manuel true pour utiliser les coordonnées définies manuellement
+     */
+    public void setPositionManuelle(boolean manuel) 
+    {
+        this.positionManuelle = manuel;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     public String toString() 
     {

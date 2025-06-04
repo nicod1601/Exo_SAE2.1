@@ -14,7 +14,7 @@ public class FrameNouveau extends JFrame
     {
         this.setTitle("Nouvelle Tache");
         this.setExtendedState(JFrame.NORMAL);
-        this.setSize(600,200);
+        this.setSize(800,200);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     

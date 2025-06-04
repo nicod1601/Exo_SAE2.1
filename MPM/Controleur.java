@@ -30,6 +30,8 @@ public class Controleur
 
     public ArrayList<Erreur> getErreur(){return this.projet.getErreur();}
 
+    public void sauvegarderTaches(ArrayList<Tache> lstTaches){this.projet.sauvegarderTaches(lstTaches);}
+
     public static void main(String[] args)
     {
         new Controleur();

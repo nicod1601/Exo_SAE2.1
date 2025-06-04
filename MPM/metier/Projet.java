@@ -10,6 +10,9 @@ package MPM.metier;
  */
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -418,8 +421,41 @@ public class Projet
 		}
 		return true;
 	}
-	
 
+	public void sauvegarderTaches(ArrayList<Tache> lstTaches)
+	{
+		try
+		{
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("./MPM/donnee/mpmNouveau.txt"), "UTF8"));
+
+			for (Tache tache : lstTaches)
+			{
+				String predecesseurs = "";
+				if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
+				{
+					StringBuilder sb = new StringBuilder();
+					for (int i = 0; i < tache.getLstPrc().size(); i++)
+					{
+						if (i > 0) sb.append(",");
+						sb.append(tache.getLstPrc().get(i).getNom());
+					}
+					predecesseurs = sb.toString();
+				}
+
+				// Écriture : Nom | Durée | Prédécesseurs
+				pw.println(tache.getNom() + "|" + 
+						tache.getDuree() + "|" + 
+						predecesseurs);
+			}
+			
+			pw.close();
+			System.out.println("Tâches sauvegardées avec succès dans taches.txt");
+		}
+		catch (Exception e)
+		{ 
+			e.printStackTrace(); 
+		}
+	}
 
 	
 	/**

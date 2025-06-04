@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class PanelMPM extends JPanel
+public class PanelMPM extends JPanel implements MouseListener, MouseMotionListener
 {
 
 	private ArrayList<Tache> listTache;
@@ -18,9 +18,13 @@ public class PanelMPM extends JPanel
 	private Controleur ctrl;
 	private FrameMPM frame;
 	private Fleche fleche;
+	
+	// Variables pour le déplacement
+	private BoxShape boxShapeSelectionnee = null;
+	private Point pointClique = null;
+	private boolean enDeplacement = false;
 
 	private final int TAILLESCROLL = 1000;
-
 
 	public PanelMPM(FrameMPM frame, Controleur ctrl) 
 	{
@@ -42,9 +46,6 @@ public class PanelMPM extends JPanel
 		this.niveauPrc   = 0;
 		this.niveauSvt   = 0;
 
-		
-
-
 		/*--------------------------------------*/
 		/*     Positionnement des composants    */
 		/*--------------------------------------*/
@@ -52,6 +53,8 @@ public class PanelMPM extends JPanel
 		/*--------------------------------------*/
 		/*       Activation des composants      */
 		/*--------------------------------------*/
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 	}
 
 	public void resetNiveau()
@@ -72,7 +75,6 @@ public class PanelMPM extends JPanel
 
 	public void majList()
 	{
-
 		this.listTache = this.ctrl.getListeTache();
 		this.majScroll(this.ctrl.getNbNiveau(), this.ctrl.getTailleNivMax()  );
 
@@ -102,6 +104,8 @@ public class PanelMPM extends JPanel
 	{
 		this.listTache.clear();
 		this.lstBoxShape.clear();
+		this.boxShapeSelectionnee = null;
+		this.enDeplacement = false;
 		this.frame.desactiverBoutons();
 		this.repaint();
 	}
@@ -137,6 +141,79 @@ public class PanelMPM extends JPanel
 				}
 			}
     	}
+	}
+
+	private BoxShape trouverBoxShapeSousSouris(Point point) 
+	{
+		for (BoxShape box : this.lstBoxShape) {
+			if (box.contient(point)) 
+			{
+				return box;
+			}
+		}
+		return null;
+	}
+
+	public void mousePressed(MouseEvent e) 
+	{
+		Point pointSouris = e.getPoint();
+		this.boxShapeSelectionnee = trouverBoxShapeSousSouris(pointSouris);
 		
+		if (this.boxShapeSelectionnee != null)
+		{
+			this.pointClique = new Point(
+                                          pointSouris.x - this.boxShapeSelectionnee.getX(),
+				                          pointSouris.y - this.boxShapeSelectionnee.getY()
+										);
+			this.enDeplacement = true;
+
+			this.boxShapeSelectionnee.setPositionManuelle(true);
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+		}
+	}
+
+	public void mouseDragged(MouseEvent e) 
+	{
+		if (this.enDeplacement && this.boxShapeSelectionnee != null && this.pointClique != null)
+		{
+			Point nouvellePosition = new Point(
+				                                e.getX() - this.pointClique.x,
+				                                e.getY() - this.pointClique.y
+                                              );
+			
+			this.boxShapeSelectionnee.setPosition(nouvellePosition.x, nouvellePosition.y);
+			
+			this.repaint();
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) 
+	{
+		this.enDeplacement = false;
+		this.boxShapeSelectionnee = null;
+		this.pointClique = null;
+		this.setCursor(Cursor.getDefaultCursor());
+	}
+
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseMoved(MouseEvent e)
+	{
+		BoxShape boxSousSouris = trouverBoxShapeSousSouris(e.getPoint());
+		if (boxSousSouris != null)
+		{
+			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		} 
+		else
+		{
+			this.setCursor(Cursor.getDefaultCursor());
+		}
 	}
 }
