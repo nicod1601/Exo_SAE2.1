@@ -13,6 +13,8 @@ public class FrameMPM extends JFrame
     private PanelMPM panelMPM;
     private PanelBouton panelBouton;
 
+    private FrameNouveau frameNouveau;
+
     private Controleur ctrl;
 
     private JScrollPane scrollPane;
@@ -31,6 +33,8 @@ public class FrameMPM extends JFrame
         /*--------------------------------------*/
 
         this.ctrl = ctrl;
+
+        this.frameNouveau = new FrameNouveau(this.ctrl);
 
         this.menu        = new MaBarre(this, this.ctrl);
         this.panelMPM    = new PanelMPM(this, this.ctrl);

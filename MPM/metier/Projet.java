@@ -26,7 +26,6 @@ public class Projet
 	
 	/** Durée totale du projet en jours */
 	private int dureeProjet;
-
 	private int nbTacheMaxNiveau;
 
 
@@ -37,12 +36,9 @@ public class Projet
 	 */
 	public Projet()
 	{
-
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
 		this.nbTacheMaxNiveau = 0;
-		
-
 	}
 
 
@@ -129,7 +125,6 @@ public class Projet
 			if(nom.equals(t.getNom()))
 				nb[1] = nb[0];
 			
-			
 		}
 
 		return nb;
@@ -165,48 +160,6 @@ public class Projet
 	 * 
 	 * @throws Exception si le fichier n'est pas trouvé ou mal formaté
 	 */
-	/*public void lireFichier() 
-	{
-		try
-		{
-			Scanner sc = new Scanner ( new File ( "./MPM/donnee/mpm.txt" ), "UTF-8" );
-
-			while ( sc.hasNextLine() )
-			{
-				String ligne    = sc.nextLine();
-				String[] partie = ligne.split("\\|");
-
-				String nom = partie[0];
-				int duree  = Integer.parseInt(partie[1]);
-
-				Tache tmp = new Tache(nom, duree);
-
-				if(partie.length > 2 && ! partie[2].isEmpty() )
-				{
-					String[] prc = partie[2].split(",");
-
-					for(int cpt =0; cpt < prc.length; cpt++)
-					{
-						for (Tache t : this.lstTache)
-						{
-							if(prc[cpt].equals(t.getNom()))
-								tmp.addPrecedent(t);
-						}
-					}
-				}
-				else
-				{
-					if(!tmp.getNom().equals("Début"))
-						tmp.addPrecedent(this.lstTache.get(0));
-				}
-
-				this.lstTache.add(tmp);
-				this.nbTache++;
-			}
-		}
-		catch ( Exception e ){ e.printStackTrace(); }
-	}*/
-
 
 	/**
 	 * Lit un fichier de données du projet et construit la liste des tâches.

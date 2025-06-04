@@ -8,6 +8,7 @@
 ./MPM/ihm/PanelMPM.java
 ./MPM/ihm/MaBarre.java
 ./MPM/ihm/PanelBouton.java
+./MPM/ihm/FrameNouveau.java
 
 ./MPM/Controleur.java
 ./MPM/TestProjet.java
