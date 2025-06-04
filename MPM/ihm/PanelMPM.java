@@ -26,6 +26,7 @@ public class PanelMPM extends JPanel
 	{
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(TAILLESCROLL, TAILLESCROLL));
+		this.setBackground(new Color(214, 208, 207));
 		
 		/*--------------------------------------*/
 		/*        Création des composants       */

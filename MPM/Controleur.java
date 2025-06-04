@@ -27,6 +27,9 @@ public class Controleur
      */ 
     public int[]            getNbParNiveau (int niv, String nom)   { return this.projet.getNbParNiveau(niv,nom);}
 
+
+    public ArrayList<Erreur> getErreur(){return this.projet.getErreur();}
+
     public static void main(String[] args)
     {
         new Controleur();

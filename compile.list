@@ -3,6 +3,7 @@
 ./MPM/metier/CheminCritique.java
 ./MPM/metier/Fleche.java
 ./MPM/metier/BoxShape.java
+./MPM/metier/Erreur.java
 
 ./MPM/ihm/FrameMPM.java
 ./MPM/ihm/PanelMPM.java

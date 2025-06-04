@@ -29,6 +29,7 @@ public class Projet
 	private int nbTacheMaxNiveau;
 
 	private ArrayList<CheminCritique> lstCheminCritique;
+	private ArrayList<Erreur> erreur;
 
 
 	/**
@@ -134,6 +135,8 @@ public class Projet
 		return nb;
 	}
 
+
+
 	/**
 	 * Retourne la liste des tâches du projet.
 	 * 
@@ -178,6 +181,8 @@ public class Projet
 	 */
 	public void lireFichier(String chemin) 
 	{
+		this.erreur = new ArrayList<Erreur>();
+		this.lstTache.clear();
 		Tache debut = new Tache("Début", 0);
 		debut.setDateMin(0);
 		this.lstTache.add(debut);
@@ -185,13 +190,19 @@ public class Projet
 		try
 		{
 			Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
+			int numLigne = 0;
 
 			while ( sc.hasNextLine() )
 			{
 				String ligne    = sc.nextLine();
+				numLigne++;
+				if (ligne.isEmpty()) continue;
+				if (!testSeparateur(ligne, numLigne)) continue; // Vérifie le format de la ligne
+				if (!testDureeInt(ligne, numLigne)) continue; // Vérifie que la durée est un entier
 				String[] partie = ligne.split("\\|");
 
 				String nom = partie[0];
+				if (!testNomDoublon(nom, numLigne, ligne)) continue; // Vérifie les doublons de nom
 				int duree  = Integer.parseInt(partie[1]);
 
 				Tache tmp = new Tache(nom, duree);
@@ -241,8 +252,17 @@ public class Projet
 			this.majDate();
 		}
 		
-		catch ( Exception e ){ e.printStackTrace(); }
+		catch ( Exception e )
+		{ 
+			e.printStackTrace();
+			this.erreur.add(new Erreur(e.getMessage()));  
+		}
 	}
+
+	public ArrayList<Erreur> getErreur()
+	{
+		return this.erreur;
+	}	
 
 	/**
 	 * Met à jour les dates de toutes les tâches du projet.
@@ -315,6 +335,88 @@ public class Projet
 				//System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
 			}
 		}
+	}
+	
+		/**
+	 * Vérifie si une ligne du fichier respecte le format attendu (2 séparateurs '|').
+	 * 
+	 * @param ligne la ligne à vérifier
+	 * @param numLigne le numéro de la ligne dans le fichier
+	 * @return true si la ligne est correctement formatée, false sinon
+	 */
+	private boolean testSeparateur(String ligne, int numLigne)
+	{
+		int nbSeparateurs = 0;
+		for (int i = 0; i < ligne.length(); i++)
+		{
+			if (ligne.charAt(i) == '|')
+			{
+				nbSeparateurs++;
+			}
+		}
+		if (nbSeparateurs != 2)
+		{
+			System.out.println(
+					"Erreur de format à la ligne " + numLigne + " : " + ligne + " (doit contenir 2 séparateurs '|')");
+			this.erreur.add(new Erreur(ligne, numLigne, 1));
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Vérifie si la 2e partie de la ligne est bien un nombre.
+	 * 
+	 * @param ligne
+	 *            la ligne à tester
+	 * @param numLigne
+	 *            le numéro de la ligne
+	 * @return true si c'est un nombre, false sinon (et ajoute une erreur)
+	 */
+	private boolean testDureeInt(String ligne, int numLigne)
+	{
+		String[] parties = ligne.split("\\|");
+		if (parties.length < 2)
+		{
+			this.erreur.add(new Erreur(ligne, numLigne, 2));
+			return false;
+		}
+		try
+		{
+			Integer.parseInt(parties[1]);
+			return true;
+		} catch (NumberFormatException e)
+		{
+			System.out.println("Erreur de durée à la ligne " + numLigne + " : " + parties[1] + " n'est pas un nombre");
+			this.erreur.add(new Erreur(ligne, numLigne, 2));
+			return false;
+		}
+	}
+
+	/**
+	 * Vérifie si le nom de la tâche est déjà présent dans la liste des tâches.
+	 * 
+	 * @param nom
+	 *            le nom de la tâche à vérifier
+	 * @param numLigne
+	 *            le numéro de la ligne dans le fichier
+	 * @param ligne
+	 *            la ligne complète (pour le message d'erreur)
+	 * @return true si le nom n'est pas en double, false sinon (et ajoute une
+	 *         erreur)
+	 */
+	private boolean testNomDoublon(String nom, int numLigne, String ligne)
+	{
+		for (Tache t : this.lstTache)
+		{
+			if (t.getNom().equals(nom))
+			{
+				System.out.println("Erreur de nom en double à la ligne " + numLigne + " : " + nom);
+				this.erreur.add(new Erreur(ligne, numLigne, 3)); // code 3 pour doublon
+				return false;
+			}
+		}
+		return true;
 	}
 	
 

@@ -1,8 +1,11 @@
 package MPM.ihm;
 
 import MPM.Controleur;
+import MPM.metier.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 
@@ -41,7 +44,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		
 		// Raccourci 
 		menuFichier       .setMnemonic('F');
-		this.menuiImporter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiImporter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiQuitter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
 	
 		/*-------------------------------*/
@@ -95,8 +98,10 @@ public class MaBarre extends JMenuBar implements ActionListener
 				else // Sinon on lit le fichier
 				{
 					this.ctrl.lireFichier(path);
-					this.frame.activerBoutons();
 					this.frame.majList();
+					this.verification(); // Vérification des erreurs dans le projet
+					this.frame.activerBoutons();
+					
 				}
 				
 
@@ -115,6 +120,33 @@ public class MaBarre extends JMenuBar implements ActionListener
 			this.frame.setVisibleFrameNouveau();
 		}
 
+	}
+
+	/**
+	 * Vérifie s'il y a des erreurs dans le projet et affiche un message d'erreur si nécessaire.
+	 */
+	private void verification()
+	{
+		ArrayList<Erreur> erreur = this.ctrl.getErreur();
+		if (erreur != null && !erreur.isEmpty())
+		{
+			for (int code = 0; code <= 4; code++)
+			{ // adapte la borne max si besoin
+				String message = "";
+				for (Erreur err : erreur)
+				{
+					if (err.getCodeErreur() == code)
+					{
+						message += err.getMessage() + "\n";
+					}
+				}
+				if (!message.isEmpty())
+				{
+					int type = (code == 1) ? JOptionPane.WARNING_MESSAGE : JOptionPane.ERROR_MESSAGE;
+					JOptionPane.showMessageDialog(this.frame, message, "Code erreur " + code, type);
+				}
+			}
+		}
 	}
 }
 

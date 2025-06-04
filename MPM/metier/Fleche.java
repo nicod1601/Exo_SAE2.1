@@ -18,7 +18,9 @@ public class Fleche {
         this.etiquette = etiquette;
     }
 
-    public void dessiner(Graphics2D g2) {
+    public void dessiner(Graphics2D g2) 
+    {
+        g2.setColor(Color.BLACK);
         Point pOrig = getMilieuCoteDroit(origine);
         Point pDest = getMilieuCoteGauche(destination);
 

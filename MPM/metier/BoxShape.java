@@ -91,6 +91,7 @@ public class BoxShape
      */
     public void dessiner(Graphics2D g2d) 
     {
+        g2d.setColor(Color.BLACK);
         int xb;
         int yb;
 
@@ -143,6 +144,7 @@ public class BoxShape
         // Texte case supérieure
         if (!this.tache.getNom().isEmpty()) 
         {
+            g2d.setColor(Color.BLACK);
             int textWidth = fm.stringWidth(this.tache.getNom());
             int textHeight = fm.getAscent();
             int textX = x + (largeur - textWidth) / 2;
@@ -153,6 +155,7 @@ public class BoxShape
         // Texte case inférieure gauche
         if (!this.dateMin.isEmpty())
         {
+             g2d.setColor(new Color(59, 185, 28 ));
             int textWidth = fm.stringWidth(this.dateMin);
             int textHeight = fm.getAscent();
             int textX = x + (largeurCase - textWidth) / 2;
@@ -164,6 +167,7 @@ public class BoxShape
         // Texte case inférieure droite
         if (!this.dateMax.isEmpty())
         {
+            g2d.setColor(Color.RED);
             int textWidth = fm.stringWidth(this.dateMax);
             int textHeight = fm.getAscent();
             int textX = x + largeurCase + (largeurCase - textWidth) / 2;
