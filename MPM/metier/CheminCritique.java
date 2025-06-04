@@ -23,9 +23,9 @@ import java.io.File;
 public class CheminCritique
 {
     private ArrayList<Tache> lstCheminCrit;
+    
 
-    public CheminCritique()
-    {
-
+    public CheminCritique(ArrayList<Tache> lstCheminCrit) {
+        this.lstCheminCrit = lstCheminCrit; 
     }
 }

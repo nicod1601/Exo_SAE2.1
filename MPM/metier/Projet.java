@@ -28,6 +28,8 @@ public class Projet
 	private int dureeProjet;
 	private int nbTacheMaxNiveau;
 
+	private ArrayList<CheminCritique> lstCheminCritique;
+
 
 	/**
 	 * Constructeur de la classe Projet.
@@ -39,6 +41,8 @@ public class Projet
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
 		this.nbTacheMaxNiveau = 0;
+
+		//this.lstCheminCritique = new ArrayList<CheminCritique>(this.lstTache);
 	}
 
 
@@ -152,7 +156,12 @@ public class Projet
 	 */
 	public String getCheminCritique() { return " "; }
 
-	public int getNbNiveau() { return lstTache.getLast().getNiveau() + 1; }
+	public int getNbNiveau()
+	{
+		int posDernier = this.lstTache.size()-1;
+		return this.lstTache.get(posDernier).getNiveau()+1;
+	}
+
 
 	/**
 	 * Lit le fichier de données du projet (mpm.txt) et construit la liste des tâches.

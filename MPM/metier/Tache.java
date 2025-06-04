@@ -48,6 +48,16 @@ public class Tache
 		this.lstSvt  = new ArrayList<Tache>();
 	}
 
+	public Tache()
+	{
+		this.nom     = "A";
+		this.duree   = 0;
+		this.dateMin = -1;
+		this.dateMax = -1;
+		this.lstPrc  = new ArrayList<Tache>();
+		this.lstSvt  = new ArrayList<Tache>();
+	}
+
 	/**
 	 * Crée une copie d'une tâche existante (copie profonde des dates,
 	 * mais copie superficielle des dépendances).
@@ -121,13 +131,7 @@ public class Tache
 	 * 
 	 * @param dateMin la nouvelle date minimale
 	 */
-	public void setDateMin(int val)
-	{ 
-		if(this.dateMin == -1 || val > dateMin)
-		{
-			this.dateMin = val;
-		}
-	}
+	
 
 	public void setNiveau()
 	{
@@ -165,6 +169,18 @@ public class Tache
 			this.dateMax = val;
 		}
 	}
+	public void setDateMin(int val)
+	{ 
+		if(this.dateMin == -1 || val > dateMin)
+		{
+			this.dateMin = val;
+		}
+	}
+	public void setNom(String nom)
+	{
+		this.nom = nom;
+	}
+
 
 	/**
 	 * Calcule et retourne la marge de la tâche (différence entre dateMax et dateMin).

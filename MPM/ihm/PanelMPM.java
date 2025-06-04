@@ -66,7 +66,7 @@ public class PanelMPM extends JPanel
 
 	public void majScroll(int largeur, int hauteur)
 	{
-		this.setPreferredSize(new Dimension((TAILLESCROLL * largeur) / 2, (TAILLESCROLL * hauteur) / 2));
+		this.setPreferredSize(new Dimension( (TAILLESCROLL * largeur), (TAILLESCROLL * hauteur) / 2) );
 	}
 
 	public void majList()
@@ -81,13 +81,13 @@ public class PanelMPM extends JPanel
 
 		for(Tache t : this.listTache)
 		{
-			this.lstBoxShape.add(new BoxShape( t.getNom(),   String.valueOf( t.getDateMin()), String.valueOf( t.getDateMax()), t.getNiveau(), this.ctrl ) );
+			this.lstBoxShape.add(new BoxShape( t, this.ctrl ) );
 		}
 
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
 		{
-			this.lstBoxShape.get(cpt).setDateMax("");
-			this.lstBoxShape.get(cpt).setDateMin("");
+			this.lstBoxShape.get(cpt).setDateMax(" ");
+			this.lstBoxShape.get(cpt).setDateMin(" ");
 		}
 		
 		//System.out.println("Liste des BoxShape : \n" + this.lstBoxShape);

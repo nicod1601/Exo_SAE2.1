@@ -102,7 +102,7 @@ public class PanelBouton extends JPanel implements ActionListener
                 if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
                 {
                     //System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
-                    this.lstBoxShape.get(cpt).setDateMin(" " + this.lstTache.get(cpt).getDateMin());
+                    this.lstBoxShape.get(cpt).setDateMin(" "  + this.lstTache.get(cpt).getDateMin());
                     //System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
 
                 }
@@ -130,8 +130,8 @@ public class PanelBouton extends JPanel implements ActionListener
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
             {
-                this.lstBoxShape.get(cpt).setDateMin(" " + this.lstTache.get(cpt).getDateMin());
-                this.lstBoxShape.get(cpt).setDateMax(" " + this.lstTache.get(cpt).getDateMax());
+                this.lstBoxShape.get(cpt).setDateMin( " " + this.lstTache.get(cpt).getDateMin());
+                this.lstBoxShape.get(cpt).setDateMax( " " +this.lstTache.get(cpt).getDateMax());
             }
 
             this.frame.majDessin();
@@ -141,8 +141,8 @@ public class PanelBouton extends JPanel implements ActionListener
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
             {
-                this.lstBoxShape.get(cpt).setDateMin(" " );
-                this.lstBoxShape.get(cpt).setDateMax(" " );
+                this.lstBoxShape.get(cpt).setDateMin(" ");
+                this.lstBoxShape.get(cpt).setDateMax(" ");
             }
 
             this.frame.majDessin();

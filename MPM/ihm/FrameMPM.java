@@ -68,6 +68,8 @@ public class FrameMPM extends JFrame
         this.setVisible(true);
     }
 
+    public void setVisibleFrameNouveau(){this.frameNouveau.setVisible(true);}
+
 
     /**
      * Méthode permettant de mettre à jour la liste des tâches

@@ -62,7 +62,8 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/* Activation des composants     */
 		/*-------------------------------*/
 		this.menuiImporter .addActionListener(this);
-		this.menuiQuitter.addActionListener(this);		
+		this.menuiQuitter.addActionListener(this);	
+		this.menuiNouveau.addActionListener(this);	
 
 	}
 
@@ -108,6 +109,11 @@ public class MaBarre extends JMenuBar implements ActionListener
 		}
 
 		if(e.getSource() == this.menuiQuitter) { System.exit(0); }
+
+		if(e.getSource() == this.menuiNouveau)
+		{
+			this.frame.setVisibleFrameNouveau();
+		}
 
 	}
 }
