@@ -19,11 +19,13 @@ public class PanelMPM extends JPanel
 	private FrameMPM frame;
 	private Fleche fleche;
 
+	private final int TAILLESCROLL = 1000;
+
 
 	public PanelMPM(FrameMPM frame, Controleur ctrl) 
 	{
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(5000, 5000));
+		this.setPreferredSize(new Dimension(TAILLESCROLL, TAILLESCROLL));
 		
 		/*--------------------------------------*/
 		/*        Création des composants       */
@@ -62,12 +64,20 @@ public class PanelMPM extends JPanel
 		this.repaint();
 	}
 
+	public void majScroll(int largeur, int hauteur)
+	{
+		this.setPreferredSize(new Dimension((TAILLESCROLL * largeur) / 2, (TAILLESCROLL * hauteur) / 2));
+	}
+
 	public void majList()
 	{
 
 		this.listTache = this.ctrl.getListeTache();
+		this.majScroll(this.ctrl.getNbNiveau(), this.ctrl.getTailleNivMax()  );
 
-		System.out.println("Liste de tache : \n" + this.listTache);
+		//System.out.println("NB niveau total : " +this.ctrl.getNbNiveau());
+		System.err.println("Taille ScrollPane : " + this.getPreferredSize() );
+		//System.out.println("Liste de tache : \n" + this.listTache);
 
 		for(Tache t : this.listTache)
 		{
@@ -120,13 +130,7 @@ public class PanelMPM extends JPanel
 					{
 						BoxShape boxShapeSvt = this.lstBoxShape.get(indexTacheSuivante);
 						
-						this.fleche = new Fleche
-						(
-							boxShape.getX() + boxShape.getLargeur()/2,
-							boxShape.getY() + boxShape.getHauteur()/2,
-							boxShapeSvt.getX() + boxShapeSvt.getLargeur()/2,
-							boxShapeSvt.getY() + boxShapeSvt.getHauteur()/2
-						);
+						this.fleche = new Fleche(boxShape,boxShapeSvt);
 						this.fleche.dessiner((Graphics2D) g);
 					}
 				}

@@ -16,13 +16,10 @@ public class Controleur
     }
 
     public void             lireFichier(String chemin){ this.projet.lireFichier(chemin);}
-    public String           afficherProjet(){ return this.projet.toString();}
-    public ArrayList<Tache> getListeTache (){ return this.projet.getLstTache(); }
-    public int getTailleNivMax()
-    {
-        return this.projet.getTailleNivMax();
-
-    }
+    public String           afficherProjet()  { return this.projet.toString()          ;}
+    public ArrayList<Tache> getListeTache ()  { return this.projet.getLstTache()       ;}
+    public int              getNbNiveau()     { return this.projet.getNbNiveau()       ;}
+    public int              getTailleNivMax() { return this.projet.getTailleNivMax()   ;}
 
     /**
      * a l'indice 0 se trouve ne nombre de taches sur le même niveau que la tache données

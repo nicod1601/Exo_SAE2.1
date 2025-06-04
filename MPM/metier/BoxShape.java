@@ -51,7 +51,7 @@ public class BoxShape
         this.txtNom                = txtNom;
         this.txtDateMin            = txtDateMin;
         this.txtDateMax            = txtDateMax;
-        this.largeur               = 140;
+        this.largeur               = 140+ (int)((20*txtNom.length())*0.8);;
         this.hauteur               = 140;
         this.hauteurCaseSuperieure = 70;
         this.niveau                = niveau;
@@ -102,7 +102,7 @@ public class BoxShape
         int[] nbParNiveau  = this.ctrl.getNbParNiveau(this.niveau,this.txtNom);
 
         // Calcul de la largeur et de la hauteur
-        xb = this.largeur + ( (2*this.largeur)*this.niveau );
+        xb = 140 + ( (2*140)*this.niveau );
         yb = ((int)(1.5*this.hauteur)*nbParNiveau[1]) ;
 
         // Ajustement de la position en fonction du nom

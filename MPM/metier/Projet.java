@@ -157,6 +157,8 @@ public class Projet
 	 */
 	public String getCheminCritique() { return " "; }
 
+	public int getNbNiveau() { return lstTache.getLast().getNiveau() + 1; }
+
 	/**
 	 * Lit le fichier de données du projet (mpm.txt) et construit la liste des tâches.
 	 * Le fichier doit respecter le format : nom|durée|précédents (séparés par des virgules).
@@ -344,11 +346,11 @@ public class Projet
 
 				if(nouvelleDateMax < tPrc.getDateMax())
 				{
-					System.out.println("12 > 0 PUTAIN DE MERDE");
+					//System.out.println("12 > 0 PUTAIN DE MERDE");
 					tPrc.setDateMax(nouvelleDateMax);
 				}
 				
-				System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
+				//System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
 			}
 		}
 	}

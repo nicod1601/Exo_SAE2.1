@@ -38,6 +38,14 @@ public class FrameMPM extends JFrame
         this.scrollPane  = new JScrollPane(this.panelMPM);
 
 
+        // utilisation des flèches sur la clavier
+        this.panelMPM.setFocusable(true);
+        this.panelMPM.requestFocusInWindow();
+
+        this.scrollPane.getVerticalScrollBar().setUnitIncrement(50);
+        this.scrollPane.getHorizontalScrollBar().setUnitIncrement(50);
+
+
 
         /*--------------------------------------*/
         /*     Positionnement des composants    */

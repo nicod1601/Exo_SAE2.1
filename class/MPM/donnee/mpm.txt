@@ -4,6 +4,6 @@ C|3|A
 D|2|B
 E|10|C,D
 F|4|
-G|15|F,C
-H|3|E
-Construction|45|G,F,H
+G|15|F
+H|3|G
+Construction|45|Z

@@ -9,8 +9,9 @@ import javax.swing.*;
 
 public class MaBarre extends JMenuBar implements ActionListener
 {
-	private JMenuItem     menuiOuvrir ;
-	private JMenuItem     menuiQuitter;
+	private JMenuItem     menuiImporter;
+	private JMenuItem     menuiQuitter ;
+	private JMenuItem     menuiNouveau ;
 	
 
 	private FrameMPM      frame;
@@ -27,16 +28,20 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.frame = frame;
 		this.ctrl  = ctrl;
 
+		this.fileChooser.setCurrentDirectory(new File(this.fileChooser.getCurrentDirectory() + "/Documents/Exo_SAE2.1/class/MPM/donnee") );
+
+
 		// un element de la barre de menu
 		JMenu menuFichier = new JMenu("Fichier"  );
 
 		// les items du menu FichierAnnuler
-		this.menuiOuvrir  = new JMenuItem ("Ouvrir" );
-		this.menuiQuitter = new JMenuItem ("Quitter");
+		this.menuiNouveau  = new JMenuItem ("Nouveau Projet");
+		this.menuiImporter = new JMenuItem ("Importer"      );
+		this.menuiQuitter  = new JMenuItem ("Quitter"       );
 		
 		// Raccourci 
 		menuFichier       .setMnemonic('F');
-		this.menuiOuvrir  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiImporter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiQuitter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
 	
 		/*-------------------------------*/
@@ -44,7 +49,9 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/*-------------------------------*/
 
 		// menu Fichier
-		menuFichier.add( this.menuiOuvrir );
+		menuFichier.add( this.menuiNouveau );
+		menuFichier.add( this.menuiImporter );
+		menuFichier.addSeparator();
 		menuFichier.add( this.menuiQuitter );
 
 		// ajout du menu 'Fichier' a la barre de menu
@@ -54,14 +61,14 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/*-------------------------------*/
 		/* Activation des composants     */
 		/*-------------------------------*/
-		this.menuiOuvrir .addActionListener(this);
+		this.menuiImporter .addActionListener(this);
 		this.menuiQuitter.addActionListener(this);		
 
 	}
 
 	public void actionPerformed ( ActionEvent e )
 	{
-		if(e.getSource() == this.menuiOuvrir)
+		if(e.getSource() == this.menuiImporter)
 		{
 			this.frame.reinitialiser();
 			this.fileChooser.setCurrentDirectory(this.fileChooser.getCurrentDirectory() );
@@ -83,7 +90,6 @@ public class MaBarre extends JMenuBar implements ActionListener
 				if (!ext.equals(".txt") )
 				{
 					JOptionPane.showMessageDialog(this.frame, "Le fichier doit avoir l'extension .txt", "Erreur", JOptionPane.ERROR_MESSAGE);
-					
 				}
 				else // Sinon on lit le fichier
 				{

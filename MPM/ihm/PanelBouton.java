@@ -82,13 +82,14 @@ public class PanelBouton extends JPanel implements ActionListener
 
     public void resetNiveau()
     {
-        this.niveauPrc = 0;
+        this.niveauPrc = this.ctrl.getNbNiveau() - 1;
         this.niveauSvt = 0;
     }
 
     public void majTacheBox(ArrayList<Tache> t, ArrayList<BoxShape> b)
     {
         this.lstTache    = t;
+        this.niveauPrc   = this.ctrl.getNbNiveau() - 1;
         this.lstBoxShape = b;
     }
 
@@ -98,7 +99,7 @@ public class PanelBouton extends JPanel implements ActionListener
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
             {
-                if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauPrc)
+                if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
                 {
                     //System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
                     this.lstBoxShape.get(cpt).setDateMin(" " + this.lstTache.get(cpt).getDateMin());
@@ -106,24 +107,21 @@ public class PanelBouton extends JPanel implements ActionListener
 
                 }
             }
-            this.niveauPrc++;
+            this.niveauSvt++;
 
             this.frame.majDessin();
         }
 
         if(e.getSource() == this.btnDateMax)
         {
-            for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+            for(int cpt = this.lstBoxShape.size() - 1; cpt >= 0; cpt--)
             {
-                if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
+                if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauPrc)
                 {
-                    System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauSvt);
                     this.lstBoxShape.get(cpt).setDateMax(" " + this.lstTache.get(cpt).getDateMax());
-                    System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauSvt);
-
                 }
             }
-            this.niveauSvt++;
+            this.niveauPrc--;
 
             this.frame.majDessin();
         }
