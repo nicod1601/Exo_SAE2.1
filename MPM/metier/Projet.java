@@ -200,9 +200,9 @@ public class Projet
 			{
 				String ligne    = sc.nextLine();
 				numLigne++;
-				if (ligne.isEmpty()) continue;
+				if (ligne.isEmpty())                  continue;
 				if (!testSeparateur(ligne, numLigne)) continue; // Vérifie le format de la ligne
-				if (!testDureeInt(ligne, numLigne)) continue; // Vérifie que la durée est un entier
+				if (!testDureeInt  (ligne, numLigne)) continue; // Vérifie que la durée est un entier
 				String[] partie = ligne.split("\\|");
 
 				String nom = partie[0];
@@ -214,6 +214,7 @@ public class Projet
 				if(partie.length > 2 && ! partie[2].isEmpty() )
 				{
 					String[] prc = partie[2].split(",");
+					if (!testPrecedentExiste(prc, numLigne, ligne)) continue; 
 
 					for(int cpt =0; cpt < prc.length; cpt++)
 					{
@@ -229,6 +230,8 @@ public class Projet
 					if(!tmp.getNom().equals("Début"))
 						tmp.addPrecedent(this.lstTache.get(0));
 				}
+
+				
 
 				this.lstTache.add(tmp);
 				this.nbTache++;
@@ -421,6 +424,30 @@ public class Projet
 			}
 		}
 		return true;
+	}
+
+	private boolean testPrecedentExiste(String[] nomsPrecedents, int numLigne, String ligne) 
+	{
+    boolean tousExistents = true;
+    for (String nomPrc : nomsPrecedents)
+    {
+        boolean existe = false;
+        for (Tache t : this.lstTache)
+        {
+            if (t.getNom().equals(nomPrc))
+            {
+                existe = true;
+                break;
+            }
+        }
+        if (!existe)
+        {
+            System.out.println("Erreur de précédent inexistant à la ligne " + numLigne + " : " + nomPrc + " dans " + ligne);
+            this.erreur.add(new Erreur(ligne, numLigne, 4)); // code 4 pour précédent inexistant
+            tousExistents = false;
+        }
+    }
+    return tousExistents;
 	}
 
 	public void sauvegarderTaches(ArrayList<Tache> lstTaches)

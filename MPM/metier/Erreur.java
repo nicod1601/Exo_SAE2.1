@@ -39,7 +39,9 @@ public class Erreur
 			case 2:
 				return "La durée indiquée à la ligne "  + numLigne + " n'est pas un entier : "   + ligne;
 			case 3:
-				return "La nom de la tâche à la ligne " + numLigne + " est déjà utilisé : "      + ligne;
+				return "Le nom de la tâche à la ligne " + numLigne + " est déjà utilisé : "      + ligne;
+			case 4:
+				return "Le prédécesseur à la ligne " + numLigne + " n'existe pas : " + ligne;
 			
 			default:
 				return "Erreur inconnue : " + this.ligne;

@@ -23,6 +23,8 @@ public class BoxShape
 
     private Controleur ctrl;
 
+    private boolean positionManuelle = false;
+
     
     
     /**
@@ -264,11 +266,7 @@ public class BoxShape
     {
         this.y = y;
     }
-
-    /**
-     * Indique si cette BoxShape utilise un positionnement manuel
-     */
-    private boolean positionManuelle = false;
+    
 
     /**
      * Active/désactive le positionnement manuel
@@ -278,21 +276,6 @@ public class BoxShape
     {
         this.positionManuelle = manuel;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     

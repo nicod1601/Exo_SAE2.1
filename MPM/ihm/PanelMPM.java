@@ -19,10 +19,16 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private FrameMPM frame;
 	private Fleche fleche;
 	
-	// Variables pour le déplacement
+	// déplacement
 	private BoxShape boxShapeSelectionnee = null;
 	private Point pointClique = null;
 	private boolean enDeplacement = false;
+
+	// elem de PopMenu
+	JMenuItem itemAjouter;
+	JMenuItem itemSupprimer;
+	JMenuItem itemModifier;
+
 
 	private final int TAILLESCROLL = 1000;
 
@@ -47,9 +53,27 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.niveauPrc   = 0;
 		this.niveauSvt   = 0;
 
+		JPopupMenu popMenu = new JPopupMenu();
+
+		this.itemAjouter   = new JMenuItem("Ajouter");
+		this.itemSupprimer = new JMenuItem("Supprimer");
+		this.itemModifier  = new JMenuItem("Modifier");
+
+		this.itemAjouter.setEnabled(true);
+		this.itemSupprimer.setEnabled(false);
+		this.itemModifier.setEnabled(false);
+
+		
+
+
 		/*--------------------------------------*/
 		/*     Positionnement des composants    */
 		/*--------------------------------------*/
+		popMenu.add(this.itemAjouter);
+		popMenu.add(this.itemSupprimer);
+		popMenu.add(this.itemModifier);
+
+		this.setComponentPopupMenu(popMenu);
 
 		/*--------------------------------------*/
 		/*       Activation des composants      */
@@ -206,13 +230,25 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.setCursor(Cursor.getDefaultCursor());
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e)
+	{
 	}
 
-	public void mouseEntered(MouseEvent e) {
+	public void mouseEntered(MouseEvent e) 
+	{
+		Point pointSouris         = e.getPoint();
+		this.boxShapeSelectionnee = this.trouverBoxShapeSousSouris(pointSouris);
+
+		if(this.boxShapeSelectionnee != null)
+		{
+			System.out.println("\""+this.boxShapeSelectionnee.getNom()+"");
+		}
+		
 	}
 
-	public void mouseExited(MouseEvent e) {
+	public void mouseExited(MouseEvent e) 
+	{
+		
 	}
 
 	public void mouseMoved(MouseEvent e)
@@ -221,6 +257,15 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		if (boxSousSouris != null)
 		{
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			//System.out.println(boxSousSouris.getNom()+"");
+
+			if(boxSousSouris.getNom().equals("Début"))
+			{
+				this.itemModifier.setEnabled(false);
+				this.itemSupprimer.setEnabled(false);
+			}
+
+			
 		} 
 		else
 		{
