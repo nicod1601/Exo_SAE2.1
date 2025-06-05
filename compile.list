@@ -11,6 +11,9 @@
 ./MPM/ihm/PanelBouton.java
 ./MPM/ihm/FrameNouveau.java
 ./MPM/ihm/PanelNouveau.java
+./MPM/ihm/FrameTheme.java
+./MPM/ihm/PanelTheme.java
+./MPM/ihm/FrameEnregistrerSous.java
 
 ./MPM/Controleur.java
 ./MPM/TestProjet.java

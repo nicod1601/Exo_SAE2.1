@@ -32,6 +32,8 @@ public class Controleur
 
     public void sauvegarderTaches(ArrayList<Tache> lstTaches){this.projet.sauvegarderTaches(lstTaches);}
 
+    public void enregistrerSous(ArrayList<Tache> lstTaches, String nomFichier){this.projet.EnregistrerSous(lstTaches, nomFichier);}
+
     public static void main(String[] args)
     {
         new Controleur();

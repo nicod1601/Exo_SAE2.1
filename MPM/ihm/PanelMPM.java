@@ -31,6 +31,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(TAILLESCROLL, TAILLESCROLL));
 		this.setBackground(new Color(214, 208, 207));
+		this.setBorder(BorderFactory.createLineBorder(Color.black) );
 		
 		/*--------------------------------------*/
 		/*        Création des composants       */
@@ -89,8 +90,17 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
 		{
-			this.lstBoxShape.get(cpt).setDateMax(" ");
-			this.lstBoxShape.get(cpt).setDateMin(" ");
+			if(this.lstBoxShape.get(cpt).getNiveau() == 0)
+			{
+				this.lstBoxShape.get(cpt).setDateMin(" "  + this.listTache.get(cpt).getDateMin());
+				this.lstBoxShape.get(cpt).setDateMax(" ");
+			}
+			else
+			{
+				this.lstBoxShape.get(cpt).setDateMax(" ");
+				this.lstBoxShape.get(cpt).setDateMin(" ");
+			}
+			
 		}
 		
 		//System.out.println("Liste des BoxShape : \n" + this.lstBoxShape);
@@ -145,7 +155,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	private BoxShape trouverBoxShapeSousSouris(Point point) 
 	{
-		for (BoxShape box : this.lstBoxShape) {
+		for (BoxShape box : this.lstBoxShape)
+		{
 			if (box.contient(point)) 
 			{
 				return box;
@@ -156,8 +167,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	public void mousePressed(MouseEvent e) 
 	{
-		Point pointSouris = e.getPoint();
-		this.boxShapeSelectionnee = trouverBoxShapeSousSouris(pointSouris);
+		Point pointSouris         = e.getPoint();
+		this.boxShapeSelectionnee = this.trouverBoxShapeSousSouris(pointSouris);
 		
 		if (this.boxShapeSelectionnee != null)
 		{

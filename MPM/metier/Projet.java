@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -442,18 +443,54 @@ public class Projet
 					predecesseurs = sb.toString();
 				}
 
-				// Écriture : Nom | Durée | Prédécesseurs
 				pw.println(tache.getNom() + "|" + 
 						tache.getDuree() + "|" + 
 						predecesseurs);
 			}
 			
 			pw.close();
-			System.out.println("Tâches sauvegardées avec succès dans taches.txt");
+			System.out.println("Tâches sauvegardées avec succès dans mpmNouveau.txt");
 		}
 		catch (Exception e)
 		{ 
 			e.printStackTrace(); 
+		}
+	}
+
+	public void EnregistrerSous(ArrayList<Tache> lstTaches, String nomFichier) 
+	{
+		try
+		{
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("./MPM/donnee/" + nomFichier + ".txt"), "UTF8"));
+
+			for (int cpt = 1; cpt < lstTaches.size() - 1; cpt++)
+			{
+				String predecesseurs = "";
+				if (lstTaches.get(cpt).getLstPrc() != null && !lstTaches.get(cpt).getLstPrc().isEmpty())
+				{
+					StringBuilder sb = new StringBuilder();
+					for (int i = 0; i < lstTaches.get(cpt).getLstPrc().size(); i++)
+					{
+						if (i > 0) sb.append(",");
+						sb.append(lstTaches.get(cpt).getLstPrc().get(i).getNom());
+					}
+					predecesseurs = sb.toString();
+				}
+
+				if(predecesseurs.equals("Début")) 
+					predecesseurs = "";
+
+				pw.println(lstTaches.get(cpt).getNom()   + "|" + 
+						   lstTaches.get(cpt).getDuree() + "|" + 
+						   predecesseurs);
+			}
+			
+			pw.close();
+			System.out.println("Tâches sauvegardées avec succès dans "+ nomFichier + ".txt");
+		}
+		catch (Exception e)
+		{ 
+			e.printStackTrace();
 		}
 	}
 

@@ -5,7 +5,6 @@ import MPM.metier.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.swing.*;
 
 
@@ -17,6 +16,9 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private JMenuItem     menuiQuitter  ;
 	private JMenuItem     menuiNouveau  ;
 	private JMenuItem     menuiSupprimer;
+	private JMenuItem     menuiEnregistrerSous ;
+
+	private JMenuItem     menuiTheme    ;
 	
 
 	private FrameMPM      frame;
@@ -40,20 +42,30 @@ public class MaBarre extends JMenuBar implements ActionListener
 
 		// un element de la barre de menu
 		JMenu menuFichier = new JMenu("Fichier"  );
+		JMenu menuEdition = new JMenu("Edition"  );
 
-		// les items du menu FichierAnnuler
-		this.menuiNouveau  = new JMenuItem ("Nouveau Projet");
-		this.menuiRefresh  = new JMenuItem ("Actualiser"    );
-		this.menuiImporter = new JMenuItem ("Importer"      );
-		this.menuiSupprimer= new JMenuItem ("Supprimer"     );
-		this.menuiQuitter  = new JMenuItem ("Quitter"       );
+		// les items du menu Fichier
+		this.menuiNouveau         = new JMenuItem ("Nouveau Projet"   );
+		this.menuiRefresh         = new JMenuItem ("Actualiser"       );
+		this.menuiImporter        = new JMenuItem ("Importer"         );
+		this.menuiEnregistrerSous = new JMenuItem ("Enregistrer sous" );
+		this.menuiSupprimer       = new JMenuItem ("Supprimer"        );
+		this.menuiQuitter         = new JMenuItem ("Quitter"          );
+
+		this.menuiTheme           = new JMenuItem ("Theme"            );
+
 		
 		// Raccourci 
-		menuFichier       .setMnemonic('F');
-		this.menuiNouveau .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N , InputEvent.CTRL_DOWN_MASK) );
-		this.menuiImporter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I , InputEvent.CTRL_DOWN_MASK) );
-		this.menuiQuitter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
-		this.menuiRefresh .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R , InputEvent.CTRL_DOWN_MASK) );
+		menuFichier        .setMnemonic('F');
+		this.menuiNouveau  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiImporter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiQuitter  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
+		this.menuiRefresh  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiSupprimer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiEnregistrerSous.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S , InputEvent.CTRL_DOWN_MASK) );
+
+		menuEdition        .setMnemonic('E');
+		this.menuiTheme    .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T , InputEvent.CTRL_DOWN_MASK) );
 	
 		/*-------------------------------*/
 		/* positionnement des composants */
@@ -62,14 +74,17 @@ public class MaBarre extends JMenuBar implements ActionListener
 		// menu Fichier
 		menuFichier.add( this.menuiNouveau );
 		menuFichier.add( this.menuiImporter );
+		menuFichier.add( this.menuiEnregistrerSous );
 		menuFichier.add( this.menuiRefresh );
 		menuFichier.add( this.menuiSupprimer );
 		menuFichier.addSeparator();
 		menuFichier.add( this.menuiQuitter );
 
 		// ajout du menu 'Fichier' a la barre de menu
+		menuEdition.add( this.menuiTheme );
 
 		this.add( menuFichier );
+		this.add( menuEdition );
 
 		/*-------------------------------*/
 		/* Activation des composants     */
@@ -78,6 +93,9 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiQuitter .addActionListener(this);	
 		this.menuiNouveau .addActionListener(this);	
 		this.menuiRefresh .addActionListener(this);
+		this.menuiSupprimer.addActionListener(this);
+		this.menuiTheme   .addActionListener(this);
+		this.menuiEnregistrerSous.addActionListener(this);
 
 	}
 
@@ -128,13 +146,12 @@ public class MaBarre extends JMenuBar implements ActionListener
 					
 				}
 				
-
-				//System.out.println("Path : " + path);
-				
-				//System.out.println("lecture du fichier...");
-				//System.out.println("Affichage du projet : \n" + this.ctrl.afficherProjet());
-				
 			} 
+
+		}
+		if(e.getSource() == this.menuiTheme)
+		{
+			this.frame.setVisibleFrameTheme();
 		}
 
 		if(e.getSource() == this.menuiQuitter) { System.exit(0); }
@@ -147,6 +164,11 @@ public class MaBarre extends JMenuBar implements ActionListener
 		if(e.getSource() == this.menuiRefresh)
 		{
 			this.refresh(this.cheminFichier);
+		}
+
+		if(e.getSource() == this.menuiEnregistrerSous)
+		{
+			this.frame.setVisibleFrameEnregistrerSous();
 		}
 
 	}

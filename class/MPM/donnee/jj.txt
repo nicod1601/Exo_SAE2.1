@@ -1,0 +1,5 @@
+A|1|Début
+B|7|Début
+C|4|A
+N|5|B
+G|6|C,N

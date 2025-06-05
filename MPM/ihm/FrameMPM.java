@@ -14,6 +14,8 @@ public class FrameMPM extends JFrame
     private PanelBouton panelBouton;
 
     private FrameNouveau frameNouveau;
+    private FrameTheme frameTheme;
+    private FrameEnregistrerSous frameEnregistrerSous;
 
     private Controleur ctrl;
 
@@ -34,7 +36,9 @@ public class FrameMPM extends JFrame
 
         this.ctrl = ctrl;
 
-        this.frameNouveau = new FrameNouveau(this.ctrl);
+        this.frameNouveau         = new FrameNouveau(this.ctrl);
+        this.frameTheme           = new FrameTheme();
+        this.frameEnregistrerSous = new FrameEnregistrerSous(this.ctrl);
 
         this.menu        = new MaBarre(this, this.ctrl);
         this.panelMPM    = new PanelMPM(this, this.ctrl);
@@ -110,4 +114,8 @@ public class FrameMPM extends JFrame
      * Méthode permettant de réinitialiser le panel de gestion des tâches.
      */
     public void reinitialiser() {this.panelMPM.reinitialiser(); }
+
+    public void setVisibleFrameTheme(){this.frameTheme.setVisible(true);}
+
+    public void setVisibleFrameEnregistrerSous(){this.frameEnregistrerSous.setVisible(true);}
 }

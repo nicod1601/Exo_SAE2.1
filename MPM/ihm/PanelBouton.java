@@ -5,7 +5,6 @@ import MPM.metier.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
 
 public class PanelBouton extends JPanel implements ActionListener
@@ -38,7 +37,7 @@ public class PanelBouton extends JPanel implements ActionListener
         this.lstTache = new ArrayList<Tache>();
         this.lstBoxShape = new ArrayList<BoxShape>();
         this.niveauPrc = 0;
-        this.niveauSvt = 0;
+        this.niveauSvt = 1;
 
         this.btnDateMin       = new JButton("-");
         this.btnDateMax       = new JButton("+");
@@ -92,7 +91,7 @@ public class PanelBouton extends JPanel implements ActionListener
     public void resetNiveau()
     {
         this.niveauPrc = this.ctrl.getNbNiveau() - 1;
-        this.niveauSvt = 0;
+        this.niveauSvt = 1;
     }
 
     public void majTacheBox(ArrayList<Tache> t, ArrayList<BoxShape> b)
@@ -188,8 +187,16 @@ public class PanelBouton extends JPanel implements ActionListener
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
             {
-                this.lstBoxShape.get(cpt).setDateMin(" ");
-                this.lstBoxShape.get(cpt).setDateMax(" ");
+                if(this.lstBoxShape.get(cpt).getNiveau() == 0)
+                {
+                    this.lstBoxShape.get(cpt).setDateMin( " " + this.lstTache.get(cpt).getDateMin());
+                    this.lstBoxShape.get(cpt).setDateMax( " ");
+                }
+                else
+                {
+                    this.lstBoxShape.get(cpt).setDateMin( " ");
+                    this.lstBoxShape.get(cpt).setDateMax( " ");
+                }
             }
 
             this.activerBouton();

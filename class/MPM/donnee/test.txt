@@ -1,0 +1,6 @@
+Début|0|
+A|5|Début
+B|5|A
+C|6|A,B
+E|9|C
+Fin|0|E
