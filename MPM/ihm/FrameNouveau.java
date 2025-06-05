@@ -1,7 +1,6 @@
 package MPM.ihm;
 import MPM.Controleur;
 import javax.swing.*;
-import java.awt.*;
 
 public class FrameNouveau extends JFrame
 {
@@ -9,8 +8,10 @@ public class FrameNouveau extends JFrame
 
     private PanelNouveau panelNouveau;
 
+    private FrameMPM frame;
 
-    public FrameNouveau(Controleur ctrl)
+
+    public FrameNouveau(FrameMPM frame,Controleur ctrl)
     {
         this.setTitle("Nouvelle Tache");
         this.setExtendedState(JFrame.NORMAL);
@@ -22,7 +23,8 @@ public class FrameNouveau extends JFrame
         /*        Création des composants       */
         /*--------------------------------------*/
         this.ctrl = ctrl;
-        this.panelNouveau = new PanelNouveau(this.ctrl);
+        this.frame = frame;
+        this.panelNouveau = new PanelNouveau(this.frame,this.ctrl);
 
         /*--------------------------------------*/
         /*          Ajout des composants        */
@@ -32,6 +34,8 @@ public class FrameNouveau extends JFrame
 
         this.setVisible(false);
     }
+
+    public void majTache(){this.panelNouveau.majTache();}
 
 
 

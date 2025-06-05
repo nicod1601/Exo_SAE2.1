@@ -30,9 +30,12 @@ public class Controleur
 
     public ArrayList<Erreur> getErreur(){return this.projet.getErreur();}
 
-    public void sauvegarderTaches(ArrayList<Tache> lstTaches){this.projet.sauvegarderTaches(lstTaches);}
+    public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
+    {
+        this.projet.sauvegarderTaches(lstTaches, lien);
+    }
 
-    public void enregistrerSous(ArrayList<Tache> lstTaches, String nomFichier){this.projet.EnregistrerSous(lstTaches, nomFichier);}
+    public void enregistrerSous(String lien, ArrayList<Tache> lstTaches){this.projet.EnregistrerSous(lien, lstTaches);}
 
     public static void main(String[] args)
     {

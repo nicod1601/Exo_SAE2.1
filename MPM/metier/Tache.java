@@ -175,6 +175,7 @@ public class Tache
 
 		if (! this.lstPrc.isEmpty())
 		{
+			
 			this.niveau = this.lstPrc.get(0).getHauteur();
 			//System.out.println("il a un precedent");
 		}

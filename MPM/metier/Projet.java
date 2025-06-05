@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -46,6 +45,7 @@ public class Projet
 		this.lstTache    = new ArrayList<Tache>();
 		this.dureeProjet = 0;
 		this.nbTacheMaxNiveau = 0;
+		this.erreur = new ArrayList<Erreur>();
 
 		//this.lstCheminCritique = new ArrayList<CheminCritique>(this.lstTache);
 	}
@@ -185,7 +185,7 @@ public class Projet
 	 */
 	public void lireFichier(String chemin) 
 	{
-		this.erreur = new ArrayList<Erreur>();
+		
 		this.lstTache.clear();
 		Tache debut = new Tache("Début", 0);
 		debut.setDateMin(0);
@@ -203,6 +203,9 @@ public class Projet
 				if (ligne.isEmpty())                  continue;
 				if (!testSeparateur(ligne, numLigne)) continue; // Vérifie le format de la ligne
 				if (!testDureeInt  (ligne, numLigne)) continue; // Vérifie que la durée est un entier
+				if (!testNomVide   (ligne, numLigne)) continue; // Vérifie que le nom n'est pas vide
+				if (!testPredecesseursMalFormes(ligne, numLigne)) continue; // Vérifie la liste des prédécesseurs
+				
 				String[] partie = ligne.split("\\|");
 
 				String nom = partie[0];
@@ -214,7 +217,7 @@ public class Projet
 				if(partie.length > 2 && ! partie[2].isEmpty() )
 				{
 					String[] prc = partie[2].split(",");
-					if (!testPrecedentExiste(prc, numLigne, ligne)) continue; 
+					
 
 					for(int cpt =0; cpt < prc.length; cpt++)
 					{
@@ -426,57 +429,88 @@ public class Projet
 		return true;
 	}
 
-	private boolean testPrecedentExiste(String[] nomsPrecedents, int numLigne, String ligne) 
+		/**
+	 * Vérifie si le nom de la tâche est vide.
+	 * 
+	 * @param ligne la ligne à tester
+	 * @param numLigne le numéro de la ligne
+	 * @return true si le nom n'est pas vide, false sinon (et ajoute une erreur)
+	 */
+	private boolean testNomVide(String ligne, int numLigne) 
 	{
-    boolean tousExistents = true;
-    for (String nomPrc : nomsPrecedents)
-    {
-        boolean existe = false;
-        for (Tache t : this.lstTache)
-        {
-            if (t.getNom().equals(nomPrc))
-            {
-                existe = true;
-                break;
-            }
-        }
-        if (!existe)
-        {
-            System.out.println("Erreur de précédent inexistant à la ligne " + numLigne + " : " + nomPrc + " dans " + ligne);
-            this.erreur.add(new Erreur(ligne, numLigne, 4)); // code 4 pour précédent inexistant
-            tousExistents = false;
-        }
-    }
-    return tousExistents;
+		String[] parties = ligne.split("\\|");
+		if (parties.length < 1 || parties[0].trim().isEmpty()) //trim permet de retirer les espaces 
+		{
+			System.out.println("Erreur : nom de tâche vide à la ligne " + numLigne);
+			this.erreur.add(new Erreur(ligne, numLigne, 5)); // code 5 pour nom vide
+			return false;
+		}
+		return true;
 	}
 
-	public void sauvegarderTaches(ArrayList<Tache> lstTaches)
+
+	/**
+	 * Vérifie si la liste des prédécesseurs est bien formée.
+	 * 
+	 * @param ligne la ligne à tester
+	 * @param numLigne le numéro de la l
+						igne
+	* @return true si la liste est correcte, false sinon (et ajoute une erreur)
+	*/
+	private boolean testPredecesseursMalFormes(String ligne, int numLigne) 
+	{
+		String[] parties = ligne.split("\\|");
+		if (parties.length < 3 || parties[2].isEmpty()) return true; // pas de prédécesseur, donc OK
+		String[] prc = parties[2].split(",");
+		for (String nom : prc) 
+		{
+			if (nom.trim().isEmpty())
+			{
+				System.out.println("Erreur : prédécesseur mal formé à la ligne " + numLigne + " : " + ligne);
+				this.erreur.add(new Erreur(ligne, numLigne, 6)); 
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
 	{
 		try
 		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("./MPM/donnee/mpmNouveau.txt"), "UTF8"));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lien), "UTF8"));
 
 			for (Tache tache : lstTaches)
 			{
-				String predecesseurs = "";
-				if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
+				// Exclure les tâches "Début" et "Fin"
+				if (! tache.getNom().equals("Début") && ! tache.getNom().equals("Fin"))
 				{
-					StringBuilder sb = new StringBuilder();
-					for (int i = 0; i < tache.getLstPrc().size(); i++)
+					String predecesseurs = "";
+					if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
 					{
-						if (i > 0) sb.append(",");
-						sb.append(tache.getLstPrc().get(i).getNom());
-					}
-					predecesseurs = sb.toString();
-				}
+						StringBuilder sb = new StringBuilder();
+						for (int i = 0; i < tache.getLstPrc().size(); i++)
+						{
+							// Exclure "Début" des prédécesseurs
+							if (!tache.getLstPrc().get(i).getNom().equals("Début"))
+							{
+								if (sb.length() > 0) sb.append(",");
+								sb.append(tache.getLstPrc().get(i).getNom());
+							}
+						}
+						predecesseurs = sb.toString();
 
-				pw.println(tache.getNom() + "|" + 
+						pw.println(tache.getNom() + "|" + 
 						tache.getDuree() + "|" + 
 						predecesseurs);
+					}
+				}
+
+				
 			}
 			
 			pw.close();
-			System.out.println("Tâches sauvegardées avec succès dans mpmNouveau.txt");
+			System.out.println("Tâches sauvegardées avec succès dans " + lien);
 		}
 		catch (Exception e)
 		{ 
@@ -484,11 +518,11 @@ public class Projet
 		}
 	}
 
-	public void EnregistrerSous(ArrayList<Tache> lstTaches, String nomFichier) 
+	public void EnregistrerSous(String lien, ArrayList<Tache> lstTaches) 
 	{
 		try
 		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("./MPM/donnee/" + nomFichier + ".txt"), "UTF8"));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lien), "UTF8"));
 
 			for (int cpt = 1; cpt < lstTaches.size() - 1; cpt++)
 			{
@@ -513,7 +547,7 @@ public class Projet
 			}
 			
 			pw.close();
-			System.out.println("Tâches sauvegardées avec succès dans "+ nomFichier + ".txt");
+			System.out.println();
 		}
 		catch (Exception e)
 		{ 

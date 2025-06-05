@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
-public class PanelMPM extends JPanel implements MouseListener, MouseMotionListener
+public class PanelMPM extends JPanel implements MouseListener, MouseMotionListener, ActionListener
 {
 
 	private ArrayList<Tache> listTache;
@@ -25,12 +25,13 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private boolean enDeplacement = false;
 
 	// elem de PopMenu
+	JPopupMenu popMenu;
 	JMenuItem itemAjouter;
 	JMenuItem itemSupprimer;
 	JMenuItem itemModifier;
 
 
-	private final int TAILLESCROLL = 1000;
+	private final int TAILLESCROLL = 800;
 
 	public PanelMPM(FrameMPM frame, Controleur ctrl) 
 	{
@@ -53,7 +54,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.niveauPrc   = 0;
 		this.niveauSvt   = 0;
 
-		JPopupMenu popMenu = new JPopupMenu();
+		this.popMenu = new JPopupMenu();
 
 		this.itemAjouter   = new JMenuItem("Ajouter");
 		this.itemSupprimer = new JMenuItem("Supprimer");
@@ -69,17 +70,21 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		/*--------------------------------------*/
 		/*     Positionnement des composants    */
 		/*--------------------------------------*/
-		popMenu.add(this.itemAjouter);
-		popMenu.add(this.itemSupprimer);
-		popMenu.add(this.itemModifier);
+		this.popMenu.add(this.itemAjouter);
+		this.popMenu.add(this.itemSupprimer);
+		this.popMenu.add(this.itemModifier);
 
-		this.setComponentPopupMenu(popMenu);
+		this.setComponentPopupMenu(this.popMenu);
 
 		/*--------------------------------------*/
 		/*       Activation des composants      */
 		/*--------------------------------------*/
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
+
+		this.itemAjouter.addActionListener(this);
+		this.itemSupprimer.addActionListener(this);
+		this.itemModifier.addActionListener(this);
 	}
 
 	public void resetNiveau()
@@ -95,7 +100,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	public void majScroll(int largeur, int hauteur)
 	{
-		this.setPreferredSize(new Dimension( (TAILLESCROLL * largeur), (TAILLESCROLL * hauteur) / 2) );
+		this.setPreferredSize(new Dimension( (TAILLESCROLL * largeur) / 2, (TAILLESCROLL * hauteur) / 2) );
+		this.revalidate();
 	}
 
 	public void majList()
@@ -131,6 +137,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 		this.frame.majTacheBox(this.listTache, this.lstBoxShape);
 
+		this.revalidate();
 		this.repaint();
 	}
 
@@ -142,6 +149,14 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.enDeplacement = false;
 		this.frame.desactiverBoutons();
 		this.repaint();
+	}
+
+	public void actionPerformed(ActionEvent e) 
+	{
+		if(e.getSource() == this.itemAjouter)
+		{
+			this.frame.setVisibleFrameNouveau();
+		}
 	}
 
 	public void paintComponent(Graphics g)
@@ -236,13 +251,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	public void mouseEntered(MouseEvent e) 
 	{
-		Point pointSouris         = e.getPoint();
-		this.boxShapeSelectionnee = this.trouverBoxShapeSousSouris(pointSouris);
-
-		if(this.boxShapeSelectionnee != null)
-		{
-			System.out.println("\""+this.boxShapeSelectionnee.getNom()+"");
-		}
 		
 	}
 
@@ -257,19 +265,41 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		if (boxSousSouris != null)
 		{
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			//System.out.println(boxSousSouris.getNom()+"");
+			//System.out.println(boxSousSouris.getNom().equals("Début"));
 
-			if(boxSousSouris.getNom().equals("Début"))
+			if(! this.popMenu.isShowing())
 			{
-				this.itemModifier.setEnabled(false);
-				this.itemSupprimer.setEnabled(false);
-			}
 
-			
+				if(boxSousSouris.getNom().equals("Début") || boxSousSouris.getNom().equals("Fin"))
+				{
+					if(! this.popMenu.isShowing())
+					{
+						this.itemAjouter.setEnabled(false);
+						this.itemModifier.setEnabled(false);
+						this.itemSupprimer.setEnabled(false);
+					}
+				}
+				else
+				{
+					if(! this.popMenu.isShowing())
+					{
+						this.itemAjouter.setEnabled(false);
+						this.itemModifier.setEnabled(true);
+						this.itemSupprimer.setEnabled(true);
+					}
+				}
+			}
+	
 		} 
 		else
 		{
 			this.setCursor(Cursor.getDefaultCursor());
+			if(! this.popMenu.isShowing())
+			{
+				this.itemAjouter.setEnabled(true);
+				this.itemModifier.setEnabled(false);
+				this.itemSupprimer.setEnabled(false);
+			}
 		}
 	}
 }

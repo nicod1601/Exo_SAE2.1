@@ -1,5 +1,22 @@
 package MPM.metier;
 
+/**
+ * Représente une erreur détectée lors de la lecture ou du traitement d'un
+ * fichier de tâches.
+ *
+ * <p>
+ * Codes d'erreur utilisés :
+ * <ul>
+ * <li><b>0</b> : Erreur inconnue</li>
+ * <li><b>1</b> : Erreur de format (le nombre de séparateurs '|' n'est pas égal
+ * à 2)</li>
+ * <li><b>2</b> : La durée n'est pas un entier ou champ durée manquant</li>
+ * <li><b>3</b> : Nom de tâche en double</li>
+ * <li><b>4</b> : Prédécesseur inexistant ou durée négative/nulle</li>
+ * </ul>
+ * </p>
+ */
+
 public class Erreur 
 {
 	private String ligne;
@@ -39,9 +56,15 @@ public class Erreur
 			case 2:
 				return "La durée indiquée à la ligne "  + numLigne + " n'est pas un entier : "   + ligne;
 			case 3:
-				return "Le nom de la tâche à la ligne " + numLigne + " est déjà utilisé : "      + ligne;
+				return "La nom de la tâche à la ligne " + numLigne + " est déjà utilisé : "      + ligne;
 			case 4:
-				return "Le prédécesseur à la ligne " + numLigne + " n'existe pas : " + ligne;
+				return "Le prédécesseur à la ligne "    + numLigne + " n'existe pas : "          + ligne;
+			case 5:
+				return "La tâche à la ligne "           + numLigne + " n'a pas de nom : "        + ligne;
+			case 6:
+				return "Le ou les prédécesseurs de la tâche à la ligne " + numLigne + " n'ont pas de nom : " + ligne;
+			case 7:
+				return "Le fichier importé n'existe pas ou n'est pas accessible." ; 
 			
 			default:
 				return "Erreur inconnue : " + this.ligne;

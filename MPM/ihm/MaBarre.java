@@ -16,7 +16,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private JMenuItem     menuiQuitter  ;
 	private JMenuItem     menuiNouveau  ;
 	private JMenuItem     menuiSupprimer;
-	private JMenuItem     menuiEnregistrerSous ;
+	private JMenuItem     menuiSaveAs ;
 
 	private JMenuItem     menuiTheme    ;
 	
@@ -48,7 +48,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiNouveau         = new JMenuItem ("Nouveau Projet"   );
 		this.menuiRefresh         = new JMenuItem ("Actualiser"       );
 		this.menuiImporter        = new JMenuItem ("Importer"         );
-		this.menuiEnregistrerSous = new JMenuItem ("Enregistrer sous" );
+		this.menuiSaveAs = new JMenuItem ("Enregistrer sous" );
 		this.menuiSupprimer       = new JMenuItem ("Supprimer"        );
 		this.menuiQuitter         = new JMenuItem ("Quitter"          );
 
@@ -62,7 +62,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiQuitter  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
 		this.menuiRefresh  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiSupprimer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D , InputEvent.CTRL_DOWN_MASK) );
-		this.menuiEnregistrerSous.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiSaveAs   .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S , InputEvent.CTRL_DOWN_MASK) );
 
 		menuEdition        .setMnemonic('E');
 		this.menuiTheme    .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T , InputEvent.CTRL_DOWN_MASK) );
@@ -74,7 +74,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		// menu Fichier
 		menuFichier.add( this.menuiNouveau );
 		menuFichier.add( this.menuiImporter );
-		menuFichier.add( this.menuiEnregistrerSous );
+		menuFichier.add( this.menuiSaveAs );
 		menuFichier.add( this.menuiRefresh );
 		menuFichier.add( this.menuiSupprimer );
 		menuFichier.addSeparator();
@@ -89,13 +89,13 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/*-------------------------------*/
 		/* Activation des composants     */
 		/*-------------------------------*/
-		this.menuiImporter.addActionListener(this);
-		this.menuiQuitter .addActionListener(this);	
-		this.menuiNouveau .addActionListener(this);	
-		this.menuiRefresh .addActionListener(this);
+		this.menuiImporter .addActionListener(this);
+		this.menuiQuitter  .addActionListener(this);	
+		this.menuiNouveau  .addActionListener(this);	
+		this.menuiRefresh  .addActionListener(this);
 		this.menuiSupprimer.addActionListener(this);
-		this.menuiTheme   .addActionListener(this);
-		this.menuiEnregistrerSous.addActionListener(this);
+		this.menuiTheme    .addActionListener(this);
+		this.menuiSaveAs.addActionListener(this);
 
 	}
 
@@ -139,10 +139,21 @@ public class MaBarre extends JMenuBar implements ActionListener
 				else // Sinon on lit le fichier
 				{
 					this.cheminFichier = path;
-					this.ctrl.lireFichier(path);
+					this.ctrl.getErreur().clear(); // On vide la liste des erreurs
+					if(!fichier.exists())
+					{
+						this.ctrl.getErreur().add(new Erreur(7));
+						this.verification();
+					}
+					else
+					{
+
+					this.frame.setLien(this.cheminFichier);
+					this.ctrl.lireFichier(this.cheminFichier);
+					this.verification();
 					this.frame.majList();
-					this.verification(); // Vérification des erreurs dans le projet
 					this.frame.activerBoutons();
+					}
 					
 				}
 				
@@ -166,9 +177,33 @@ public class MaBarre extends JMenuBar implements ActionListener
 			this.refresh(this.cheminFichier);
 		}
 
-		if(e.getSource() == this.menuiEnregistrerSous)
+		if(e.getSource() == this.menuiSaveAs)
 		{
-			this.frame.setVisibleFrameEnregistrerSous();
+			this.fileChooser.setCurrentDirectory(this.fileChooser.getCurrentDirectory() );
+			fileChooser.setDialogTitle("Enregistrer sous");
+			this.fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    
+			int retour = this.fileChooser.showSaveDialog(this.frame); 
+
+
+			if(retour == JFileChooser.APPROVE_OPTION)
+			{
+				File fichier  = this.fileChooser.getSelectedFile();
+				String path   = fichier.getPath();
+
+
+				try 
+				{
+					this.ctrl.enregistrerSous(path, this.ctrl.getListeTache());
+					JOptionPane.showMessageDialog(this.frame, "Projet enregistré sous " + path, "Enregistrement", JOptionPane.INFORMATION_MESSAGE);
+				} 
+				catch (Exception e1) 
+				{
+					JOptionPane.showMessageDialog(this.frame, "Problème lors de l'enregistrement", "Enregistrement", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			
+			}
 		}
 
 	}
@@ -181,7 +216,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		ArrayList<Erreur> erreur = this.ctrl.getErreur();
 		if (erreur != null && !erreur.isEmpty())
 		{
-			for (int code = 0; code <= 4; code++)
+			for (int code = 0; code <= 8; code++)
 			{ // adapte la borne max si besoin
 				String message = "";
 				for (Erreur err : erreur)

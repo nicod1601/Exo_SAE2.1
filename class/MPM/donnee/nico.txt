@@ -1,0 +1,8 @@
+A|1|
+G|9|
+H|4|A
+Violence|1|A,G,H
+I|1|Violence
+U|8|G
+J|4|A
+K|4|I

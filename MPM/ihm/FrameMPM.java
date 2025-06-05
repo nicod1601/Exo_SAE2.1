@@ -8,16 +8,16 @@ import javax.swing.*;
 
 public class FrameMPM extends JFrame
 {
-    
     private MaBarre menu;
     private PanelMPM panelMPM;
     private PanelBouton panelBouton;
 
     private FrameNouveau frameNouveau;
     private FrameTheme frameTheme;
-    private FrameEnregistrerSous frameEnregistrerSous;
 
     private Controleur ctrl;
+
+    private String lien;
 
     private JScrollPane scrollPane;
     
@@ -35,10 +35,10 @@ public class FrameMPM extends JFrame
         /*--------------------------------------*/
 
         this.ctrl = ctrl;
+        this.lien = " ";
 
-        this.frameNouveau         = new FrameNouveau(this.ctrl);
+        this.frameNouveau         = new FrameNouveau(this,this.ctrl);
         this.frameTheme           = new FrameTheme();
-        this.frameEnregistrerSous = new FrameEnregistrerSous(this.ctrl);
 
         this.menu        = new MaBarre(this, this.ctrl);
         this.panelMPM    = new PanelMPM(this, this.ctrl);
@@ -72,7 +72,16 @@ public class FrameMPM extends JFrame
         this.setVisible(true);
     }
 
-    public void setVisibleFrameNouveau(){this.frameNouveau.setVisible(true);}
+    public void refresh(String lien) {this.menu.refresh(lien);}
+
+    public void setVisibleFrameNouveau()
+    {
+        this.frameNouveau.majTache();
+        this.frameNouveau.setVisible(true);
+    }
+
+    public void setLien(String lien){this.lien = lien;}
+    public String getLien(){return this.lien;}
 
 
     /**
@@ -117,5 +126,5 @@ public class FrameMPM extends JFrame
 
     public void setVisibleFrameTheme(){this.frameTheme.setVisible(true);}
 
-    public void setVisibleFrameEnregistrerSous(){this.frameEnregistrerSous.setVisible(true);}
+
 }
