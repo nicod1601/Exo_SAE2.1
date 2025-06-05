@@ -31,7 +31,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	JMenuItem itemModifier;
 
 
-	private final int TAILLESCROLL = 800;
+	private final int TAILLESCROLL = 600;
 
 	public PanelMPM(FrameMPM frame, Controleur ctrl) 
 	{
@@ -157,6 +157,37 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		{
 			this.frame.setVisibleFrameNouveau();
 		}
+
+		if(e.getSource() == this.itemSupprimer)
+		{
+			this.supprimerTache();
+		}
+	}
+
+	public void supprimerTache()
+	{
+		System.out.println("supprimerTache");
+		System.out.println("Tache selectionnee : " + this.boxShapeSelectionnee);
+
+		if(this.boxShapeSelectionnee != null)
+		{
+			System.out.println("Suppression de la tache : " + this.boxShapeSelectionnee.getTache().getNom());
+			System.out.println("Tableau des taches : " + this.listTache);
+			
+			// Supprimer de la liste des tâches
+			this.listTache.remove(this.boxShapeSelectionnee.getTache());
+			
+			// Vider complètement la liste des BoxShape avant de la recréer
+			this.lstBoxShape.clear();
+			
+			// Remettre à null la sélection
+			this.boxShapeSelectionnee = null;
+			
+			// Maintenant on peut appeler majList() en sécurité
+			this.majList();
+			
+			System.out.println("Tableau des taches après suppression : " + this.listTache);
+		}
 	}
 
 	public void paintComponent(Graphics g)
@@ -240,7 +271,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	public void mouseReleased(MouseEvent e) 
 	{
 		this.enDeplacement = false;
-		this.boxShapeSelectionnee = null;
+		//this.boxShapeSelectionnee = null;
 		this.pointClique = null;
 		this.setCursor(Cursor.getDefaultCursor());
 	}
@@ -261,8 +292,11 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	public void mouseMoved(MouseEvent e)
 	{
-		BoxShape boxSousSouris = trouverBoxShapeSousSouris(e.getPoint());
-		if (boxSousSouris != null)
+		Point pointSouris         = e.getPoint();
+		this.boxShapeSelectionnee = this.trouverBoxShapeSousSouris(pointSouris);
+
+
+		if (this.boxShapeSelectionnee != null)
 		{
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			//System.out.println(boxSousSouris.getNom().equals("Début"));
@@ -270,7 +304,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			if(! this.popMenu.isShowing())
 			{
 
-				if(boxSousSouris.getNom().equals("Début") || boxSousSouris.getNom().equals("Fin"))
+				if(this.boxShapeSelectionnee.getNom().equals("Début") || this.boxShapeSelectionnee.getNom().equals("Fin"))
 				{
 					if(! this.popMenu.isShowing())
 					{

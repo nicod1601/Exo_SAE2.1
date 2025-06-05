@@ -35,6 +35,8 @@ public class Controleur
         this.projet.sauvegarderTaches(lstTaches, lien);
     }
 
+    public void ajouterTache(Tache tache){this.projet.ajouterTache(tache);}
+
     public void enregistrerSous(String lien, ArrayList<Tache> lstTaches){this.projet.EnregistrerSous(lien, lstTaches);}
 
     public static void main(String[] args)

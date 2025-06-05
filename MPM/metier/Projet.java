@@ -258,8 +258,9 @@ public class Projet
 				}
 				t.setNiveau();
 			}
-
-			this.majDate();
+			if(!this.testTropDeNiveaux()) this.lstTache.clear(); // Si trop de niveaux, on vide la liste des tâches
+			else
+				this.majDate();
 		}
 		
 		catch ( Exception e )
@@ -472,6 +473,28 @@ public class Projet
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Vérifie si le nombre de niveaux dépasse la limite autorisée (200). Ajoute
+	 * une erreur si la limite est dépassée.
+	 * 
+	 * @return true si le nombre de niveaux est correct, false sinon
+	 */
+	private boolean testTropDeNiveaux()
+	{
+		if (this.getNbNiveau() > 200)
+		{
+			System.out.println("Erreur : trop de niveaux (plus de 200)");
+			this.erreur.add(new Erreur( 8));
+			return false;
+		}
+		return true;
+	}
+
+	public void ajouterTache(Tache t)
+	{
+		this.lstTache.add(t);
 	}
 
 	public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)

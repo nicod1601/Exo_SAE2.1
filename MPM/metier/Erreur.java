@@ -65,6 +65,8 @@ public class Erreur
 				return "Le ou les prédécesseurs de la tâche à la ligne " + numLigne + " n'ont pas de nom : " + ligne;
 			case 7:
 				return "Le fichier importé n'existe pas ou n'est pas accessible." ; 
+			case 8:
+				return "Le nombre de niveaux dépasse la limite autorisée (200 niveaux)"; 
 			
 			default:
 				return "Erreur inconnue : " + this.ligne;

@@ -53,6 +53,7 @@ public class PanelNouveau extends JPanel implements ActionListener
         this.txtNom        = new JTextField(10);
         this.txtDuree      = new JTextField(3);
         this.btnCreerTache = new JButton("Creer Tache");
+        this.btnCreerTache.setEnabled(false);
 
         this.boxShape = new BoxShape(this.ctrl);
         this.panelBox = this.boxShape.creerPanel(this.boxShape);
@@ -78,6 +79,8 @@ public class PanelNouveau extends JPanel implements ActionListener
         this.add(scrollPaneCheckbox);
         this.add(panelInformation);
         this.add(this.panelBox);
+
+        
 
         /*--------------------------------------*/
         /*         Ajout des listeners          */
@@ -113,6 +116,8 @@ public class PanelNouveau extends JPanel implements ActionListener
         // Rafraîchir l'affichage
         this.panelChoixPrc.revalidate();
         this.panelChoixPrc.repaint();
+
+        this.verifLien();
     }
 
     public void majPanelBoxShape()
@@ -120,22 +125,43 @@ public class PanelNouveau extends JPanel implements ActionListener
          this.panelBox.repaint();
     }
 
+    public void verifLien()
+    {
+        String lien = this.frameMPM.getLien();
+
+        if(lien.equals("") || lien == null || lien.trim().equals(""))
+        {
+            this.btnCreerTache.setEnabled(false);
+        }
+        else
+        {
+            this.btnCreerTache.setEnabled(true);
+        }
+        
+    }
+
     public void actionPerformed(ActionEvent e)
     {
+
         if(e.getSource() == this.txtNom)
         {
             this.boxShape.setNom(this.txtNom.getText());
+            System.out.println("Lien : " + this.frameMPM.getLien());
             this.majPanelBoxShape();
         }
 
         if(!this.txtDuree.getText().equals("") && !this.txtNom.getText().equals(""))
         {
+
             if(e.getSource() == this.btnCreerTache)
             {
                 try 
                 {
                     Tache nouvelleTache = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText()));
                     this.lstTache.add(nouvelleTache);
+                    
+                    BoxShape boxShape = new BoxShape(nouvelleTache, this.ctrl);
+                    this.ctrl.ajouterTache(nouvelleTache);
                     
                     for(int i = 0; i < this.tabPrc.size(); i++)
                     {
@@ -144,13 +170,14 @@ public class PanelNouveau extends JPanel implements ActionListener
                         {
                             nouvelleTache.addPrecedent(this.lstTache.get(i + 1));
                             System.out.println("Ajout prédécesseur : " + this.lstTache.get(i + 1).getNom());
+                            
                         }
                     }
 
                     this.boxShape.setNom(this.txtNom.getText());
                     this.majPanelBoxShape();
 
-                    this.ctrl.sauvegarderTaches(this.lstTache, this.frameMPM.getLien());
+                    //this.ctrl.sauvegarderTaches(this.lstTache, this.frameMPM.getLien());
 
                     this.txtNom.setText("");
                     this.txtDuree.setText("");

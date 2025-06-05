@@ -56,6 +56,8 @@ public class BoxShape
         this.dateMax = " " + t.getDateMax();
         this.dateMin = " " + t.getDateMin();
     }
+
+    public Tache getTache() { return this.tache; }
     
     // Getters
     public int getLargeur()                 { return largeur;                         }

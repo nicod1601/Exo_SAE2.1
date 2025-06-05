@@ -6,3 +6,4 @@ I|1|Violence
 U|8|G
 J|4|A
 K|4|I
+Hercule|8|H,U,J

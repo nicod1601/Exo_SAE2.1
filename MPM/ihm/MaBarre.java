@@ -216,7 +216,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		ArrayList<Erreur> erreur = this.ctrl.getErreur();
 		if (erreur != null && !erreur.isEmpty())
 		{
-			for (int code = 0; code <= 8; code++)
+			for (int code = 0; code <= 9; code++)
 			{ // adapte la borne max si besoin
 				String message = "";
 				for (Erreur err : erreur)
