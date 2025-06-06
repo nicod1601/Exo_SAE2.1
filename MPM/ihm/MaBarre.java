@@ -216,7 +216,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		ArrayList<Erreur> erreur = this.ctrl.getErreur();
 		if (erreur != null && !erreur.isEmpty())
 		{
-			for (int code = 0; code <= 9; code++)
+			for (int code = 0; code <= 10; code++)
 			{ // adapte la borne max si besoin
 				String message = "";
 				for (Erreur err : erreur)
@@ -228,8 +228,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 				}
 				if (!message.isEmpty())
 				{
-					int type = (code == 1) ? JOptionPane.WARNING_MESSAGE : JOptionPane.ERROR_MESSAGE;
-					JOptionPane.showMessageDialog(this.frame, message, "Code erreur " + code, type);
+					JOptionPane.showMessageDialog(this.frame, message, "Code erreur " + code, JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}

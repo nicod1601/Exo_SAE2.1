@@ -160,6 +160,8 @@ public class Tache
 			
 	}
 
+	public void setNiveau(int val) { this.niveau = val; }
+
 	public int getNiveau() { return this.niveau;}
 
 	/**

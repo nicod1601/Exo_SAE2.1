@@ -104,10 +104,8 @@ public class PanelNouveau extends JPanel implements ActionListener
 
             for(int cpt =0; cpt < this.lstTache.size() ; cpt++)
             {
-                System.out.println("Nom : " + this.lstTache.get(cpt).getNom());
                 if(! this.lstTache.get(cpt).getNom().equals("Début") && ! this.lstTache.get(cpt).getNom().equals("Fin"))
                 {
-                    System.out.println("Ajout checkbox : " + this.lstTache.get(cpt).getNom());
                     JCheckBox checkbox = new JCheckBox(this.lstTache.get(cpt).getNom());
                     this.tabPrc.add(checkbox);
                     this.panelChoixPrc.add(checkbox);
@@ -157,15 +155,13 @@ public class PanelNouveau extends JPanel implements ActionListener
 
             if(e.getSource() == this.btnCreerTache)
             {
-                try {
-                    System.out.println("=== DÉBUT CRÉATION TÂCHE ===");
+                try 
+                {
                     
                     // 1. Création de la tâche
                     Tache nouvelleTache = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText()));
-                    System.out.println("Tâche créée: " + nouvelleTache.getNom() + " (durée: " + nouvelleTache.getDuree() + ")");
                     
                     // 2. Traitement des prédécesseurs sélectionnés
-                    System.out.println("Nombre de checkboxes: " + this.tabPrc.size());
                     ArrayList<Tache> predecesseursSelectionnes = new ArrayList<>();
                     
                     // Collecter les prédécesseurs sélectionnés
@@ -215,12 +211,21 @@ public class PanelNouveau extends JPanel implements ActionListener
                     
                     // 5. Vérifier que la tâche a bien été ajoutée
                     boolean tacheAjoutee = false;
-                    for(Tache t : this.ctrl.getListeTache()) {
-                        if(t.getNom().equals(nouvelleTache.getNom())) {
+                    for(Tache t : this.ctrl.getListeTache()) 
+                    {
+                        if(t.getNom().equals(nouvelleTache.getNom())) 
+                        {
                             tacheAjoutee = true;
                             System.out.println("Tâche trouvée dans la liste du contrôleur");
                             break;
                         }
+                    }
+
+                    //régler le niveau de Fin
+                    Tache fin = this.lstTache.get(this.lstTache.size() - 1);
+                    if(nouvelleTache.getNiveau() > fin.getNiveau())
+                    {
+                        fin.setNiveau(nouvelleTache.getNiveau() + 1);
                     }
                     
                     // 6. Rafraîchir l'affichage

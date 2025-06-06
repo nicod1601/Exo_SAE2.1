@@ -198,6 +198,13 @@ public class BoxShape
 
         }
     }
+
+
+    public void supprimer(Tache tOrg, Tache tDest)
+    {
+        this.tache.getLstPrc().remove(tOrg);
+        this.tache.getLstSvt().remove(tDest);
+    }
     
     /**
      * Crée un JPanel contenant cette forme

@@ -4,6 +4,7 @@ import MPM.Controleur;
 import MPM.metier.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -24,6 +25,10 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private Point pointClique = null;
 	private boolean enDeplacement = false;
 
+	//flèche
+	private ArrayList<Fleche> lstFleche;
+	private Fleche flecheSelectionnee = null;
+
 	//stocke
 	private BoxShape recupBox;
 
@@ -32,6 +37,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private JMenuItem itemAjouter;
 	private JMenuItem itemSupprimer;
 	private JMenuItem itemModifier;
+	private JMenuItem itemSupprimerFleche;
 
 	// sous menu AjouterPrc
 	private JMenu menuAjoutePrc;
@@ -70,10 +76,14 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemSupprimer = new JMenuItem("Supprimer");
 		this.itemModifier  = new JMenuItem("Modifier");
 
+		this.itemSupprimerFleche = new JMenuItem("Supprimer Fleche");
+
 		this.menuAjoutePrc = new JMenu("Ajouter Prc");
 		this.itemAjoutePrc = new JMenuItem("");
 
 		this.recupBox = this.boxShapeSelectionnee;
+
+		this.lstFleche = new ArrayList<Fleche>();
 
 		this.ajouterPrc();
 
@@ -82,8 +92,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemAjouter.setEnabled(true);
 		this.itemSupprimer.setEnabled(false);
 		this.itemModifier.setEnabled(false);
-
-		
+		this.itemSupprimerFleche.setEnabled(false);
 
 
 		/*--------------------------------------*/
@@ -92,6 +101,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.popMenu.add(this.itemAjouter);
 		this.popMenu.add(this.itemSupprimer);
 		this.popMenu.add(this.itemModifier);
+		this.popMenu.add(this.itemSupprimerFleche);
+		this.popMenu.addSeparator();
 		this.popMenu.add(this.menuAjoutePrc);
 
 		this.setComponentPopupMenu(this.popMenu);
@@ -106,6 +117,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemSupprimer.addActionListener(this);
 		this.itemModifier.addActionListener(this);
 		this.itemAjoutePrc.addActionListener(this);
+		this.itemSupprimerFleche.addActionListener(this);
 	}
 
 	public void ajouterPrc()
@@ -210,34 +222,66 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.repaint();
 	}
 
-	public void actionPerformed(ActionEvent e) 
+	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == this.itemAjouter)
+		if (e.getSource() == this.itemAjouter) 
 		{
 			this.frame.setVisibleFrameNouveau();
 		}
 
-		if(e.getSource() == this.itemSupprimer)
+		if (e.getSource() == this.itemSupprimer)
 		{
 			this.supprimerTache();
 		}
 
-		if(e.getSource() == this.itemModifier)
+		if (e.getSource() == this.itemSupprimerFleche)
 		{
-			//this.frame.setVisibleFrameModifier();
+			this.supprimerFleche(); 
 		}
 
-		for(int cpt = 0; cpt < this.menuAjoutePrc.getItemCount(); cpt++)
+		for (int cpt = 0; cpt < this.menuAjoutePrc.getItemCount(); cpt++)
 		{
-			if(e.getSource() == this.menuAjoutePrc.getItem(cpt))
+			if (e.getSource() == this.menuAjoutePrc.getItem(cpt))
 			{
-				for(Tache t : this.ctrl.getListeTache())
+				for (Tache t : this.ctrl.getListeTache())
 				{
-					if(t.getNom().equals(this.menuAjoutePrc.getItem(cpt).getText()))
+					if (t.getNom().equals(this.menuAjoutePrc.getItem(cpt).getText()))
 					{
 						this.ctrl.addPrecedent(this.recupBox.getTache(), t);
+						this.majList(); 
+						break;
 					}
 				}
+			}
+		}
+	}
+
+	public void supprimerFleche()
+	{
+		if (this.flecheSelectionnee != null) 
+		{
+			// Récupérer les tâches origine et destination
+			Tache tacheOrigine = this.flecheSelectionnee.getOrigine().getTache();
+			Tache tacheDestination = this.flecheSelectionnee.getDestination().getTache();
+			
+			// Utiliser la méthode supprimer de la classe Fleche pour nettoyer les relations
+			this.flecheSelectionnee.supprimer(tacheOrigine, tacheDestination);
+			
+			// Supprimer la flèche de la liste
+			this.lstFleche.remove(this.flecheSelectionnee);
+			
+			// Remettre la sélection à null
+			this.flecheSelectionnee = null;
+			
+			// Mettre à jour l'affichage
+			this.majList();
+			this.repaint();
+			
+			System.out.println("Flèche supprimée avec succès");
+
+			for(Tache t : this.ctrl.getListeTache())
+			{
+				System.out.println("TACHE : " + t.getNom() + " : " + t.getLstPrc() + " précedents" + " et " + t.getLstSvt() + " successeurs");
 			}
 		}
 	}
@@ -249,34 +293,51 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 		if(this.boxShapeSelectionnee != null)
 		{
-			
-			// Supprimer de la liste des tâches
+			Tache t = this.boxShapeSelectionnee.getTache();
+
+			// il faut que les autre l'oublie aussi 
+			ArrayList<Tache> lstPrc = t.getLstPrc();
+
+			for (int cpt = 0; cpt < lstPrc.size(); cpt++)
+			{
+				lstPrc.get(cpt).getLstSvt().remove(t);
+			}
+
+			ArrayList<Tache> lstSvt = t.getLstSvt();
+
+			for (int cpt = 0; cpt < lstSvt.size(); cpt++)
+			{
+				lstSvt.get(cpt).getLstPrc().remove(t);
+			}
+
 			this.listTache.remove(this.boxShapeSelectionnee.getTache());
-			
-			// Vider complètement la liste des BoxShape avant de la recréer
+
 			this.lstBoxShape.clear();
 			
-			// Remettre à null la sélection
 			this.boxShapeSelectionnee = null;
 			
-			// Maintenant on peut appeler majList() en sécurité
 			this.majList();
-
-			this.ajouterPrc();
+			this.ctrl.majDate();
 		}
 	}
 
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
+		this.ctrl.majDate();
 
+		// Dessiner les BoxShape
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
 		{	
 			this.lstBoxShape.get(cpt).dessiner((Graphics2D) g);
 		}
 
+		// Vider la liste des flèches avant de la reconstruire
+		this.lstFleche.clear();
+
+		// Recréer les flèches basées sur les relations entre tâches
 		for (int cpt = 0; cpt < this.listTache.size(); cpt++) 
-    	{
+		{
 			BoxShape boxShape = this.lstBoxShape.get(cpt);
 			Tache t = this.listTache.get(cpt);
 
@@ -291,14 +352,16 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 					{
 						BoxShape boxShapeSvt = this.lstBoxShape.get(indexTacheSuivante);
 						
-						this.fleche = new Fleche(boxShape,boxShapeSvt);
-						this.fleche.setEtiquette(String.valueOf(t.getDuree()));
+						Fleche nouvelleFleche = new Fleche(boxShape, boxShapeSvt);
+						nouvelleFleche.setEtiquette(String.valueOf(t.getDuree()));
 						
-						this.fleche.dessiner((Graphics2D) g);
+						this.lstFleche.add(nouvelleFleche);
+						
+						nouvelleFleche.dessiner((Graphics2D) g);
 					}
 				}
 			}
-    	}
+		}
 	}
 
 	private BoxShape trouverBoxShapeSousSouris(Point point) 
@@ -312,6 +375,74 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		}
 		return null;
 	}
+	private Fleche trouverFlecheSousSouris(Point point) 
+	{
+		for (Fleche fleche : this.lstFleche) 
+		{
+			if (this.estSurFleche(fleche, point)) {
+				return fleche;
+			}
+		}
+		return null;
+	}
+
+	private boolean estSurFleche(Fleche fleche, Point point) 
+	{
+		BoxShape origine = fleche.getOrigine();
+		BoxShape destination = fleche.getDestination();
+		
+		Point pOrig = getMilieuCoteDroit(origine);
+		Point pDest = getMilieuCoteGauche(destination);
+		
+		// Calcul de la distance du point à la ligne
+		double distance = distancePointLigne(point, pOrig, pDest);
+		return distance <= 5; // Tolérance de 5 pixels
+	}
+	private double distancePointLigne(Point point, Point p1, Point p2)
+	{
+		double A = point.x - p1.x;
+		double B = point.y - p1.y;
+		double C = p2.x - p1.x;
+		double D = p2.y - p1.y;
+		
+		double dot = A * C + B * D;
+		double lenSq = C * C + D * D;
+		
+		if (lenSq == 0) return Math.sqrt(A * A + B * B);
+		
+		double param = dot / lenSq;
+		
+		double xx, yy;
+		if (param < 0) {
+			xx = p1.x;
+			yy = p1.y;
+		} else if (param > 1) {
+			xx = p2.x;
+			yy = p2.y;
+		} else {
+			xx = p1.x + param * C;
+			yy = p1.y + param * D;
+		}
+		
+		double dx = point.x - xx;
+		double dy = point.y - yy;
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+
+	// 4. Méthodes utilitaires pour les points de connexion
+	private Point getMilieuCoteDroit(BoxShape box) 
+	{
+		Rectangle r = box.getBounds();
+		return new Point(r.x + r.width, r.y + r.height / 2);
+	}
+
+	private Point getMilieuCoteGauche(BoxShape box) 
+	{
+		Rectangle r = box.getBounds();
+		return new Point(r.x, r.y + r.height / 2);
+	}
+
+
 
 	public void mousePressed(MouseEvent e) 
 	{
@@ -368,55 +499,70 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		
 	}
 
-	public void mouseMoved(MouseEvent e)
+	public void mouseMoved(MouseEvent e) 
 	{
-		Point pointSouris         = e.getPoint();
+		Point pointSouris = e.getPoint();
 		this.boxShapeSelectionnee = this.trouverBoxShapeSousSouris(pointSouris);
+		Fleche flecheSousSouris = this.trouverFlecheSousSouris(pointSouris);
 
-
-		if (this.boxShapeSelectionnee != null)
+		if (flecheSousSouris != null) 
 		{
+			this.flecheSelectionnee = flecheSousSouris;
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			//System.out.println(boxSousSouris.getNom().equals("Début"));
-
-			if(! this.popMenu.isShowing())
+			
+			if (!this.popMenu.isShowing())
 			{
-				this.recupBox = this.boxShapeSelectionnee;
-
-				if(this.boxShapeSelectionnee.getNom().equals("Début") || this.boxShapeSelectionnee.getNom().equals("Fin"))
+				this.itemAjouter.setEnabled(false);
+				this.itemModifier.setEnabled(false);
+				this.itemSupprimer.setEnabled(false);
+				this.itemSupprimerFleche.setEnabled(true);
+				this.menuAjoutePrc.setEnabled(false);
+			}
+		} 
+		else 
+		{
+			if (this.boxShapeSelectionnee != null) 
+			{
+				// Souris sur une box
+				this.flecheSelectionnee = null;
+				this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			
+				if (!this.popMenu.isShowing()) 
 				{
-					if(! this.popMenu.isShowing())
+					this.recupBox = this.boxShapeSelectionnee;
+					
+					if (this.boxShapeSelectionnee.getNom().equals("Début") || this.boxShapeSelectionnee.getNom().equals("Fin")) 
 					{
 						this.itemAjouter.setEnabled(false);
 						this.itemModifier.setEnabled(false);
 						this.itemSupprimer.setEnabled(false);
+						this.itemSupprimerFleche.setEnabled(false);
 						this.ajouterPrc();
-
-						this.recupBox = this.boxShapeSelectionnee;
-					}
-				}
-				else
-				{
-					if(! this.popMenu.isShowing())
+					} 
+					else
 					{
 						this.itemAjouter.setEnabled(false);
 						this.itemModifier.setEnabled(true);
 						this.itemSupprimer.setEnabled(true);
+						this.itemSupprimerFleche.setEnabled(false);
 						this.ajouterPrc();
 					}
 				}
-			}
-	
-		} 
-		else
-		{
-			this.setCursor(Cursor.getDefaultCursor());
-			if(! this.popMenu.isShowing())
+			} 
+			else 
 			{
-				this.itemAjouter.setEnabled(true);
-				this.itemModifier.setEnabled(false);
-				this.itemSupprimer.setEnabled(false);
-				this.ajouterPrc();
+				// Souris dans le vide
+				this.flecheSelectionnee = null;
+				this.setCursor(Cursor.getDefaultCursor());
+				
+				if (!this.popMenu.isShowing()) 
+				{
+					this.itemAjouter.setEnabled(true);
+					this.itemModifier.setEnabled(false);
+					this.itemSupprimer.setEnabled(false);
+					this.itemSupprimerFleche.setEnabled(false);
+					this.ajouterPrc();
+				}
 			}
 		}
 	}

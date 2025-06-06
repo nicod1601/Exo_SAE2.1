@@ -67,6 +67,8 @@ public class Erreur
 				return "Le fichier importé n'existe pas ou n'est pas accessible." ; 
 			case 8:
 				return "Le nombre de niveaux dépasse la limite autorisée (200 niveaux)"; 
+			case 9:
+				return "Le fichier importé est vide.";
 			
 			default:
 				return "Erreur inconnue : " + this.ligne;

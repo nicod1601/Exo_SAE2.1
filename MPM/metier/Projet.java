@@ -193,96 +193,101 @@ public class Projet
 	 */
 	public void lireFichier(String chemin) 
 	{
-		
-		this.lstTache.clear();
-		Tache debut = new Tache("Début", 0);
-		debut.setDateMin(0);
-		this.lstTache.add(debut);
-
-		try
+		if (!fichierEstVide(chemin)) 
 		{
-			Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
-			int numLigne = 0;
+			
+		
+			this.lstTache.clear();
+			Tache debut = new Tache("Début", 0);
+			debut.setDateMin(0);
+			this.lstTache.add(debut);
 
-			while ( sc.hasNextLine() )
+			try
 			{
-				String ligne    = sc.nextLine();
-				numLigne++;
-				boolean ligneValide = true;
-				
+				Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
+				int numLigne = 0;
 
-				if (ligne.isEmpty())                                 ligneValide = false; // Ignore les lignes vides
-				if (ligneValide && !testSeparateur(ligne, numLigne)) ligneValide = false; // Vérifie le format de la ligne
-				if (ligneValide && !testDureeInt  (ligne, numLigne)) ligneValide = false; // Vérifie que la durée est un entier
-				if (ligneValide && !testNomVide   (ligne, numLigne)) ligneValide = false; // Vérifie que le nom n'est pas vide
-				if (ligneValide && !testPredecesseursMalFormes(ligne, numLigne)) ligneValide = false; // Vérifie la liste des prédécesseurs
-				if (ligneValide && !testNomDoublon(ligne.split("\\|")[0], numLigne, ligne)) ligneValide = false; // Vérifie les doublons de nom
-
-				if(ligneValide)
+				while ( sc.hasNextLine() )
 				{
-					String[] partie = ligne.split("\\|");
-
-					String nom = partie[0];
+					String ligne    = sc.nextLine();
+					numLigne++;
+					boolean ligneValide = true;
 					
-					int duree  = Integer.parseInt(partie[1]);
 
-					Tache tmp = new Tache(nom, duree);
+					if (ligne.isEmpty())                                 ligneValide = false; // Ignore les lignes vides
+					if (ligneValide && !testSeparateur(ligne, numLigne)) ligneValide = false; // Vérifie le format de la ligne
+					if (ligneValide && !testDureeInt  (ligne, numLigne)) ligneValide = false; // Vérifie que la durée est un entier
+					if (ligneValide && !testNomVide   (ligne, numLigne)) ligneValide = false; // Vérifie que le nom n'est pas vide
+					if (ligneValide && !testPredecesseursMalFormes(ligne, numLigne)) ligneValide = false; // Vérifie la liste des prédécesseurs
+					if (ligneValide && !testNomDoublon(ligne.split("\\|")[0], numLigne, ligne)) ligneValide = false; // Vérifie les doublons de nom
 
-					if(partie.length > 2 && ! partie[2].isEmpty() )
+					if(ligneValide)
 					{
-						String[] prc = partie[2].split(",");
-						
+						String[] partie = ligne.split("\\|");
 
-						for(int cpt =0; cpt < prc.length; cpt++)
+						String nom = partie[0];
+						
+						int duree  = Integer.parseInt(partie[1]);
+
+						Tache tmp = new Tache(nom, duree);
+
+						if(partie.length > 2 && ! partie[2].isEmpty() )
 						{
-							for (Tache t : this.lstTache)
+							String[] prc = partie[2].split(",");
+							
+
+							for(int cpt =0; cpt < prc.length; cpt++)
 							{
-								if(prc[cpt].equals(t.getNom()))
-									tmp.addPrecedent(t);
+								for (Tache t : this.lstTache)
+								{
+									if(prc[cpt].equals(t.getNom()))
+										tmp.addPrecedent(t);
+								}
 							}
 						}
+						else
+						{
+							if(!tmp.getNom().equals("Début"))
+								tmp.addPrecedent(this.lstTache.get(0));
+						}
+
+						
+
+						this.lstTache.add(tmp);
+						this.nbTache++;
 					}
-					else
+				
+				}
+				Tache fin = new Tache("Fin", 0);
+				for(Tache t : this.lstTache)
+				{
+					if(t.getNbSvt() == 0 && !t.getNom().equals("Début")) 
 					{
-						if(!tmp.getNom().equals("Début"))
-							tmp.addPrecedent(this.lstTache.get(0));
+						fin.addPrecedent(t);
 					}
-
-					
-
-					this.lstTache.add(tmp);
-					this.nbTache++;
 				}
-			}
-			Tache fin = new Tache("Fin", 0);
-			for(Tache t : this.lstTache)
-			{
-				if(t.getNbSvt() == 0 && !t.getNom().equals("Début")) 
+				this.lstTache.add(fin);
+
+				for(Tache t : this.lstTache)
 				{
-					fin.addPrecedent(t);
+					if(t.getNbPrc() == 0 && !t.getNom().equals("Début") && !t.getNom().equals("Fin"))
+					{
+						t.addPrecedent(debut);
+					}
+					t.setNiveau();
 				}
+				if(!this.testTropDeNiveaux()) this.lstTache.clear(); // Si trop de niveaux, on vide la liste des tâches
+				else
+					this.majDate();
 			}
-			this.lstTache.add(fin);
-
-			for(Tache t : this.lstTache)
-			{
-				if(t.getNbPrc() == 0 && !t.getNom().equals("Début") && !t.getNom().equals("Fin"))
-				{
-					t.addPrecedent(debut);
-				}
-				t.setNiveau();
+			
+			catch ( Exception e )
+			{ 
+				e.printStackTrace();
+				this.erreur.add(new Erreur(e.getMessage()));  
 			}
-			if(!this.testTropDeNiveaux()) this.lstTache.clear(); // Si trop de niveaux, on vide la liste des tâches
-			else
-				this.majDate();
+			this.ecrireErreursDansLog();
 		}
-		
-		catch ( Exception e )
-		{ 
-			e.printStackTrace();
-			this.erreur.add(new Erreur(e.getMessage()));  
-		}
-		this.ecrireErreursDansLog();
 	}
 
 	public ArrayList<Erreur> getErreur()
@@ -299,9 +304,6 @@ public class Projet
 		this.setDateMin();
 		this.setDateMax();
 	}
-
-
-
 
 	/**
 	 * Calcule les dates au plus tôt pour toutes les tâches du projet.
@@ -331,34 +333,35 @@ public class Projet
 	 */
 	private void setDateMax()
 	{
-
-		Tache t, tPrc;
-
-		t = this.lstTache.get(this.lstTache.size()-1);
-		t.setDateMax(t.getDateMin());
-
-		for(int cptP = this.lstTache.size()-1; cptP > 0; cptP--)
+		if(this.lstTache.size() != 0) 
 		{
-			t = this.lstTache.get(cptP);
+			Tache t, tPrc;
 
-			for(int cpt = 0; cpt < t.getNbPrc(); cpt++)
+			t = this.lstTache.get(this.lstTache.size()-1);
+			t.setDateMax(t.getDateMin());
+
+			for(int cptP = this.lstTache.size()-1; cptP > 0; cptP--)
 			{
-				tPrc = t.getPrc(cpt);
+				t = this.lstTache.get(cptP);
 
-				int nouvelleDateMax = t.getDateMax() - tPrc.getDuree();
-				
-				if(tPrc.getDateMax() < 0 )
+				for(int cpt = 0; cpt < t.getNbPrc(); cpt++)
 				{
-					tPrc.setDateMax(nouvelleDateMax);
-				}
+					tPrc = t.getPrc(cpt);
 
-				if(nouvelleDateMax < tPrc.getDateMax())
-				{
-					//System.out.println("12 > 0 PUTAIN DE MERDE");
-					tPrc.setDateMax(nouvelleDateMax);
+					int nouvelleDateMax = t.getDateMax() - tPrc.getDuree();
+					
+					if(tPrc.getDateMax() < 0 )
+					{
+						tPrc.setDateMax(nouvelleDateMax);
+					}
+
+					if(nouvelleDateMax < tPrc.getDateMax())
+					{
+						tPrc.setDateMax(nouvelleDateMax);
+					}
+					
+					//System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
 				}
-				
-				//System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
 			}
 		}
 	}
@@ -507,6 +510,42 @@ public class Projet
 		return true;
 	}
 
+	private boolean fichierEstVide(String chemin)
+	{
+		File fichier = new File(chemin); 
+		if (fichier.exists() && fichier.length() == 0  )
+		{
+			System.out.println("Le fichier : " + chemin + "est vide : " );
+			this.erreur.add(new Erreur(9));
+			return true;
+		}
+		else
+		{
+			try
+			{
+				Scanner sc      = new Scanner(new File(chemin), "UTF-8");
+				String  contenu = "";
+				while (sc.hasNextLine())
+				{
+					contenu += sc.nextLine(); 
+				} 
+				if (contenu.trim().isEmpty()) // <-- Utilise trim() pour enlever les espaces inutiles
+				{
+					System.out.println("Le fichier : " + chemin + " est vide." );
+					this.erreur.add(new Erreur(9));
+					return true;
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				this.erreur.add(new Erreur(e.getMessage()));
+			}
+		}
+		
+		return false;
+	}
+
 	private void ecrireErreursDansLog()
 	{
 		if (!this.erreur.isEmpty())
@@ -519,9 +558,15 @@ public class Projet
 					dossierLogs.mkdirs(); // <-- Utilise mkdirs() pour créer tous les dossiers nécessaires
 				}
 				GregorianCalendar cal = new GregorianCalendar();
-				String date = String.format("%04d-%02d-%02d_%02d-%02d-%02d",
-						cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH),
-						cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+				String annee   = String.format("%04d", cal.get(Calendar.YEAR));
+				String mois    = String.format("%02d", cal.get(Calendar.MONTH) + 1);
+				String jour    = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
+				String heure   = String.format("%02d", cal.get(Calendar.HOUR_OF_DAY));
+				String minute  = String.format("%02d", cal.get(Calendar.MINUTE));
+				String seconde = String.format("%02d", cal.get(Calendar.SECOND));
+
+				String date = annee + "-" + mois + "-" + jour + "_" + heure + "-" + minute + "-" + seconde;
+
 				String nomFichier = "logs/erreurs_" + date +".log";
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), "UTF8"));
 				for (Erreur e : this.erreur)
@@ -534,6 +579,7 @@ public class Projet
 			catch (Exception e)
 			{
 				e.printStackTrace();
+				this.erreur.add(new Erreur(e.getMessage())); 
 			}
 		}
 	}

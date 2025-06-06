@@ -26,6 +26,24 @@ public class Fleche
         
     }
 
+    public BoxShape getOrigine() 
+    {
+        return this.origine;
+    }
+
+    public BoxShape getDestination() 
+    {
+        return this.destination;
+    }
+
+    public void supprimer(Tache tOrig, Tache tDest)
+    {
+        this.origine.getTache().getLstSvt().remove(tDest);
+        this.destination.getTache().getLstPrc().remove(tOrig);
+
+    }
+
+
 
 
     public void dessiner(Graphics2D g2) 
