@@ -45,7 +45,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		JMenu menuEdition = new JMenu("Edition"  );
 
 		// les items du menu Fichier
-		this.menuiNouveau         = new JMenuItem ("Nouveau Projet"   );
+		this.menuiNouveau         = new JMenuItem ("Ajouter Tache"   );
 		this.menuiRefresh         = new JMenuItem ("Actualiser"       );
 		this.menuiImporter        = new JMenuItem ("Importer"         );
 		this.menuiSaveAs = new JMenuItem ("Enregistrer sous" );
@@ -57,7 +57,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		
 		// Raccourci 
 		menuFichier        .setMnemonic('F');
-		this.menuiNouveau  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiNouveau  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiImporter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiQuitter  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
 		this.menuiRefresh  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R , InputEvent.CTRL_DOWN_MASK) );

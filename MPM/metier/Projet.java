@@ -15,6 +15,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.GregorianCalendar;
+import java.util.Calendar;
 
 
 public class Projet
@@ -48,6 +50,12 @@ public class Projet
 		this.erreur = new ArrayList<Erreur>();
 
 		//this.lstCheminCritique = new ArrayList<CheminCritique>(this.lstTache);
+	}
+
+	public void addPrecedent(Tache t, Tache precedent)
+	{
+		t.addPrecedent(precedent);
+		this.majDate();
 	}
 
 
@@ -200,46 +208,52 @@ public class Projet
 			{
 				String ligne    = sc.nextLine();
 				numLigne++;
-				if (ligne.isEmpty())                  continue;
-				if (!testSeparateur(ligne, numLigne)) continue; // Vérifie le format de la ligne
-				if (!testDureeInt  (ligne, numLigne)) continue; // Vérifie que la durée est un entier
-				if (!testNomVide   (ligne, numLigne)) continue; // Vérifie que le nom n'est pas vide
-				if (!testPredecesseursMalFormes(ligne, numLigne)) continue; // Vérifie la liste des prédécesseurs
+				boolean ligneValide = true;
 				
-				String[] partie = ligne.split("\\|");
 
-				String nom = partie[0];
-				if (!testNomDoublon(nom, numLigne, ligne)) continue; // Vérifie les doublons de nom
-				int duree  = Integer.parseInt(partie[1]);
+				if (ligne.isEmpty())                                 ligneValide = false; // Ignore les lignes vides
+				if (ligneValide && !testSeparateur(ligne, numLigne)) ligneValide = false; // Vérifie le format de la ligne
+				if (ligneValide && !testDureeInt  (ligne, numLigne)) ligneValide = false; // Vérifie que la durée est un entier
+				if (ligneValide && !testNomVide   (ligne, numLigne)) ligneValide = false; // Vérifie que le nom n'est pas vide
+				if (ligneValide && !testPredecesseursMalFormes(ligne, numLigne)) ligneValide = false; // Vérifie la liste des prédécesseurs
+				if (ligneValide && !testNomDoublon(ligne.split("\\|")[0], numLigne, ligne)) ligneValide = false; // Vérifie les doublons de nom
 
-				Tache tmp = new Tache(nom, duree);
-
-				if(partie.length > 2 && ! partie[2].isEmpty() )
+				if(ligneValide)
 				{
-					String[] prc = partie[2].split(",");
-					
+					String[] partie = ligne.split("\\|");
 
-					for(int cpt =0; cpt < prc.length; cpt++)
+					String nom = partie[0];
+					
+					int duree  = Integer.parseInt(partie[1]);
+
+					Tache tmp = new Tache(nom, duree);
+
+					if(partie.length > 2 && ! partie[2].isEmpty() )
 					{
-						for (Tache t : this.lstTache)
+						String[] prc = partie[2].split(",");
+						
+
+						for(int cpt =0; cpt < prc.length; cpt++)
 						{
-							if(prc[cpt].equals(t.getNom()))
-								tmp.addPrecedent(t);
+							for (Tache t : this.lstTache)
+							{
+								if(prc[cpt].equals(t.getNom()))
+									tmp.addPrecedent(t);
+							}
 						}
 					}
-				}
-				else
-				{
-					if(!tmp.getNom().equals("Début"))
-						tmp.addPrecedent(this.lstTache.get(0));
-				}
+					else
+					{
+						if(!tmp.getNom().equals("Début"))
+							tmp.addPrecedent(this.lstTache.get(0));
+					}
 
-				
+					
 
-				this.lstTache.add(tmp);
-				this.nbTache++;
+					this.lstTache.add(tmp);
+					this.nbTache++;
+				}
 			}
-
 			Tache fin = new Tache("Fin", 0);
 			for(Tache t : this.lstTache)
 			{
@@ -268,6 +282,7 @@ public class Projet
 			e.printStackTrace();
 			this.erreur.add(new Erreur(e.getMessage()));  
 		}
+		this.ecrireErreursDansLog();
 	}
 
 	public ArrayList<Erreur> getErreur()
@@ -279,7 +294,7 @@ public class Projet
 	 * Met à jour les dates de toutes les tâches du projet.
 	 * Calcule les dates au plus tôt et au plus tard selon la méthode MPM.
 	 */
-	private void majDate()
+	public void majDate()
 	{
 		this.setDateMin();
 		this.setDateMax();
@@ -332,7 +347,7 @@ public class Projet
 
 				int nouvelleDateMax = t.getDateMax() - tPrc.getDuree();
 				
-				if(tPrc.getDateMax() == -1 )
+				if(tPrc.getDateMax() < 0 )
 				{
 					tPrc.setDateMax(nouvelleDateMax);
 				}
@@ -483,18 +498,76 @@ public class Projet
 	 */
 	private boolean testTropDeNiveaux()
 	{
-		if (this.getNbNiveau() > 200)
+		if (this.getNbNiveau() > 202) // 200 niveaux + 2 (Début et Fin)
 		{
-			System.out.println("Erreur : trop de niveaux (plus de 200)");
+			System.out.println("Erreur : trop de niveaux (plus de 200) - Nombre de niveaux : " + this.getNbNiveau());
 			this.erreur.add(new Erreur( 8));
 			return false;
 		}
 		return true;
 	}
 
-	public void ajouterTache(Tache t)
+	private void ecrireErreursDansLog()
 	{
-		this.lstTache.add(t);
+		if (!this.erreur.isEmpty())
+		{
+			try
+			{
+				File dossierLogs = new File("logs");
+				if (!dossierLogs.exists()) 
+				{
+					dossierLogs.mkdirs(); // <-- Utilise mkdirs() pour créer tous les dossiers nécessaires
+				}
+				GregorianCalendar cal = new GregorianCalendar();
+				String date = String.format("%04d-%02d-%02d_%02d-%02d-%02d",
+						cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH),
+						cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
+				String nomFichier = "logs/erreurs_" + date +".log";
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), "UTF8"));
+				for (Erreur e : this.erreur)
+				{
+					pw.println(e.toString());
+				}
+				pw.close();
+				System.out.println("Erreurs enregistrées dans erreurs.log");
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void supprimerTache(Tache tacheASupprimer)
+	{
+		this.lstTache.remove(tacheASupprimer);
+		for(Tache t : this.lstTache) 
+		{
+			t.setNiveau();
+		}
+
+		this.majDate();
+	}
+
+	public void ajouterTache(Tache nouvelleTache)
+	{
+		int indexFin = this.lstTache.size() - 1;
+		this.lstTache.add(indexFin, nouvelleTache);
+		
+		System.out.println("Tâche ajoutée à l'index: " + indexFin);
+		System.out.println("Nouvelle taille: " + this.lstTache.size());
+
+		if(nouvelleTache.getNbPrc() == 0) 
+		{
+			nouvelleTache.addPrecedent(this.lstTache.get(0));
+		}
+
+		for(Tache t : this.lstTache) 
+		{
+			t.setNiveau();
+		}
+
+		this.majDate();
 	}
 
 	public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)

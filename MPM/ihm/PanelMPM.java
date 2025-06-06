@@ -24,11 +24,21 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private Point pointClique = null;
 	private boolean enDeplacement = false;
 
+	//stocke
+	private BoxShape recupBox;
+
 	// elem de PopMenu
-	JPopupMenu popMenu;
-	JMenuItem itemAjouter;
-	JMenuItem itemSupprimer;
-	JMenuItem itemModifier;
+	private JPopupMenu popMenu;
+	private JMenuItem itemAjouter;
+	private JMenuItem itemSupprimer;
+	private JMenuItem itemModifier;
+
+	// sous menu AjouterPrc
+	private JMenu menuAjoutePrc;
+	private JMenuItem itemAjoutePrc;
+
+	
+
 
 
 	private final int TAILLESCROLL = 600;
@@ -60,6 +70,15 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemSupprimer = new JMenuItem("Supprimer");
 		this.itemModifier  = new JMenuItem("Modifier");
 
+		this.menuAjoutePrc = new JMenu("Ajouter Prc");
+		this.itemAjoutePrc = new JMenuItem("");
+
+		this.recupBox = this.boxShapeSelectionnee;
+
+		this.ajouterPrc();
+
+		
+
 		this.itemAjouter.setEnabled(true);
 		this.itemSupprimer.setEnabled(false);
 		this.itemModifier.setEnabled(false);
@@ -73,6 +92,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.popMenu.add(this.itemAjouter);
 		this.popMenu.add(this.itemSupprimer);
 		this.popMenu.add(this.itemModifier);
+		this.popMenu.add(this.menuAjoutePrc);
 
 		this.setComponentPopupMenu(this.popMenu);
 
@@ -85,6 +105,45 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemAjouter.addActionListener(this);
 		this.itemSupprimer.addActionListener(this);
 		this.itemModifier.addActionListener(this);
+		this.itemAjoutePrc.addActionListener(this);
+	}
+
+	public void ajouterPrc()
+	{
+		this.menuAjoutePrc.removeAll();
+
+		if(this.boxShapeSelectionnee == null) 
+		{
+			this.menuAjoutePrc.setEnabled(false);
+    	}
+		else
+		{
+			this.menuAjoutePrc.setEnabled(true);
+			Tache tacheSelectionnee = this.boxShapeSelectionnee.getTache();
+
+			if(tacheSelectionnee.getNom().equals("Début"))
+			{
+				this.menuAjoutePrc.setEnabled(false);
+			}
+			else
+			{
+				this.menuAjoutePrc.setEnabled(true);
+			}
+
+		
+			for(Tache t : this.ctrl.getListeTache())
+			{
+				if(!t.equals(tacheSelectionnee) && !t.getNom().equals("Fin") && !( t.getNiveau() >= tacheSelectionnee.getNiveau() ) ) 
+				{
+					
+					JMenuItem item = new JMenuItem(t.getNom());
+					item.addActionListener(this);
+					
+					this.menuAjoutePrc.add(item);
+				}
+			}
+		}
+
 	}
 
 	public void resetNiveau()
@@ -106,23 +165,27 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	public void majList()
 	{
+		
 		this.listTache = this.ctrl.getListeTache();
-		this.majScroll(this.ctrl.getNbNiveau(), this.ctrl.getTailleNivMax()  );
-
-		//System.out.println("NB niveau total : " +this.ctrl.getNbNiveau());
-		System.err.println("Taille ScrollPane : " + this.getPreferredSize() );
-		//System.out.println("Liste de tache : \n" + this.listTache);
-
+		
+		this.lstBoxShape.clear();
+		
+		this.majScroll(this.ctrl.getNbNiveau(), this.ctrl.getTailleNivMax());
+		
 		for(Tache t : this.listTache)
 		{
-			this.lstBoxShape.add(new BoxShape( t, this.ctrl ) );
+			BoxShape box = new BoxShape(t, this.ctrl);
+			this.lstBoxShape.add(box);
+			System.out.println("BoxShape créée pour: " + t.getNom() + " au niveau: " + t.getNiveau());
 		}
-
+		
+		
+		// Configuration des dates pour l'affichage
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
 		{
 			if(this.lstBoxShape.get(cpt).getNiveau() == 0)
 			{
-				this.lstBoxShape.get(cpt).setDateMin(" "  + this.listTache.get(cpt).getDateMin());
+				this.lstBoxShape.get(cpt).setDateMin(" " + this.listTache.get(cpt).getDateMin());
 				this.lstBoxShape.get(cpt).setDateMax(" ");
 			}
 			else
@@ -130,13 +193,9 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 				this.lstBoxShape.get(cpt).setDateMax(" ");
 				this.lstBoxShape.get(cpt).setDateMin(" ");
 			}
-			
 		}
-		
-		//System.out.println("Liste des BoxShape : \n" + this.lstBoxShape);
-
 		this.frame.majTacheBox(this.listTache, this.lstBoxShape);
-
+		
 		this.revalidate();
 		this.repaint();
 	}
@@ -162,6 +221,25 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		{
 			this.supprimerTache();
 		}
+
+		if(e.getSource() == this.itemModifier)
+		{
+			//this.frame.setVisibleFrameModifier();
+		}
+
+		for(int cpt = 0; cpt < this.menuAjoutePrc.getItemCount(); cpt++)
+		{
+			if(e.getSource() == this.menuAjoutePrc.getItem(cpt))
+			{
+				for(Tache t : this.ctrl.getListeTache())
+				{
+					if(t.getNom().equals(this.menuAjoutePrc.getItem(cpt).getText()))
+					{
+						this.ctrl.addPrecedent(this.recupBox.getTache(), t);
+					}
+				}
+			}
+		}
 	}
 
 	public void supprimerTache()
@@ -171,8 +249,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 		if(this.boxShapeSelectionnee != null)
 		{
-			System.out.println("Suppression de la tache : " + this.boxShapeSelectionnee.getTache().getNom());
-			System.out.println("Tableau des taches : " + this.listTache);
 			
 			// Supprimer de la liste des tâches
 			this.listTache.remove(this.boxShapeSelectionnee.getTache());
@@ -185,8 +261,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			
 			// Maintenant on peut appeler majList() en sécurité
 			this.majList();
-			
-			System.out.println("Tableau des taches après suppression : " + this.listTache);
+
+			this.ajouterPrc();
 		}
 	}
 
@@ -216,6 +292,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 						BoxShape boxShapeSvt = this.lstBoxShape.get(indexTacheSuivante);
 						
 						this.fleche = new Fleche(boxShape,boxShapeSvt);
+						this.fleche.setEtiquette(String.valueOf(t.getDuree()));
+						
 						this.fleche.dessiner((Graphics2D) g);
 					}
 				}
@@ -271,7 +349,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	public void mouseReleased(MouseEvent e) 
 	{
 		this.enDeplacement = false;
-		//this.boxShapeSelectionnee = null;
+		this.recupBox = this.boxShapeSelectionnee;
 		this.pointClique = null;
 		this.setCursor(Cursor.getDefaultCursor());
 	}
@@ -303,6 +381,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 			if(! this.popMenu.isShowing())
 			{
+				this.recupBox = this.boxShapeSelectionnee;
 
 				if(this.boxShapeSelectionnee.getNom().equals("Début") || this.boxShapeSelectionnee.getNom().equals("Fin"))
 				{
@@ -311,6 +390,9 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 						this.itemAjouter.setEnabled(false);
 						this.itemModifier.setEnabled(false);
 						this.itemSupprimer.setEnabled(false);
+						this.ajouterPrc();
+
+						this.recupBox = this.boxShapeSelectionnee;
 					}
 				}
 				else
@@ -320,6 +402,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 						this.itemAjouter.setEnabled(false);
 						this.itemModifier.setEnabled(true);
 						this.itemSupprimer.setEnabled(true);
+						this.ajouterPrc();
 					}
 				}
 			}
@@ -333,6 +416,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 				this.itemAjouter.setEnabled(true);
 				this.itemModifier.setEnabled(false);
 				this.itemSupprimer.setEnabled(false);
+				this.ajouterPrc();
 			}
 		}
 	}

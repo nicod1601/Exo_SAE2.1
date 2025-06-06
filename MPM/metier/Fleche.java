@@ -2,25 +2,35 @@ package MPM.metier;
 
 import java.awt.*;
 
-public class Fleche {
+public class Fleche 
+{
     private BoxShape origine;
     private BoxShape destination;
-    private float epaisseur = 2.0f;
-    private int tailleTete = 8;
-    private String etiquette = "";
+    private float    epaisseur = 2.0f;
+    private int      tailleTete = 8;
+    private String   etiquette = ""  ;
+    private Color    couleurFleche   ;
+    private Color    couleurEtiquette;
 
-    public Fleche(BoxShape bOrig, BoxShape bDest) {
-        this.origine = bOrig;
+    public Fleche(BoxShape bOrig, BoxShape bDest) 
+    {
+        this.origine     = bOrig;
         this.destination = bDest;
+        this.couleurFleche     = Color.BLUE; // Couleur par défaut
     }
 
-    public void setEtiquette(String etiquette) {
+    public void setEtiquette(String etiquette) 
+    {
         this.etiquette = etiquette;
+        this.couleurEtiquette = Color.RED; // Couleur par défaut pour l'étiquette
+        
     }
+
+
 
     public void dessiner(Graphics2D g2) 
     {
-        g2.setColor(Color.BLACK);
+        g2.setColor(this.couleurFleche);
         Point pOrig = getMilieuCoteDroit(origine);
         Point pDest = getMilieuCoteGauche(destination);
 
@@ -37,8 +47,16 @@ public class Fleche {
         if (!etiquette.isEmpty()) {
             int xText = (pOrig.x + pDest.x) / 2;
             int yText = (pOrig.y + pDest.y) / 2 - 5;
+            g2.setColor(this.couleurEtiquette);
             g2.drawString(etiquette, xText, yText);
         }
+    }
+
+    public void setCouleurFleche(Color couleur) {
+        this.couleurFleche = couleur;
+    }
+    public void setCouleurEtiquette(Color couleur) {
+        this.couleurEtiquette = couleur;
     }
 
     private Point getMilieuCoteDroit(BoxShape box) {

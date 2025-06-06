@@ -72,7 +72,7 @@ public class FrameMPM extends JFrame
         this.setVisible(true);
     }
 
-    public void refresh(String lien) {this.menu.refresh(lien);}
+    //public void refresh(String lien) {this.menu.refresh(lien);}
 
     public void setVisibleFrameNouveau()
     {

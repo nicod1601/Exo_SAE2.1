@@ -162,27 +162,6 @@ public class Tache
 
 	public int getNiveau() { return this.niveau;}
 
-
-	public int getHauteur() { return this.hauteur;}
-
-
-
-	public void setHauteur()
-	{
-		//System.out.println("coucou");
-
-		//System.out.println(! this.lstPrc.isEmpty() );
-
-		if (! this.lstPrc.isEmpty())
-		{
-			
-			this.niveau = this.lstPrc.get(0).getHauteur();
-			//System.out.println("il a un precedent");
-		}
-		else
-			this.niveau = 0;
-	}
-
 	/**
 	 * Définit la date au plus tard pour cette tâche.
 	 * 
@@ -190,7 +169,7 @@ public class Tache
 	 */
 	public void setDateMax(int val) 
 	{ 
-		if(this.dateMax == -1 || val < dateMax)
+		if(this.dateMax < 0 || val < dateMax)
 		{
 			this.dateMax = val;
 		}

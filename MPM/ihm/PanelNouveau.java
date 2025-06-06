@@ -155,46 +155,97 @@ public class PanelNouveau extends JPanel implements ActionListener
 
             if(e.getSource() == this.btnCreerTache)
             {
-                try 
-                {
+                try {
+                    System.out.println("=== DÉBUT CRÉATION TÂCHE ===");
+                    
+                    // 1. Création de la tâche
                     Tache nouvelleTache = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText()));
-                    this.lstTache.add(nouvelleTache);
+                    System.out.println("Tâche créée: " + nouvelleTache.getNom() + " (durée: " + nouvelleTache.getDuree() + ")");
                     
-                    BoxShape boxShape = new BoxShape(nouvelleTache, this.ctrl);
-                    this.ctrl.ajouterTache(nouvelleTache);
+                    // 2. Traitement des prédécesseurs sélectionnés
+                    System.out.println("Nombre de checkboxes: " + this.tabPrc.size());
+                    ArrayList<Tache> predecesseursSelectionnes = new ArrayList<>();
                     
-                    for(int i = 0; i < this.tabPrc.size(); i++)
-                    {
+                    // Collecter les prédécesseurs sélectionnés
+                    for(int i = 0; i < this.tabPrc.size(); i++) {
                         JCheckBox cb = this.tabPrc.get(i);
-                        if(cb.isSelected())
-                        {
-                            nouvelleTache.addPrecedent(this.lstTache.get(i + 1));
-                            System.out.println("Ajout prédécesseur : " + this.lstTache.get(i + 1).getNom());
+                        if(cb.isSelected()) {
+                            String nomPredecesseur = cb.getText();
+                            System.out.println("Recherche prédécesseur: " + nomPredecesseur);
                             
+                            // Chercher la tâche prédécesseur par nom
+                            for(Tache tachePrecedente : this.lstTache) {
+                                if(tachePrecedente.getNom().equals(nomPredecesseur)) {
+                                    predecesseursSelectionnes.add(tachePrecedente);
+                                    System.out.println("Prédécesseur trouvé: " + tachePrecedente.getNom());
+                                    break;
+                                }
+                            }
                         }
                     }
-
-                    this.boxShape.setNom(this.txtNom.getText());
-                    this.majPanelBoxShape();
-
-                    //this.ctrl.sauvegarderTaches(this.lstTache, this.frameMPM.getLien());
-
-                    this.txtNom.setText("");
-                    this.txtDuree.setText("");
                     
-                    for(JCheckBox cb : this.tabPrc)
-                    {
-                        cb.setSelected(false);
+                    // 3. Restructurer les liens pour insérer la nouvelle tâche
+                    for(Tache predecesseur : predecesseursSelectionnes) {
+                        // Sauvegarder les successeurs actuels du prédécesseur
+                        ArrayList<Tache> successeursATransferer = new ArrayList<>(predecesseur.getLstSvt());
+                        
+                        // Retirer tous les liens successeurs du prédécesseur
+                        for(Tache successeur : successeursATransferer) {
+                            // Supprimer le lien bidirectionnel
+                            predecesseur.getLstSvt().remove(successeur);
+                            successeur.getLstPrc().remove(predecesseur);
+                            
+                            System.out.println("Lien supprimé: " + predecesseur.getNom() + " -> " + successeur.getNom());
+                        }
+                        
+                        // Connecter le prédécesseur à la nouvelle tâche
+                        // La méthode addPrecedent gère automatiquement les liens bidirectionnels
+                        nouvelleTache.addPrecedent(predecesseur);
+                        System.out.println("Lien créé: " + predecesseur.getNom() + " -> " + nouvelleTache.getNom());
+                        
+                        // Connecter la nouvelle tâche aux anciens successeurs
+                        for(Tache successeur : successeursATransferer) {
+                            successeur.addPrecedent(nouvelleTache);
+                            System.out.println("Lien créé: " + nouvelleTache.getNom() + " -> " + successeur.getNom());
+                        }
                     }
                     
-                    System.out.println("Tâche créée : " + nouvelleTache.getNom());
+                    // 4. Ajouter la tâche au projet
+                    System.out.println("Nombre de tâches avant ajout: " + this.lstTache.size());
+                    
+                    // Ajouter la tâche via le contrôleur
+                    this.ctrl.ajouterTache(nouvelleTache);
+                    
+                    System.out.println("Nombre de tâches après ajout: " + this.ctrl.getListeTache().size());
+                    
+                    // 5. Vérifier que la tâche a bien été ajoutée
+                    boolean tacheAjoutee = false;
+                    for(Tache t : this.ctrl.getListeTache()) {
+                        if(t.getNom().equals(nouvelleTache.getNom())) {
+                            tacheAjoutee = true;
+                            System.out.println("Tâche trouvée dans la liste du contrôleur");
+                            break;
+                        }
+                    }
+                    
+                    // 6. Rafraîchir l'affichage
+                    this.frameMPM.majList();
 
                     this.majTache();
-                    this.frameMPM.refresh(this.frameMPM.getLien());
-
+                    this.ctrl.majDate();
+                    
+                    
+                    System.out.println("=== FIN CRÉATION TÂCHE ===");
                     
                 } catch(NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "La durée doit être un nombre entier", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    System.err.println("Erreur de format de nombre: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(this, "Veuillez entrer une durée valide (nombre entier)", 
+                                                "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
+                } catch(Exception ex) {
+                    System.err.println("Erreur lors de la création de la tâche: " + ex.getMessage());
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Erreur lors de la création de la tâche: " + ex.getMessage(), 
+                                                "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

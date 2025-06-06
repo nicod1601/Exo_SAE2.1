@@ -35,7 +35,28 @@ public class Controleur
         this.projet.sauvegarderTaches(lstTaches, lien);
     }
 
-    public void ajouterTache(Tache tache){this.projet.ajouterTache(tache);}
+    public void addPrecedent(Tache tache, Tache precedent)
+    {
+        this.projet.addPrecedent(tache,precedent);
+        this.frame.majList();
+    }
+
+    public void majDate()
+    {
+        this.projet.majDate();
+    }
+
+    public void ajouterTache(Tache tache)
+    {
+        this.projet.ajouterTache(tache);
+        this.frame.majList();
+    }
+
+    public void supprimerTache(Tache tache)
+    {
+        this.projet.supprimerTache(tache);
+        this.frame.majList();
+    }
 
     public void enregistrerSous(String lien, ArrayList<Tache> lstTaches){this.projet.EnregistrerSous(lien, lstTaches);}
 
