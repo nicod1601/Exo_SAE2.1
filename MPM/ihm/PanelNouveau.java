@@ -23,8 +23,9 @@ public class PanelNouveau extends JPanel implements ActionListener
 
     private ArrayList<JCheckBox> tabPrc;
     private FrameMPM frameMPM;
+    private FrameNouveau frame;
 
-    public PanelNouveau(FrameMPM frameMPM,Controleur ctrl)
+    public PanelNouveau(FrameMPM frameMPM,Controleur ctrl, FrameNouveau frame)
     {
         this.setLayout(new GridLayout(1, 3));
 
@@ -33,6 +34,7 @@ public class PanelNouveau extends JPanel implements ActionListener
         /*--------------------------------------*/
         this.ctrl = ctrl;
         this.frameMPM = frameMPM;
+        this.frame = frame;
 
         JPanel panelInformation = new JPanel(new GridLayout(3, 1));
 
@@ -175,7 +177,8 @@ public class PanelNouveau extends JPanel implements ActionListener
                             
                             // Chercher la tâche prédécesseur par nom
                             for(Tache tachePrecedente : this.lstTache) {
-                                if(tachePrecedente.getNom().equals(nomPredecesseur)) {
+                                if(tachePrecedente.getNom().equals(nomPredecesseur))
+                                {
                                     predecesseursSelectionnes.add(tachePrecedente);
                                     System.out.println("Prédécesseur trouvé: " + tachePrecedente.getNom());
                                     break;
@@ -190,7 +193,8 @@ public class PanelNouveau extends JPanel implements ActionListener
                         ArrayList<Tache> successeursATransferer = new ArrayList<>(predecesseur.getLstSvt());
                         
                         // Retirer tous les liens successeurs du prédécesseur
-                        for(Tache successeur : successeursATransferer) {
+                        for(Tache successeur : successeursATransferer) 
+                        {
                             // Supprimer le lien bidirectionnel
                             predecesseur.getLstSvt().remove(successeur);
                             successeur.getLstPrc().remove(predecesseur);
@@ -198,16 +202,7 @@ public class PanelNouveau extends JPanel implements ActionListener
                             System.out.println("Lien supprimé: " + predecesseur.getNom() + " -> " + successeur.getNom());
                         }
                         
-                        // Connecter le prédécesseur à la nouvelle tâche
-                        // La méthode addPrecedent gère automatiquement les liens bidirectionnels
                         nouvelleTache.addPrecedent(predecesseur);
-                        System.out.println("Lien créé: " + predecesseur.getNom() + " -> " + nouvelleTache.getNom());
-                        
-                        // Connecter la nouvelle tâche aux anciens successeurs
-                        for(Tache successeur : successeursATransferer) {
-                            successeur.addPrecedent(nouvelleTache);
-                            System.out.println("Lien créé: " + nouvelleTache.getNom() + " -> " + successeur.getNom());
-                        }
                     }
                     
                     // 4. Ajouter la tâche au projet
@@ -233,6 +228,8 @@ public class PanelNouveau extends JPanel implements ActionListener
 
                     this.majTache();
                     this.ctrl.majDate();
+
+                    this.frame.setVisible(false);
                     
                     
                     System.out.println("=== FIN CRÉATION TÂCHE ===");

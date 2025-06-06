@@ -24,7 +24,7 @@ public class FrameNouveau extends JFrame
         /*--------------------------------------*/
         this.ctrl = ctrl;
         this.frame = frame;
-        this.panelNouveau = new PanelNouveau(this.frame,this.ctrl);
+        this.panelNouveau = new PanelNouveau(this.frame,this.ctrl,this);
 
         /*--------------------------------------*/
         /*          Ajout des composants        */
