@@ -179,7 +179,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	{
 		
 		this.listTache = this.ctrl.getListeTache();
-		this.ctrl.parcourirLstTache();
+		this.ctrl.majDate();
 		
 		this.lstBoxShape.clear();
 		
@@ -273,22 +273,11 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 			this.majList();
 			this.repaint();
-			
-			System.out.println("Flèche supprimée avec succès");
-
-			for(Tache t : this.ctrl.getListeTache())
-			{
-				System.out.println("TACHE : " + t.getNom() + " : " + t.getLstPrc() + " précedents" + " et " + t.getLstSvt() + " successeurs");
-			}
-
-			
 		}
 	}
 
 	public void supprimerTache()
 	{
-		System.out.println("supprimerTache");
-		System.out.println("Tache selectionnee : " + this.boxShapeSelectionnee);
 
 		if(this.boxShapeSelectionnee != null)
 		{
@@ -314,14 +303,12 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			this.boxShapeSelectionnee = null;
 			
 			this.majList();
-			this.ctrl.majDate();
 		}
 	}
 
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		this.ctrl.parcourirLstTache();
 
 		// Dessiner les BoxShape
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)

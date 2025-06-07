@@ -55,7 +55,6 @@ public class Projet
 	public void addPrecedent(Tache t, Tache precedent)
 	{
 		t.addPrecedent(precedent);
-		this.majDate();
 	}
 
 
@@ -276,9 +275,15 @@ public class Projet
 					}
 					t.setNiveau();
 				}
-				if(!this.testTropDeNiveaux()) this.lstTache.clear(); // Si trop de niveaux, on vide la liste des tâches
+
+				if(!this.testTropDeNiveaux()) 
+				{
+					this.lstTache.clear();
+				}
 				else
+				{
 					this.majDate();
+				}
 			}
 			
 			catch ( Exception e )
@@ -325,32 +330,47 @@ public class Projet
 	 * pour recaculer les dates au plus tôt et au plus tard
 	 */
 	
-	public void parcourirLstTache()
+	public void majDate()
 	{
-		if(this.lstTache.size() != 0)
+		for(Tache t : this.lstTache)
 		{
-			for(Tache t : this.lstTache)
+			if(t.getNom().equals("Début"))
 			{
-				this.setDateMin();
-				this.setDateMax();
-
-				System.out.println("------------------------------------------");
-				System.out.println(t);
-				System.out.println("------------------------------------------");
+				t.forceSetDateMin(0);
+				t.forceSetDateMax(-1);
 			}
+			else
+			{
+				t.forceSetDateMax(-1);
+				t.forceSetDateMin(-1);
+			}
+		}
+		this.trierTachesParNiveau();
+		this.setDateMin();
+		this.setDateMax();
+
+		for(Tache t : this.lstTache)
+		{
+			System.out.println(t);
 		}
 	}
 
-	/**
-	 * Met à jour les dates de toutes les tâches du projet.
-	 * Calcule les dates au plus tôt et au plus tard selon la méthode MPM.
-	 */
-	public void majDate()
+	public void trierTachesParNiveau() 
 	{
-		this.setDateMin();
-		this.setDateMax();
+		for (int i = 0; i < this.lstTache.size() - 1; i++)
+		 {
+			for (int j = 0; j < this.lstTache.size() - 1 - i; j++)
+			{
+				if (this.lstTache.get(j).getNiveau() > this.lstTache.get(j + 1).getNiveau())
+				{
+					// Échange les deux tâches
+					Tache temp = this.lstTache.get(j);
+					this.lstTache.set(j, this.lstTache.get(j + 1));
+					this.lstTache.set(j + 1, temp);
+				}
+			}
+		}
 	}
-
 	/**
 	 * Calcule les dates au plus tôt pour toutes les tâches du projet.
 	 * Les tâches sans précédent commencent le 02/06/2025.
@@ -368,6 +388,7 @@ public class Projet
 				tSvt.setDateMin(t.getDateMin() + t.getDuree());
 			}
 		}
+		
 	}
 
 	/**
@@ -405,8 +426,6 @@ public class Projet
 					{
 						tPrc.setDateMax(nouvelleDateMax);
 					}
-					
-					//System.out.println("tPrc.getDateMax() : " + tPrc.getDateMax() + " > "+ nouvelleDateMax + " : " + (tPrc.getDateMax() > nouvelleDateMax));
 				}
 			}
 		}
@@ -645,9 +664,6 @@ public class Projet
 	{
 		int indexFin = this.lstTache.size() - 1;
 		this.lstTache.add(indexFin, nouvelleTache);
-		
-		System.out.println("Tâche ajoutée à l'index: " + indexFin);
-		System.out.println("Nouvelle taille: " + this.lstTache.size());
 
 		if(nouvelleTache.getNbPrc() == 0) 
 		{
@@ -659,7 +675,15 @@ public class Projet
 			t.setNiveau();
 		}
 
+		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
+
+		if(nouvelleTache.getNiveau() == tacheFin.getNiveau()) 
+		{
+			tacheFin.setNiveau(tacheFin.getNiveau() + 1);
+		}
+
 		this.majDate();
+
 	}
 
 	public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
@@ -759,4 +783,5 @@ public class Projet
 		
 		return sRet;
 	}
+	
 }

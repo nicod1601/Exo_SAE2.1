@@ -179,10 +179,17 @@ public class MaBarre extends JMenuBar implements ActionListener
 				File fichier  = this.fileChooser.getSelectedFile();
 				String path   = fichier.getPath();
 
+				this.cheminFichier = path;
+				
 
 				try 
 				{
 					this.ctrl.enregistrerSous(path, this.ctrl.getListeTache());
+					this.frame.setLien(this.cheminFichier);
+					this.ctrl.lireFichier(this.cheminFichier);
+					this.verification();
+					this.frame.majList();
+					this.frame.activerBoutons();
 					JOptionPane.showMessageDialog(this.frame, "Projet enregistré sous " + path, "Enregistrement", JOptionPane.INFORMATION_MESSAGE);
 				} 
 				catch (Exception e1) 

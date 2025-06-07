@@ -38,9 +38,9 @@ public class BoxShape
     public BoxShape(Controleur ctrl)
     {
         this.ctrl  = ctrl;
-        this.largeur = 140;
-        this.hauteur = 140;
-        this.hauteurCaseSuperieure = 70;
+        this.largeur = 100;
+        this.hauteur = 100;
+        this.hauteurCaseSuperieure = 50;
         this.tache = new Tache();
         this.dateMax = " ";
         this.dateMin = " ";
@@ -50,9 +50,9 @@ public class BoxShape
     {
         this.ctrl                  = ctrl;
         this.tache                 = t;
-        this.largeur               = 140+ (int)((20*this.tache.getNom().length())*0.8);
-        this.hauteur               = 140;
-        this.hauteurCaseSuperieure = 70;
+        this.largeur               = 100+ (int)((20*this.tache.getNom().length())*0.8);
+        this.hauteur               = 100;
+        this.hauteurCaseSuperieure = 50;
         this.dateMax = " " + t.getDateMax();
         this.dateMin = " " + t.getDateMin();
     }

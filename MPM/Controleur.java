@@ -42,22 +42,14 @@ public class Controleur
     {
         this.projet.addPrecedent(tache,precedent);
         this.frame.majList();
-        this.parcourirLstTache();
     }
 
-    public void parcourirLstTache() {this.projet.parcourirLstTache();}
-
-    public void majDate()
-    {
-        this.projet.majDate();
-        this.parcourirLstTache();
-    }
+    public void majDate() {this.projet.majDate();}
 
     public void ajouterTache(Tache tache)
     {
         this.projet.ajouterTache(tache);
         this.frame.majList();
-        this.parcourirLstTache();
 
     }
 
@@ -72,7 +64,6 @@ public class Controleur
     {
         this.projet.supprimerTache(tache);
         this.frame.majList();
-        this.parcourirLstTache();
     }
 
     public String getFichier(String chemin)
@@ -81,7 +72,11 @@ public class Controleur
         return this.projet.getFichier(chemin);
     }
 
-    public void enregistrerSous(String lien, ArrayList<Tache> lstTaches){this.projet.EnregistrerSous(lien, lstTaches);}
+    public void enregistrerSous(String lien, ArrayList<Tache> lstTaches)
+    {
+        this.projet.EnregistrerSous(lien, lstTaches);
+        this.frame.majTxt();
+    }
 
     public static void main(String[] args)
     {

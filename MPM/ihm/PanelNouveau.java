@@ -41,12 +41,9 @@ public class PanelNouveau extends JPanel implements ActionListener
         JLabel lblNom   = new JLabel("Nom Tache :"  , JLabel.RIGHT);
         JLabel lblDuree = new JLabel("Duree Tache :", JLabel.RIGHT);
 
-        JPanel panelNom      = new JPanel(new GridLayout(1,2));
-        JPanel panelDuree    = new JPanel(new GridLayout(1,2));
+        JPanel panelNom      = new JPanel(new FlowLayout());
+        JPanel panelDuree    = new JPanel(new FlowLayout());
         JPanel panelAction   = new JPanel();
-
-        JPanel panelTxtNom   = new JPanel();
-        JPanel panelTxtDuree = new JPanel();
         
         this.panelChoixPrc = new JPanel();
         this.panelChoixPrc.setLayout(new BoxLayout(this.panelChoixPrc, BoxLayout.Y_AXIS));
@@ -56,7 +53,7 @@ public class PanelNouveau extends JPanel implements ActionListener
         scrollPaneCheckbox.setBorder(BorderFactory.createTitledBorder("Prédécesseurs"));
 
         this.txtNom        = new JTextField(10);
-        this.txtDuree      = new JTextField(3);
+        this.txtDuree      = new JTextField(10);
         this.btnCreerTache = new JButton("Creer Tache");
         this.btnCreerTache.setEnabled(false);
 
@@ -66,16 +63,13 @@ public class PanelNouveau extends JPanel implements ActionListener
 
         /*--------------------------------------*/
         /*          Ajout des composants        */
-        /*--------------------------------------*/
-
-        panelTxtNom.add(this.txtNom);
-        panelTxtDuree.add(this.txtDuree);
+        /*--------------------------------------*/;
 
         panelNom.add(lblNom);
-        panelNom.add(panelTxtNom);
+        panelNom.add(this.txtNom);
 
         panelDuree.add(lblDuree);
-        panelDuree.add(panelTxtDuree);
+        panelDuree.add(this.txtDuree);
 
         panelAction.add(this.btnCreerTache);
         
@@ -161,82 +155,59 @@ public class PanelNouveau extends JPanel implements ActionListener
             {
                 try 
                 {
-                    
-                    // 1. Création de la tâche
                     Tache nouvelleTache = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText()));
                     
-                    // 2. Traitement des prédécesseurs sélectionnés
                     ArrayList<Tache> predecesseursSelectionnes = new ArrayList<>();
                     
-                    // Collecter les prédécesseurs sélectionnés
-                    for(int i = 0; i < this.tabPrc.size(); i++) {
+                    for(int i = 0; i < this.tabPrc.size(); i++) 
+                    {
                         JCheckBox cb = this.tabPrc.get(i);
-                        if(cb.isSelected()) {
+
+                        if(cb.isSelected()) 
+                        {
                             String nomPredecesseur = cb.getText();
-                            System.out.println("Recherche prédécesseur: " + nomPredecesseur);
                             
-                            // Chercher la tâche prédécesseur par nom
-                            for(Tache tachePrecedente : this.lstTache) {
+                            for(Tache tachePrecedente : this.lstTache)
+                            {
                                 if(tachePrecedente.getNom().equals(nomPredecesseur))
                                 {
                                     predecesseursSelectionnes.add(tachePrecedente);
-                                    System.out.println("Prédécesseur trouvé: " + tachePrecedente.getNom());
                                     break;
                                 }
                             }
                         }
                     }
                     
-                    // 3. Restructurer les liens pour insérer la nouvelle tâche
-                    for(Tache predecesseur : predecesseursSelectionnes) {
-                        // Sauvegarder les successeurs actuels du prédécesseur
+                    for(Tache predecesseur : predecesseursSelectionnes)
+                    {
                         ArrayList<Tache> successeursATransferer = new ArrayList<>(predecesseur.getLstSvt());
                         
-                        // Retirer tous les liens successeurs du prédécesseur
                         for(Tache successeur : successeursATransferer) 
                         {
-                            // Supprimer le lien bidirectionnel
                             predecesseur.getLstSvt().remove(successeur);
                             successeur.getLstPrc().remove(predecesseur);
-                            
-                            System.out.println("Lien supprimé: " + predecesseur.getNom() + " -> " + successeur.getNom());
+
                         }
                         
                         nouvelleTache.addPrecedent(predecesseur);
                     }
-                    
-                    // 4. Ajouter la tâche au projet
-                    System.out.println("Nombre de tâches avant ajout: " + this.lstTache.size());
-                    
-                    // Ajouter la tâche via le contrôleur
+
                     this.ctrl.ajouterTache(nouvelleTache);
-                    
-                    System.out.println("Nombre de tâches après ajout: " + this.ctrl.getListeTache().size());
-                    
-                    // 5. Vérifier que la tâche a bien été ajoutée
+
                     boolean tacheAjoutee = false;
+
                     for(Tache t : this.ctrl.getListeTache()) 
                     {
                         if(t.getNom().equals(nouvelleTache.getNom())) 
                         {
                             tacheAjoutee = true;
-                            System.out.println("Tâche trouvée dans la liste du contrôleur");
                             break;
                         }
                     }
-
-                    //régler le niveau de Fin
-                    Tache fin = this.lstTache.get(this.lstTache.size() - 1);
-                    if(nouvelleTache.getNiveau() > fin.getNiveau())
-                    {
-                        fin.setNiveau(nouvelleTache.getNiveau() + 1);
-                    }
                     
-                    // 6. Rafraîchir l'affichage
                     this.frameMPM.majList();
 
                     this.majTache();
-                    this.ctrl.majDate();
 
                     this.frame.setVisible(false);
                     

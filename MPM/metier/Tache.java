@@ -166,11 +166,20 @@ public class Tache
 	}
 	//coucou nicolas devine qui cest ?
 	// c'est qui
+
+	public void forceSetDateMin(int val) 
+	{
+		this.dateMin = val;
+	}
+	public void forceSetDateMax(int val) 
+	{
+		this.dateMax = val;
+	}
 	public void setNiveau(int val) { this.niveau = val; }
 
 	public void setDateMax(int val) 
 	{ 
-		if(this.dateMax < 0 || val < dateMax)
+		if(this.dateMax == -1 || val < dateMax )
 		{
 			this.dateMax = val;
 		}
@@ -199,6 +208,7 @@ public class Tache
 		t.lstSvt.add(this);
 	}
 
+	
 	public String toString()
 	{
 		String sRet = "";
