@@ -159,7 +159,7 @@ public class Tache
 		}
 			
 	}
-
+	//coucou nicolas devine qui cest ?
 	public void setNiveau(int val) { this.niveau = val; }
 
 	public int getNiveau() { return this.niveau;}
