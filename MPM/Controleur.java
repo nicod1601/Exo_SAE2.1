@@ -15,20 +15,23 @@ public class Controleur
         this.projet = new Projet();
     }
 
-    public void             lireFichier(String chemin){ this.projet.lireFichier(chemin);}
-    public String           afficherProjet()  { return this.projet.toString()          ;}
-    public ArrayList<Tache> getListeTache ()  { return this.projet.getLstTache()       ;}
-    public int              getNbNiveau()     { return this.projet.getNbNiveau()       ;}
-    public int              getTailleNivMax() { return this.projet.getTailleNivMax()   ;}
 
-    /**
-     * a l'indice 0 se trouve ne nombre de taches sur le même niveau que la tache données
-     * à l'indice 1 se trouve la place de la tache donnée parmis les tâches du même niveau
-     */ 
-    public int[]            getNbParNiveau (int niv, String nom)   { return this.projet.getNbParNiveau(niv,nom);}
+    /*-------------------------------*/
+    /*         Accesseurs            */
+    /*-------------------------------*/
 
 
-    public ArrayList<Erreur> getErreur(){return this.projet.getErreur();}
+    public String            afficherProjet()                       { return this.projet.toString()             ;}
+    public ArrayList<Tache>  getListeTache ()                       { return this.projet.getLstTache()          ;}
+    public int               getNbNiveau()                          { return this.projet.getNbNiveau()          ;}
+    public int               getTailleNivMax()                      { return this.projet.getTailleNivMax()      ;}
+    public int[]             getNbParNiveau (int niv, String nom)   { return this.projet.getNbParNiveau(niv,nom);}
+    public ArrayList<Erreur> getErreur()                            {return this.projet.getErreur()             ;}
+
+
+    /*-------------------------------*/
+    /*         Autre méthodes        */
+    /*-------------------------------*/
 
     public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
     {
@@ -39,23 +42,43 @@ public class Controleur
     {
         this.projet.addPrecedent(tache,precedent);
         this.frame.majList();
+        this.parcourirLstTache();
     }
+
+    public void parcourirLstTache() {this.projet.parcourirLstTache();}
 
     public void majDate()
     {
         this.projet.majDate();
+        this.parcourirLstTache();
     }
 
     public void ajouterTache(Tache tache)
     {
         this.projet.ajouterTache(tache);
         this.frame.majList();
+        this.parcourirLstTache();
+
     }
+
+     public void lireFichier(String chemin)
+     {
+        this.projet.lireFichier(chemin);
+        this.frame.majTxt();
+    }
+
 
     public void supprimerTache(Tache tache)
     {
         this.projet.supprimerTache(tache);
         this.frame.majList();
+        this.parcourirLstTache();
+    }
+
+    public String getFichier(String chemin)
+    {
+        if(this.projet == null) return "";
+        return this.projet.getFichier(chemin);
     }
 
     public void enregistrerSous(String lien, ArrayList<Tache> lstTaches){this.projet.EnregistrerSous(lien, lstTaches);}

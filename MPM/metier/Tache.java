@@ -78,11 +78,14 @@ public class Tache
 		this.lstPrc  = new ArrayList<>(t.lstPrc);
 		this.lstSvt  = new ArrayList<>(t.lstSvt);
 	}
-	
 
+
+	/*-------------------------------------------------*/
+	/*                Accesseurs                       */
+	/*-------------------------------------------------*/
+	
 	/** @return le nom de la tâche */
 	public String getNom() { return this.nom; }
-
 
 	/** @return la durée de la tâche en jours */
 	public int getDuree() { return this.duree; }
@@ -131,6 +134,13 @@ public class Tache
 
 	public Tache getPrc(int index){return this.lstPrc.get(index); }
 
+	public int getNiveau() { return this.niveau;}
+
+
+	/*-------------------------------------------------*/
+	/*                Modificateurs                    */
+	/*-------------------------------------------------*/
+
 	/**
 	 * Définit la date au plus tôt pour cette tâche.
 	 * 
@@ -162,7 +172,7 @@ public class Tache
 	//coucou nicolas devine qui cest ?
 	public void setNiveau(int val) { this.niveau = val; }
 
-	public int getNiveau() { return this.niveau;}
+	
 
 	/**
 	 * Définit la date au plus tard pour cette tâche.

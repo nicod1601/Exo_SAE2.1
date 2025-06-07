@@ -179,6 +179,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	{
 		
 		this.listTache = this.ctrl.getListeTache();
+		this.ctrl.parcourirLstTache();
 		
 		this.lstBoxShape.clear();
 		
@@ -283,6 +284,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			{
 				System.out.println("TACHE : " + t.getNom() + " : " + t.getLstPrc() + " précedents" + " et " + t.getLstSvt() + " successeurs");
 			}
+
+			
 		}
 	}
 
@@ -324,7 +327,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		this.ctrl.majDate();
+		this.ctrl.parcourirLstTache();
 
 		// Dessiner les BoxShape
 		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)

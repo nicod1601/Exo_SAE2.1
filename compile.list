@@ -4,6 +4,7 @@
 ./MPM/metier/Fleche.java
 ./MPM/metier/BoxShape.java
 ./MPM/metier/Erreur.java
+./MPM/metier/Fond.java
 
 ./MPM/ihm/FrameMPM.java
 ./MPM/ihm/PanelMPM.java
@@ -11,8 +12,8 @@
 ./MPM/ihm/PanelBouton.java
 ./MPM/ihm/FrameNouveau.java
 ./MPM/ihm/PanelNouveau.java
-./MPM/ihm/FrameTheme.java
-./MPM/ihm/PanelTheme.java
+./MPM/ihm/FrameOption.java
+./MPM/ihm/PanelOptionParametre.java
 
 ./MPM/Controleur.java
 ./MPM/TestProjet.java

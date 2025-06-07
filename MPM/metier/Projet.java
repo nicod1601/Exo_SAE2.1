@@ -14,9 +14,9 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.GregorianCalendar;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Scanner;
 
 
 public class Projet
@@ -290,10 +290,56 @@ public class Projet
 		}
 	}
 
+
+	public String getFichier(String chemin)
+	{
+		String str = "";
+		try
+		{
+			Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
+			int numLigne = 0;
+
+			while ( sc.hasNextLine() )
+			{
+				String ligne    = sc.nextLine();
+				str += ligne + "\n";
+
+			}
+		}
+		catch ( Exception e )
+		{ 
+			e.printStackTrace();
+			this.erreur.add(new Erreur(e.getMessage()));  
+		}
+		System.out.println(str);
+		return str;
+	}	
+
 	public ArrayList<Erreur> getErreur()
 	{
 		return this.erreur;
-	}	
+	}
+	
+
+	/* Cette méthode permet de parcourir la liste des tâches
+	 * pour recaculer les dates au plus tôt et au plus tard
+	 */
+	
+	public void parcourirLstTache()
+	{
+		if(this.lstTache.size() != 0)
+		{
+			for(Tache t : this.lstTache)
+			{
+				this.setDateMin();
+				this.setDateMax();
+
+				System.out.println("------------------------------------------");
+				System.out.println(t);
+				System.out.println("------------------------------------------");
+			}
+		}
+	}
 
 	/**
 	 * Met à jour les dates de toutes les tâches du projet.

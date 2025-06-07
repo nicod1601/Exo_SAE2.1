@@ -13,7 +13,7 @@ public class FrameMPM extends JFrame
     private PanelBouton panelBouton;
 
     private FrameNouveau frameNouveau;
-    private FrameTheme frameTheme;
+    private FrameOption frameOption;
 
     private Controleur ctrl;
 
@@ -38,7 +38,7 @@ public class FrameMPM extends JFrame
         this.lien = " ";
 
         this.frameNouveau         = new FrameNouveau(this,this.ctrl);
-        this.frameTheme           = new FrameTheme();
+        this.frameOption           = new FrameOption(this, this.ctrl);
 
         this.menu        = new MaBarre(this, this.ctrl);
         this.panelMPM    = new PanelMPM(this, this.ctrl);
@@ -84,6 +84,12 @@ public class FrameMPM extends JFrame
     public String getLien(){return this.lien;}
 
 
+    public void majTxt()
+    {
+        this.frameOption.majTxt();
+    }
+
+
 
     /**
      * Méthode permettant de mettre à jour la liste des tâches
@@ -125,7 +131,7 @@ public class FrameMPM extends JFrame
      */
     public void reinitialiser() {this.panelMPM.reinitialiser(); }
 
-    public void setVisibleFrameTheme(){this.frameTheme.setVisible(true);}
+    public void setVisibleFrameOption(){this.frameOption.setVisible(true);}
 
 
 }

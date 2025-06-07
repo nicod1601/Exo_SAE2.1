@@ -27,7 +27,7 @@ public class PanelNouveau extends JPanel implements ActionListener
 
     public PanelNouveau(FrameMPM frameMPM,Controleur ctrl, FrameNouveau frame)
     {
-        this.setLayout(new GridLayout(1, 3));
+        this.setLayout(new GridLayout(1, 2));
 
         /*--------------------------------------*/
         /*        Création des composants       */
@@ -44,6 +44,9 @@ public class PanelNouveau extends JPanel implements ActionListener
         JPanel panelNom      = new JPanel(new GridLayout(1,2));
         JPanel panelDuree    = new JPanel(new GridLayout(1,2));
         JPanel panelAction   = new JPanel();
+
+        JPanel panelTxtNom   = new JPanel();
+        JPanel panelTxtDuree = new JPanel();
         
         this.panelChoixPrc = new JPanel();
         this.panelChoixPrc.setLayout(new BoxLayout(this.panelChoixPrc, BoxLayout.Y_AXIS));
@@ -57,8 +60,6 @@ public class PanelNouveau extends JPanel implements ActionListener
         this.btnCreerTache = new JButton("Creer Tache");
         this.btnCreerTache.setEnabled(false);
 
-        this.boxShape = new BoxShape(this.ctrl);
-        this.panelBox = this.boxShape.creerPanel(this.boxShape);
         this.lstTache = new ArrayList<Tache>();
 
         this.tabPrc = new ArrayList<JCheckBox>();
@@ -66,11 +67,15 @@ public class PanelNouveau extends JPanel implements ActionListener
         /*--------------------------------------*/
         /*          Ajout des composants        */
         /*--------------------------------------*/
+
+        panelTxtNom.add(this.txtNom);
+        panelTxtDuree.add(this.txtDuree);
+
         panelNom.add(lblNom);
-        panelNom.add(this.txtNom);
+        panelNom.add(panelTxtNom);
 
         panelDuree.add(lblDuree);
-        panelDuree.add(this.txtDuree);
+        panelDuree.add(panelTxtDuree);
 
         panelAction.add(this.btnCreerTache);
         
@@ -80,7 +85,6 @@ public class PanelNouveau extends JPanel implements ActionListener
         
         this.add(scrollPaneCheckbox);
         this.add(panelInformation);
-        this.add(this.panelBox);
 
         
 
