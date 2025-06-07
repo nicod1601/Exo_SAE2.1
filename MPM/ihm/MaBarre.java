@@ -15,9 +15,8 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private JMenuItem     menuiRefresh  ;
 	private JMenuItem     menuiQuitter  ;
 	private JMenuItem     menuiNouveau  ;
-	private JMenuItem     menuiSupprimer;
-	private JMenuItem     menuiSaveAs ;
-	private JMenuItem     menuiOption    ;
+	private JMenuItem     menuiSaveAs   ;
+	private JMenuItem     menuiOption   ;
 	
 
 	private FrameMPM      frame;
@@ -48,7 +47,6 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiRefresh         = new JMenuItem ("Actualiser"       );
 		this.menuiImporter        = new JMenuItem ("Importer"         );
 		this.menuiSaveAs          = new JMenuItem ("Enregistrer sous" );
-		this.menuiSupprimer       = new JMenuItem ("Supprimer"        );
 		this.menuiQuitter         = new JMenuItem ("Quitter"          );
 		this.menuiOption          = new JMenuItem ("Options"          );
 
@@ -59,7 +57,6 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiImporter .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiQuitter  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, InputEvent.ALT_DOWN_MASK ) );
 		this.menuiRefresh  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R , InputEvent.CTRL_DOWN_MASK) );
-		this.menuiSupprimer.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiSaveAs   .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S , InputEvent.CTRL_DOWN_MASK) );
 		/*-------------------------------*/
 		/* positionnement des composants */
@@ -68,7 +65,6 @@ public class MaBarre extends JMenuBar implements ActionListener
 		// menu Fichier
 		menuFichier.add( this.menuiNouveau );
 		menuFichier.add( this.menuiRefresh );
-		menuFichier.add( this.menuiSupprimer );
 		menuFichier.addSeparator();
 		menuFichier.add( this.menuiImporter );
 		menuFichier.add( this.menuiSaveAs );
@@ -85,7 +81,6 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiQuitter  .addActionListener(this);	
 		this.menuiNouveau  .addActionListener(this);	
 		this.menuiRefresh  .addActionListener(this);
-		this.menuiSupprimer.addActionListener(this);
 		this.menuiSaveAs.addActionListener(this);
 		this.menuiOption.addActionListener(this);
 

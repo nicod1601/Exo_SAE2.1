@@ -115,10 +115,7 @@ public class PanelBouton extends JPanel implements ActionListener
             {
                 if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
                 {
-                    //System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
                     this.lstBoxShape.get(cpt).setDateMin(" "  + this.lstTache.get(cpt).getDateMin());
-                    //System.out.println("BoxShape : " + this.lstBoxShape.get(cpt).getDateMin() + " ->  Niveau : " + this.niveauPrc);
-
                 }
             }
             this.niveauSvt++;

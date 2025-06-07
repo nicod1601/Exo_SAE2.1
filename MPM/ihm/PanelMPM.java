@@ -261,20 +261,16 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	{
 		if (this.flecheSelectionnee != null) 
 		{
-			// Récupérer les tâches origine et destination
 			Tache tacheOrigine = this.flecheSelectionnee.getOrigine().getTache();
 			Tache tacheDestination = this.flecheSelectionnee.getDestination().getTache();
 			
-			// Utiliser la méthode supprimer de la classe Fleche pour nettoyer les relations
 			this.flecheSelectionnee.supprimer(tacheOrigine, tacheDestination);
 			
-			// Supprimer la flèche de la liste
+
 			this.lstFleche.remove(this.flecheSelectionnee);
-			
-			// Remettre la sélection à null
+
 			this.flecheSelectionnee = null;
-			
-			// Mettre à jour l'affichage
+
 			this.majList();
 			this.repaint();
 			
@@ -297,8 +293,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		if(this.boxShapeSelectionnee != null)
 		{
 			Tache t = this.boxShapeSelectionnee.getTache();
-
-			// il faut que les autre l'oublie aussi 
 			ArrayList<Tache> lstPrc = t.getLstPrc();
 
 			for (int cpt = 0; cpt < lstPrc.size(); cpt++)

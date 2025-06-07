@@ -150,10 +150,7 @@ public class Tache
 
 	public void setNiveau()
 	{
-		//System.out.println("coucou");
-		
-		//System.out.println(! this.lstPrc.isEmpty() );
-		
+	
 		if (! this.lstPrc.isEmpty())
 		{
 			int nivTemp =0 ;
@@ -164,21 +161,13 @@ public class Tache
 			}
 				this.niveau = nivTemp;
 			
-			//System.out.println("il a un precedent");
-			
 		}
 			
 	}
 	//coucou nicolas devine qui cest ?
+	// c'est qui
 	public void setNiveau(int val) { this.niveau = val; }
 
-	
-
-	/**
-	 * Définit la date au plus tard pour cette tâche.
-	 * 
-	 * @param dateMax la nouvelle date maximale
-	 */
 	public void setDateMax(int val) 
 	{ 
 		if(this.dateMax < 0 || val < dateMax)
@@ -186,6 +175,7 @@ public class Tache
 			this.dateMax = val;
 		}
 	}
+
 	public void setDateMin(int val)
 	{ 
 		if(this.dateMin == -1 || val > dateMin)
@@ -198,35 +188,17 @@ public class Tache
 		this.nom = nom;
 	}
 
-
-	/**
-	 * Calcule et retourne la marge de la tâche (différence entre dateMax et dateMin).
-	 * 
-	 * @return la marge en jours
-	 */
 	public int getMarge()
 	{
 		return this.dateMax-this.dateMin;
 	}
 
-	/**
-	 * Ajoute une tâche comme précédente. Cette tâche devient aussi une suivante
-	 * de la tâche ajoutée.
-	 * 
-	 * @param t la tâche précédente à ajouter
-	 */
 	public void addPrecedent(Tache t)
 	{
 		this.lstPrc.add(t);
 		t.lstSvt.add(this);
 	}
 
-	/**
-	 * Retourne une représentation textuelle détaillée de la tâche :
-	 * nom, durée, dates au plus tôt et au plus tard, marge, dépendances, niveau.
-	 * 
-	 * @return la description de la tâche
-	 */
 	public String toString()
 	{
 		String sRet = "";
