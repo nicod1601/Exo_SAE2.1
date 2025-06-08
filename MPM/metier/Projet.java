@@ -705,7 +705,7 @@ public class Projet
 
 	}
 
-	public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
+	public void enregistrer(String lien, ArrayList<Tache> lstTaches)
 	{
 		try
 		{
@@ -749,7 +749,7 @@ public class Projet
 		}
 	}
 
-	public void EnregistrerSous(String lien, ArrayList<Tache> lstTaches) 
+	public void enregistrerSous(String lien, ArrayList<Tache> lstTaches) 
 	{
 		try
 		{
@@ -783,6 +783,18 @@ public class Projet
 		catch (Exception e)
 		{ 
 			e.printStackTrace();
+		}
+	}
+
+	public void modifierTache(String nomTache, int dureeTache, Tache tache) 
+	{
+		for (Tache t : this.lstTache) 
+		{
+			if (t.getNom().equals(tache.getNom()))
+			{
+				t.setNom(nomTache);
+				t.setDuree(dureeTache);
+			}
 		}
 	}
 

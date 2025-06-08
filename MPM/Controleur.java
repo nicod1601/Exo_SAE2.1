@@ -33,10 +33,10 @@ public class Controleur
     /*         Autre méthodes        */
     /*-------------------------------*/
 
-    public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
+    /*public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
     {
         this.projet.sauvegarderTaches(lstTaches, lien);
-    }
+    }*/
 
     public void addPrecedent(Tache tache, Tache precedent)
     {
@@ -72,10 +72,22 @@ public class Controleur
         return this.projet.getFichier(chemin);
     }
 
+    public void enregistrer(String lien, ArrayList<Tache> lstTaches)
+    {
+        this.projet.enregistrer(lien, lstTaches);
+        this.frame.majTxt();
+    }
+
     public void enregistrerSous(String lien, ArrayList<Tache> lstTaches)
     {
-        this.projet.EnregistrerSous(lien, lstTaches);
+        this.projet.enregistrerSous(lien, lstTaches);
         this.frame.majTxt();
+    }
+
+    public void modifierTache(String nom, int duree, Tache tache)
+    {
+        this.projet.modifierTache(nom, duree, tache);
+        //this.frame.majList();
     }
 
     public static void main(String[] args)

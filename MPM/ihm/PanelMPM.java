@@ -280,6 +280,13 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			this.supprimerFleche(); 
 		}
 
+		if (e.getSource() == this.itemModifier)
+		{
+			this.frame.setPosition(this.recupBox.getX(), this.recupBox.getY());
+			this.frame.setModifTache(this.recupBox.getTache());
+			this.frame.setVisibleFrameModif();
+		}
+
 		for (int cpt = 0; cpt < this.menuAjoutePrc.getItemCount(); cpt++)
 		{
 			if (e.getSource() == this.menuAjoutePrc.getItem(cpt))
@@ -290,7 +297,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 					{
 						this.ctrl.addPrecedent(this.recupBox.getTache(), t);
 						this.majList(); 
-						break;
 					}
 				}
 			}

@@ -141,11 +141,7 @@ public class Tache
 	/*                Modificateurs                    */
 	/*-------------------------------------------------*/
 
-	/**
-	 * Définit la date au plus tôt pour cette tâche.
-	 * 
-	 * @param dateMin la nouvelle date minimale
-	 */
+	public void setDuree(int val) { this.duree = val; }
 	
 
 	public void setNiveau()

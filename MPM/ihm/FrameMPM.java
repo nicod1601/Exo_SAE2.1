@@ -15,6 +15,7 @@ public class FrameMPM extends JFrame
 
     private FrameNouveau frameNouveau;
     private FrameOption frameOption;
+    private FrameModifier frameModifier;
 
     private Controleur ctrl;
 
@@ -40,6 +41,7 @@ public class FrameMPM extends JFrame
 
         this.frameNouveau         = new FrameNouveau(this,this.ctrl);
         this.frameOption           = new FrameOption(this, this.ctrl);
+        this.frameModifier         = new FrameModifier(this, this.ctrl);
 
         this.menu        = new MaBarre(this, this.ctrl);
         this.panelMPM    = new PanelMPM(this, this.ctrl);
@@ -137,6 +139,12 @@ public class FrameMPM extends JFrame
     public void boutonDeBase(){this.panelBouton.boutonDeBase();}
 
     public void setModifBocks(int largeur, int hauteur, Color couleur){this.panelMPM.setModifBocks(largeur, hauteur, couleur);}
+
+    public void setVisibleFrameModif(){this.frameModifier.setVisible(true);}
+
+    public void setPosition(int x, int y){this.frameModifier.setPosition(x, y);}
+
+    public void setModifTache(Tache tache){this.frameModifier.setModifTache(tache);}
 
 
 }
