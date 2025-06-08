@@ -14,6 +14,7 @@ public class BoxShape
     private int hauteurCaseSuperieure;
     private String dateMax;
     private String dateMin;
+    private Color couleur;
 
 
     private Tache  tache;
@@ -38,23 +39,25 @@ public class BoxShape
     public BoxShape(Controleur ctrl)
     {
         this.ctrl  = ctrl;
-        this.largeur = 100;
-        this.hauteur = 100;
-        this.hauteurCaseSuperieure = 50;
+        this.largeur = 60;
+        this.hauteur = 60;
+        this.hauteurCaseSuperieure = 30;
         this.tache = new Tache();
         this.dateMax = " ";
         this.dateMin = " ";
+        this.couleur = Color.BLACK;
     }
 
     public BoxShape(Tache t, Controleur ctrl)
     {
         this.ctrl                  = ctrl;
         this.tache                 = t;
-        this.largeur               = 100+ (int)((20*this.tache.getNom().length())*0.8);
-        this.hauteur               = 100;
-        this.hauteurCaseSuperieure = 50;
+        this.largeur               = 60+ (int)((20*this.tache.getNom().length())*0.8);
+        this.hauteur               = 60;
+        this.hauteurCaseSuperieure = 30;
         this.dateMax = " " + t.getDateMax();
         this.dateMin = " " + t.getDateMin();
+        this.couleur = Color.BLACK;
     }
 
     public Tache getTache() { return this.tache; }
@@ -71,6 +74,9 @@ public class BoxShape
     public String getDateMin(){ return this.dateMin;  }
     public String getDateMax(){ return this.dateMax;  }
     public int getNiveau()    { return tache.getNiveau();        }
+    public void setTaille(int taille) { this.largeur = taille; this.hauteur = taille; }
+    public Color getCouleur() { return this.couleur; }
+    public void setCouleur(Color couleur) { this.couleur = couleur; }
 
     
     
@@ -95,7 +101,7 @@ public class BoxShape
      */
     public void dessiner(Graphics2D g2d) 
     {
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(this.couleur);
         int xb;
         int yb;
 
@@ -105,7 +111,7 @@ public class BoxShape
             int[] nbParNiveau = this.ctrl.getNbParNiveau(this.tache.getNiveau(), this.tache.getNom());
 
             // Calcul de la largeur et de la hauteur
-            xb = 140 + ((2 * 140) * this.tache.getNiveau());
+            xb = this.largeur + ((2 * 125) * this.tache.getNiveau());
             yb = ((int) (1.5 * this.hauteur) * nbParNiveau[1]);
 
             // Ajustement de la position en fonction du nom
@@ -145,26 +151,16 @@ public class BoxShape
         dessinerTexte(g2d, xb, yb, hauteurInferieure, largeurCase);
     }
 
-    /*private int getLargeurMaxPrc()
-    {
-        int max = 0;
-        for(Tache t : this.tache.getLstPrc())
-            
-        return max;
-    }*/
-    
-    /**
-     * Méthode privée pour dessiner le texte dans les cases
-     */
     private void dessinerTexte(Graphics2D g2d, int x, int y, int hauteurInferieure, int largeurCase) 
     {
-        g2d.setFont(new Font("Arial", Font.BOLD, 30));
+       
         
         FontMetrics fm = g2d.getFontMetrics();
         
         // Texte case supérieure
         if (!this.tache.getNom().isEmpty()) 
         {
+            g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(Color.BLACK);
             int textWidth = fm.stringWidth(this.tache.getNom());
             int textHeight = fm.getAscent();
@@ -176,7 +172,8 @@ public class BoxShape
         // Texte case inférieure gauche
         if (!this.dateMin.isEmpty())
         {
-             g2d.setColor(new Color(59, 185, 28 ));
+            g2d.setFont(new Font("Arial", Font.BOLD, 15));
+            g2d.setColor(new Color(59, 185, 28 ));
             int textWidth = fm.stringWidth(this.dateMin);
             int textHeight = fm.getAscent();
             int textX = x + (largeurCase - textWidth) / 2;
@@ -188,6 +185,7 @@ public class BoxShape
         // Texte case inférieure droite
         if (!this.dateMax.isEmpty())
         {
+            g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(Color.RED);
             int textWidth = fm.stringWidth(this.dateMax);
             int textHeight = fm.getAscent();
@@ -217,11 +215,58 @@ public class BoxShape
             protected void paintComponent(Graphics g) 
             {
                 super.paintComponent(g);
-                box.dessiner((Graphics2D) g);
+                box.dessinerExemple((Graphics2D) g);
             }
             
-            public Dimension getPreferredSize() {return new Dimension(largeur + 20, hauteur + 20); }
+            //public Dimension getPreferredSize() {return new Dimension(largeur, hauteur); }
         };
+    }
+
+     public void dessinerExemple(Graphics2D g2d) 
+    {
+        g2d.setColor(this.couleur);
+        int xb;
+        int yb;
+
+        // Si la position n'est pas définie manuellement, calculer automatiquement
+        if (!this.positionManuelle) 
+        {
+
+            // Calcul de la largeur et de la hauteur
+            xb = 100;
+            yb = 20;
+
+            // Ajustement de la position en fonction du nom
+            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) {
+                yb = (((int) (1.5 * this.hauteur) * this.ctrl.getTailleNivMax()) + ((int) (1.5 * this.hauteur))) / 2;
+            }
+        } 
+        else 
+        {
+            // Utiliser la position manuelle
+            xb = this.x;
+            yb = this.y;
+        }
+
+        // Configuration du style pour les bordures
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        
+        // Case supérieure
+        g2d.drawRect(xb, yb, largeur, hauteurCaseSuperieure);
+        
+        // Cases inférieures
+        int hauteurInferieure = hauteur - hauteurCaseSuperieure;
+        int largeurCase = largeur / 2;
+        
+        // Case inférieure gauche
+        g2d.drawRect(xb, yb + hauteurCaseSuperieure, largeurCase, hauteurInferieure);
+        
+        // Case inférieure droite
+        g2d.drawRect(xb + largeurCase, yb + hauteurCaseSuperieure, largeurCase, hauteurInferieure);
+        
+        // Dessin du texte
+        dessinerTexte(g2d, xb, yb, hauteurInferieure, largeurCase);
     }
     
     /**

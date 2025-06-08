@@ -3,6 +3,7 @@ package MPM.ihm;
 import MPM.Controleur;
 import MPM.metier.*;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.*;
 
@@ -132,6 +133,10 @@ public class FrameMPM extends JFrame
     public void reinitialiser() {this.panelMPM.reinitialiser(); }
 
     public void setVisibleFrameOption(){this.frameOption.setVisible(true);}
+
+    public void boutonDeBase(){this.panelBouton.boutonDeBase();}
+
+    public void setModifBocks(int largeur, int hauteur, Color couleur){this.panelMPM.setModifBocks(largeur, hauteur, couleur);}
 
 
 }

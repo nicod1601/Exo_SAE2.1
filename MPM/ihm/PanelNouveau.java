@@ -212,14 +212,15 @@ public class PanelNouveau extends JPanel implements ActionListener
                     this.frame.setVisible(false);
                     
                     
-                    System.out.println("=== FIN CRÉATION TÂCHE ===");
                     
-                } catch(NumberFormatException ex) {
-                    System.err.println("Erreur de format de nombre: " + ex.getMessage());
+                } 
+                catch(NumberFormatException ex) 
+                {
                     JOptionPane.showMessageDialog(this, "Veuillez entrer une durée valide (nombre entier)", 
                                                 "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
-                } catch(Exception ex) {
-                    System.err.println("Erreur lors de la création de la tâche: " + ex.getMessage());
+                } 
+                catch(Exception ex) 
+                {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Erreur lors de la création de la tâche: " + ex.getMessage(), 
                                                 "Erreur", JOptionPane.ERROR_MESSAGE);

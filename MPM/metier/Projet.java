@@ -651,10 +651,29 @@ public class Projet
 
 	public void supprimerTache(Tache tacheASupprimer)
 	{
+		for(int cpt = 0; cpt < tacheASupprimer.getNbPrc(); cpt++)
+		{
+			tacheASupprimer.getLstPrc().get(cpt).getLstSvt().remove(tacheASupprimer);
+		}
+
+		for(int cpt = 0; cpt < tacheASupprimer.getNbSvt(); cpt++)
+		{
+			tacheASupprimer.getLstSvt().get(cpt).getLstPrc().remove(tacheASupprimer);
+		}
+
 		this.lstTache.remove(tacheASupprimer);
+
 		for(Tache t : this.lstTache) 
 		{
 			t.setNiveau();
+		}
+
+		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
+
+		System.out.println(tacheASupprimer.getNiveau() + " = " + (tacheFin.getNiveau() - 1));
+		if(tacheASupprimer.getNiveau() == tacheFin.getNiveau() - 1) 
+		{
+			tacheFin.setNiveau(tacheFin.getNiveau() - 1);
 		}
 
 		this.majDate();

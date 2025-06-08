@@ -31,6 +31,9 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	//stocke
 	private BoxShape recupBox;
+	private Color recupCouleur;
+	private int recupLargeur;
+	private int recupHauteur;
 
 	// elem de PopMenu
 	private JPopupMenu popMenu;
@@ -42,6 +45,8 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	// sous menu AjouterPrc
 	private JMenu menuAjoutePrc;
 	private JMenuItem itemAjoutePrc;
+
+	private JLabel infoLabel;
 
 	
 
@@ -94,6 +99,14 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemModifier.setEnabled(false);
 		this.itemSupprimerFleche.setEnabled(false);
 
+		// Label d'information qui suit la souris
+        infoLabel = new JLabel();
+        infoLabel.setOpaque(true);
+        infoLabel.setBackground(new Color(255, 255, 200)); // Jaune clair
+        infoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        infoLabel.setVisible(false);
+        infoLabel.setSize(200, 50);
+
 
 		/*--------------------------------------*/
 		/*     Positionnement des composants    */
@@ -118,7 +131,11 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.itemModifier.addActionListener(this);
 		this.itemAjoutePrc.addActionListener(this);
 		this.itemSupprimerFleche.addActionListener(this);
+
+
 	}
+
+
 
 	public void ajouterPrc()
 	{
@@ -158,6 +175,22 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	}
 
+	public void setModifBocks(int largeur, int hauteur, Color couleur)
+	{	
+		for(BoxShape box : this.lstBoxShape)
+		{
+			box.setTaille(largeur);
+			box.setHauteur(hauteur);
+			box.setCouleur(couleur);
+
+			this.recupCouleur = couleur;
+			this.recupLargeur = largeur;
+			this.recupHauteur = hauteur;
+		}
+
+		this.majDessin();
+	}
+
 	public void resetNiveau()
 	{
 		this.niveauPrc = 0;
@@ -189,6 +222,13 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		{
 			BoxShape box = new BoxShape(t, this.ctrl);
 			this.lstBoxShape.add(box);
+
+			if(this.recupCouleur != null && this.recupLargeur != 0 && this.recupHauteur != 0)
+			{
+				box.setTaille(this.recupLargeur);
+				box.setHauteur(this.recupHauteur);
+				box.setCouleur(this.recupCouleur);
+			} 
 			System.out.println("BoxShape créée pour: " + t.getNom() + " au niveau: " + t.getNiveau());
 		}
 		
@@ -273,6 +313,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 			this.majList();
 			this.repaint();
+			this.frame.boutonDeBase();
 		}
 	}
 
@@ -281,7 +322,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 		if(this.boxShapeSelectionnee != null)
 		{
-			Tache t = this.boxShapeSelectionnee.getTache();
+			/*Tache t = this.boxShapeSelectionnee.getTache();
 			ArrayList<Tache> lstPrc = t.getLstPrc();
 
 			for (int cpt = 0; cpt < lstPrc.size(); cpt++)
@@ -294,7 +335,9 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			for (int cpt = 0; cpt < lstSvt.size(); cpt++)
 			{
 				lstSvt.get(cpt).getLstPrc().remove(t);
-			}
+			}*/
+
+			this.ctrl.supprimerTache(this.boxShapeSelectionnee.getTache());
 
 			this.listTache.remove(this.boxShapeSelectionnee.getTache());
 
@@ -303,6 +346,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			this.boxShapeSelectionnee = null;
 			
 			this.majList();
+			this.frame.boutonDeBase();
 		}
 	}
 

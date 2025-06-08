@@ -88,6 +88,20 @@ public class PanelBouton extends JPanel implements ActionListener
 
     }
 
+    public void boutonDeBase()
+    {
+
+        this.btnAfficherTout.setEnabled(true);
+        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ));
+        this.btnDateMin.setEnabled(true);
+        this.btnDateMin.setBackground(new Color(101, 180, 0 ));
+
+        this.btnAfficherRien.setEnabled(false);
+        this.btnAfficherRien.setBackground(new Color(180, 0, 0 ));
+        this.btnDateMax.setEnabled(false);
+        this.btnDateMax.setBackground(new Color(180, 0, 0 ));
+    }
+
     public void resetNiveau()
     {
         this.niveauPrc = this.ctrl.getNbNiveau() - 1;
