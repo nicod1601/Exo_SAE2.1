@@ -55,7 +55,7 @@ public class PanelNouveau extends JPanel implements ActionListener
         this.txtNom        = new JTextField(10);
         this.txtDuree      = new JTextField(10);
         this.btnCreerTache = new JButton("Creer Tache");
-        this.btnCreerTache.setEnabled(false);
+        //this.btnCreerTache.setEnabled(false);
 
         this.lstTache = new ArrayList<Tache>();
 

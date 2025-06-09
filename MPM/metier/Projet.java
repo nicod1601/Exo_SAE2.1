@@ -670,14 +670,29 @@ public class Projet
 
 		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
 
-		System.out.println(tacheASupprimer.getNiveau() + " = " + (tacheFin.getNiveau() - 1));
 		if(tacheASupprimer.getNiveau() == tacheFin.getNiveau() - 1) 
 		{
-			tacheFin.setNiveau(tacheFin.getNiveau() - 1);
-		}
+			// Vérifier s'il existe d'autres tâches du même niveau que celle à supprimer
+			boolean autresTachesMemeNiveau = false;
+			for(Tache t : this.lstTache)
+			{
+				if(t != tacheASupprimer && t.getNiveau() == tacheASupprimer.getNiveau())
+				{
+					autresTachesMemeNiveau = true;
+				}
+			}
 
+			if(! autresTachesMemeNiveau) 
+			{
+				tacheFin.setNiveau(tacheFin.getNiveau() - 1);
+			}
+		}
 		this.majDate();
+			
 	}
+
+
+		
 
 	public void ajouterTache(Tache nouvelleTache)
 	{

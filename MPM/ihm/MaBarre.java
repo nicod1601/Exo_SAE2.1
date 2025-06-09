@@ -18,6 +18,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private JMenuItem     menuiSaveAs     ;
 	private JMenuItem     menuiOption     ;
 	private JMenuItem     menuiSave       ;
+	private JMenuItem     menuiNvProjet   ;
 	
 
 	private FrameMPM      frame;
@@ -51,6 +52,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiSave            = new JMenuItem ("Enregistrer"      );
 		this.menuiQuitter         = new JMenuItem ("Quitter"          );
 		this.menuiOption          = new JMenuItem ("Options"          );
+		this.menuiNvProjet        = new JMenuItem ("Nouveau Projet"  );
 
 		
 		// Raccourci 
@@ -61,6 +63,8 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiRefresh  .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiSaveAs   .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V , InputEvent.CTRL_DOWN_MASK) );
 		this.menuiSave     .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiOption   .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O , InputEvent.CTRL_DOWN_MASK) );
+		this.menuiNvProjet .setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N , InputEvent.CTRL_DOWN_MASK) );
 
 
 		if(this.cheminFichier.equals("") || this.cheminFichier == null)
@@ -74,6 +78,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/*-------------------------------*/
 
 		// menu Fichier
+		menuFichier.add( this.menuiNvProjet );
 		menuFichier.add( this.menuiNouveau );
 		menuFichier.add( this.menuiRefresh );
 		menuFichier.addSeparator();
@@ -96,6 +101,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 		this.menuiSaveAs.addActionListener(this);
 		this.menuiOption.addActionListener(this);
 		this.menuiSave.addActionListener(this);
+		this.menuiNvProjet.addActionListener(this);
 
 	}
 
@@ -131,6 +137,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 				File fichier  = fileChooser.getSelectedFile();
 
 				System.out.print("Nom du fichier : " + fichier.getName() + "\n");
+				System.out.print("Dossier du fichier : " + fichier.getPath() + "\n");
 				
 				
 				String path   = fichier.getPath(); 
@@ -167,6 +174,51 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 			} 
 
+		}
+
+		if(e.getSource() == this.menuiNvProjet)
+		{
+			try 
+			{
+				String dossierBase = this.fileChooser.getCurrentDirectory() + "/Donnees/MPM";
+				String nomFichier = "nouveau_projet_" + System.currentTimeMillis() + ".txt";
+				String cheminComplet = dossierBase + "/" + nomFichier;
+				
+				File fichier = new File(cheminComplet);
+				
+				fichier.getParentFile().mkdirs();
+				 
+				fichier.createNewFile();
+				
+				java.io.FileWriter writer = new java.io.FileWriter(fichier);
+				writer.write("Exemple|1|\n");
+				writer.close();
+				
+				this.cheminFichier = cheminComplet;
+				this.frame.reinitialiser();
+				this.ctrl.getErreur().clear();
+				
+				this.ctrl.lireFichier(this.cheminFichier);
+				
+				this.frame.setLien(this.cheminFichier);
+				this.frame.majList();
+				this.frame.activerBoutons();
+				this.activerLesOption();
+
+				this.menuiSave.setEnabled(false);
+				
+				JOptionPane.showMessageDialog(this.frame, 
+					"Nouveau projet créé : " + nomFichier, 
+					"Nouveau Projet", 
+					JOptionPane.INFORMATION_MESSAGE);
+			}
+			catch (Exception e1) 
+			{
+				JOptionPane.showMessageDialog(this.frame, 
+					"Erreur lors de la création du projet : " + e1.getMessage(), 
+					"Erreur", 
+					JOptionPane.ERROR_MESSAGE);
+			}
 		}
 
 		if(e.getSource() == this.menuiQuitter) { System.exit(0); }
@@ -221,6 +273,12 @@ public class MaBarre extends JMenuBar implements ActionListener
 			{
 				File fichier  = this.fileChooser.getSelectedFile();
 				String path   = fichier.getPath();
+
+				 if (!path.toLowerCase().endsWith(".txt"))
+				 {
+					path += ".txt";
+					fichier = new File(path);
+				}
 
 				this.cheminFichier = path;
 				

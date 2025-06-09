@@ -38,6 +38,9 @@ public class Controleur
         this.projet.sauvegarderTaches(lstTaches, lien);
     }*/
 
+
+
+
     public void addPrecedent(Tache tache, Tache precedent)
     {
         this.projet.addPrecedent(tache,precedent);

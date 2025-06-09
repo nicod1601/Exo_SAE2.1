@@ -212,45 +212,50 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	{
 		
 		this.listTache = this.ctrl.getListeTache();
-		this.ctrl.majDate();
-		
-		this.lstBoxShape.clear();
-		
-		this.majScroll(this.ctrl.getNbNiveau(), this.ctrl.getTailleNivMax());
-		
-		for(Tache t : this.listTache)
-		{
-			BoxShape box = new BoxShape(t, this.ctrl);
-			this.lstBoxShape.add(box);
 
-			if(this.recupCouleur != null && this.recupLargeur != 0 && this.recupHauteur != 0)
-			{
-				box.setTaille(this.recupLargeur);
-				box.setHauteur(this.recupHauteur);
-				box.setCouleur(this.recupCouleur);
-			} 
-			System.out.println("BoxShape créée pour: " + t.getNom() + " au niveau: " + t.getNiveau());
-		}
-		
-		
-		// Configuration des dates pour l'affichage
-		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+		if(this.listTache.size() != 0 && this.listTache != null)
 		{
-			if(this.lstBoxShape.get(cpt).getNiveau() == 0)
-			{
-				this.lstBoxShape.get(cpt).setDateMin(" " + this.listTache.get(cpt).getDateMin());
-				this.lstBoxShape.get(cpt).setDateMax(" ");
-			}
-			else
-			{
-				this.lstBoxShape.get(cpt).setDateMax(" ");
-				this.lstBoxShape.get(cpt).setDateMin(" ");
-			}
-		}
-		this.frame.majTacheBox(this.listTache, this.lstBoxShape);
+			this.ctrl.majDate();
 		
-		this.revalidate();
-		this.repaint();
+			this.lstBoxShape.clear();
+			
+			this.majScroll(this.ctrl.getNbNiveau(), this.ctrl.getTailleNivMax());
+			
+			for(Tache t : this.listTache)
+			{
+				BoxShape box = new BoxShape(t, this.ctrl);
+				this.lstBoxShape.add(box);
+
+				if(this.recupCouleur != null && this.recupLargeur != 0 && this.recupHauteur != 0)
+				{
+					box.setTaille(this.recupLargeur);
+					box.setHauteur(this.recupHauteur);
+					box.setCouleur(this.recupCouleur);
+				} 
+				System.out.println("BoxShape créée pour: " + t.getNom() + " au niveau: " + t.getNiveau());
+			}
+			
+			
+			// Configuration des dates pour l'affichage
+			for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+			{
+				if(this.lstBoxShape.get(cpt).getNiveau() == 0)
+				{
+					this.lstBoxShape.get(cpt).setDateMin(" " + this.listTache.get(cpt).getDateMin());
+					this.lstBoxShape.get(cpt).setDateMax(" ");
+				}
+				else
+				{
+					this.lstBoxShape.get(cpt).setDateMax(" ");
+					this.lstBoxShape.get(cpt).setDateMin(" ");
+				}
+			}
+			this.frame.majTacheBox(this.listTache, this.lstBoxShape);
+			
+			this.revalidate();
+			this.repaint();
+		}
+		
 	}
 
 	public void reinitialiser()
