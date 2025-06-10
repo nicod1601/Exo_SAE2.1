@@ -51,6 +51,7 @@ public class Tache
 		this.dateMax = -1;
 		this.lstPrc  = new ArrayList<Tache>();
 		this.lstSvt  = new ArrayList<Tache>();
+		this.niveau  = 0;
 	}
 
 	public Tache()
@@ -61,6 +62,7 @@ public class Tache
 		this.dateMax = -1;
 		this.lstPrc  = new ArrayList<Tache>();
 		this.lstSvt  = new ArrayList<Tache>();
+		this.niveau  = 0;
 	}
 
 	/**
@@ -77,6 +79,7 @@ public class Tache
 		this.dateMax = t.dateMax;
 		this.lstPrc  = new ArrayList<>(t.lstPrc);
 		this.lstSvt  = new ArrayList<>(t.lstSvt);
+		this.niveau  = t.niveau;
 	}
 
 
@@ -144,20 +147,27 @@ public class Tache
 	public void setDuree(int val) { this.duree = val; }
 	
 
-	public void setNiveau()
+	public void setNiveau(ArrayList<Tache> lstPrc)
 	{
 	
-		if (! this.lstPrc.isEmpty())
+		/*if (! this.lstPrc.isEmpty())
 		{
 			int nivTemp =0 ;
 			for (Tache t : this.lstPrc)
 			{
-				if(nivTemp < t.getNiveau()+1)
+				if(nivTemp 	< t.getNiveau()+1)
 					nivTemp = t.getNiveau()+1;
 			}
-				this.niveau = nivTemp;
+
+			this.niveau = nivTemp;
+		}*/
+
+		int niveauMax = 0;
+		for (Tache t : lstPrc)
+			if(t.getNiveau() > niveauMax)
+				niveauMax = t.getNiveau();
 			
-		}
+		this.niveau = niveauMax+1;
 			
 	}
 	//coucou nicolas devine qui cest ?

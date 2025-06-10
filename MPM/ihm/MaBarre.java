@@ -169,6 +169,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 						this.frame.majList	   	  ();
 						this.frame.activerBoutons ();
 						this.	  activerLesOption();
+						this.frame.setTitle("MPM - " + fichier.getName());
 					}
 				}
 			}
@@ -217,6 +218,9 @@ public class MaBarre extends JMenuBar implements ActionListener
 					"Erreur lors de la création du projet : " + e1.getMessage(), 
 					"Erreur", 
 					JOptionPane.ERROR_MESSAGE);
+				this.ctrl.getErreur().add(new Erreur(8));
+				
+
 			}
 		}
 

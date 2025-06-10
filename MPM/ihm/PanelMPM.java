@@ -221,7 +221,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 					box.setHauteur(this.recupHauteur);
 					box.setCouleur(this.recupCouleur);
 				} 
-				System.out.println("BoxShape créée pour: " + t.getNom() + " au niveau: " + t.getNiveau());
+				//System.out.println("BoxShape créée pour: " + t.getNom() + " au niveau: " + t.getNiveau());
 			}
 			
 			

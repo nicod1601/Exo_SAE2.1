@@ -82,7 +82,7 @@ public class Projet
 				t.addPrecedent(debut);
 				
 			}
-			t.setNiveau();
+			t.setNiveau(t.getLstPrc());
 		}
 
 		this.majDate();
@@ -273,7 +273,7 @@ public class Projet
 					{
 						t.addPrecedent(debut);
 					}
-					t.setNiveau();
+					t.setNiveau(t.getLstPrc());
 				}
 
 				if(!this.testTropDeNiveaux()) 
@@ -665,7 +665,7 @@ public class Projet
 
 		for(Tache t : this.lstTache) 
 		{
-			t.setNiveau();
+			t.setNiveau(t.getLstPrc());
 		}
 
 		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
@@ -699,23 +699,24 @@ public class Projet
 		int indexFin = this.lstTache.size() - 1;
 		this.lstTache.add(indexFin, nouvelleTache);
 
-		if(nouvelleTache.getNbPrc() == 0) 
+		/*if(nouvelleTache.getNbPrc() == 0) 
 		{
 			nouvelleTache.addPrecedent(this.lstTache.get(0));
-		}
+		}*/
 
 		for(Tache t : this.lstTache) 
 		{
-			t.setNiveau();
+			t.setNiveau(t.getLstPrc());
 		}
 
 		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
 
-		if(nouvelleTache.getNiveau() == tacheFin.getNiveau()) 
+		if(nouvelleTache.getNiveau() <= tacheFin.getNiveau()) 
 		{
 			tacheFin.setNiveau(tacheFin.getNiveau() + 1);
 		}
 
+		this.trierTachesParNiveau();
 		this.majDate();
 
 	}

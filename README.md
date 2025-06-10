@@ -20,11 +20,9 @@ Ce projet est une application Java permettant de gérer la planification de proj
 
 ## Installation
 
-1. **Prérequis** :
-   - Java JDK 17 ou supérieur installé
-   - Système compatible Unix (Linux, macOS) ou Windows avec bash
 
-2. **Compilation et exécution** :
+
+1. **Compilation et exécution** :
    Ouvrez un terminal à la racine du projet et lancez :
    ```sh
    ./compilation.sh
@@ -32,7 +30,7 @@ Ce projet est une application Java permettant de gérer la planification de proj
    Le script compile tous les fichiers listés dans `compile.list` et lance l’application.
 
 3. **Logs** :
-   Les erreurs de compilation ou d’exécution sont enregistrées dans le dossier `logs/`.
+   Les erreurs de compilation ou d’exécution sont enregistrées dans le dossier `class/logs/`.
 
 ## Utilisation
 
@@ -41,6 +39,16 @@ Ce projet est une application Java permettant de gérer la planification de proj
 - **Importer/Enregistrer** : Menu `Fichier > Importer` ou `Enregistrer sous`
 - **Modifier une tâche** : Sélectionner une tâche dans l’interface puis utiliser les boutons ou menus contextuels
 - **Options** : Menu `Fichier > Options` pour personnaliser l’affichage ou les paramètres
+
+## Liste des erreurs
+   - Erreur **1** : Il n'y a pas 2 séparateurs dans le fichier texte. 
+   - Erreur **2** : Une durée dans le fichier importé n'est pas un entier. 
+   - Erreur **3** : Le nom d'une tâche dans le fichier importé est en double. 
+   - Erreur **4** : Un prédecesseur dans le fichier importé n'existe pas. 
+   - Erreur **5** : Une tâche dans le fichier importé n'a pas de nom. 
+   - Erreur **6** : Un prédesceur dans le fichier importé n'a pas de nom. 
+   - Erreur **7** : Le fichier importé n'existe pas ou n'est pas accessible.
+   - Erreur **8** : 
 
 ## Organisation du code
 

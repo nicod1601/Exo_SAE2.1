@@ -174,12 +174,6 @@ public class PanelNouveau extends JPanel implements ActionListener
                     {
                         ArrayList<Tache> successeursATransferer = new ArrayList<>(predecesseur.getLstSvt());
                         
-                        for(Tache successeur : successeursATransferer) 
-                        {
-                            predecesseur.getLstSvt().remove(successeur);
-                            successeur.getLstPrc().remove(predecesseur);
-
-                        }
                         nouvelleTache.addPrecedent(predecesseur);
                     }
 

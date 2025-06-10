@@ -187,10 +187,6 @@ public class Tache
 		return nivMax;
 	}
 
-	//coucou nicolas devine qui cest ?
-	// c'est qui
-	//C'est Valentin
-
 	public void forceSetDateMin(int val) { this.dateMin = val;}
 	public void forceSetDateMax(int val) { this.dateMax = val;}
 	public void setNiveau	   (int val) { this.niveau 	= val;}
@@ -221,7 +217,7 @@ public class Tache
 		}
 		else
 		{
-			System.out.println("il passe par le else");
+			//System.out.println("il passe par le else");
 			this.hauteur = 0;
 		}
 

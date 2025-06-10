@@ -17,18 +17,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
+import javax.smartcardio.CardChannel;
 
 
 public class Projet
 {
 	private ArrayList<Erreur> erreur;
 	private ArrayList<Tache>  lstTache;
+	private ArrayList<CheminCritique> lstCheminCritique;
 
 	private int   nbTache;
 	private int   nbTacheSurNiveau;
 	private int   dureeProjet;
 	private int   nbTacheMaxNiveau;
 	private int[] ensTacheMaxNiveau;
+
+	
 
 
 
@@ -43,13 +47,11 @@ public class Projet
 		this.nbTacheMaxNiveau  = 0;
 		this.lstTache    	   = new ArrayList<Tache> ();
 		this.erreur 		   = new ArrayList<Erreur>();
-		//this.lstCheminCritique = new CheminCritique(this.lstTache);
+		this.lstCheminCritique = new ArrayList<CheminCritique>();
 	}
 
 	public void addPrecedent(Tache t, Tache precedent) { t.addPrecedent(precedent); }
 
-
-	
 	/**
 	 * Vérifie si le projet est vide (aucune tâche).
 	 * 
@@ -105,6 +107,18 @@ public class Projet
 
 		return nb;
 	}
+	public int getNbParNiveau(int niv)
+	{
+		int nb = 0;
+
+		for (Tache t : this.lstTache)
+		{
+			if(t.getNiveau() == niv)
+				nb++;
+
+		}
+		return nb;
+	}
 
 
 
@@ -148,8 +162,6 @@ public class Projet
 	{
 		if (!fichierEstVide(chemin)) 
 		{
-			
-		
 			this.lstTache.clear();
 			Tache debut = new Tache("Début", 0);
 			debut.setDateMin(0);
@@ -213,31 +225,27 @@ public class Projet
 							posPrcTmp = this.lstTache.indexOf(tmp.getLstPrc().get(0));
 
 						}
+
 						if (posPrcTmp < posPrcDernier )
-						{
 							this.lstTache.add(posPrcDernier,tmp);
 
-						}
 						else
-						{
 							this.lstTache.add( tmp);
-
-						}
-
 
 						tmp.setNiveau(tmp.getLstPrc());
 						this.nbTache++;
 					}
 				
 				}
+
 				Tache fin = new Tache("Fin", 0);
 
 				for(Tache t : this.lstTache)
-				{
+				
 					if(t.getNbSvt() == 0 && !t.getNom().equals("Début")) 
 						fin.addPrecedent(t);
 					
-				}
+				
 				this.lstTache.add(fin);
 
 				for(Tache t : this.lstTache)
@@ -252,8 +260,17 @@ public class Projet
 
 				this.majHauteur();
 
+				
+
 				if(!this.testTropDeNiveaux()) this.lstTache.clear();
 				else 						  this.majDate();
+				
+				afficherLstTacheCritique();
+
+				for(CheminCritique c : this.lstCheminCritique)
+					System.out.println(c.toString());
+
+				System.out.println(this.lstCheminCritique.size());
 				
 			}
 			
@@ -267,22 +284,75 @@ public class Projet
 		}
 	}
 
+	// Méthode publique qui lance la détermination des chemins critiques à partir des tâches sans prédécesseurs (racines)
+	public void afficherLstTacheCritique() 
+	{
+		this.lstCheminCritique.clear();
+		System.out.println("afficher chmin critique");
+		
+
+		for (Tache t : this.lstTache) 
+		{
+			//System.out.println("afficher dans le for");
+			
+			//System.out.println(t);
+			//System.out.println("" + t.getLstPrc().isEmpty() + " " + (t.getMarge()  == 0 ));
+
+			if (t.getLstPrc().isEmpty() && t.getMarge() == 0) {
+				ArrayList<Tache> chemin = new ArrayList<>();
+				//System.out.println("afficher dans le if");
+
+				determinerCheminCritique(t, chemin);
+			}
+		}
+		
+	}
+
+	// Méthode privée récursive qui construit les chemins critiques
+	private void determinerCheminCritique(Tache tache, ArrayList<Tache> cheminActuel) {
+		cheminActuel.add(tache);
+
+		// Trouver les successeurs critiques (ayant la tâche actuelle comme précédent et marge == 0)
+		ArrayList<Tache> successeursCritiques = new ArrayList<>();
+		for (Tache t : this.lstTache) {
+			if (t.getLstPrc().contains(tache) && t.getMarge() == 0) {
+				successeursCritiques.add(t);
+			}
+		}
+
+		System.out.println("apres le for ");
+		if (successeursCritiques.isEmpty()) {
+			// Pas de successeur critique, c'est une fin de chemin critique
+			this.lstCheminCritique.add(new CheminCritique(new ArrayList<>(cheminActuel)));
+			System.out.println("dans le if successerus empty");
+		}
+
+		else {
+			// Pour chaque successeur critique, continuer la récursion
+			for (Tache succ : successeursCritiques) {
+				determinerCheminCritique(succ, new ArrayList<>(cheminActuel));
+			}
+			System.out.println("dans le else successeurs existants");
+			
+
+		}
+	}
+
 
 	public void majHauteur()
 	{
 		for(Tache t : this.lstTache)
 		{
 			if (t.getNiveau() == this.ensTacheMaxNiveau.length /* this.ensTacheMaxNiveau.length == 0*/)
-			{
 				this.ensTacheMaxNiveau[t.getNiveau()] = 0;
-			}
+			
 
 
-			int hauteurTemp=t.setHauteur(this.ensTacheMaxNiveau[t.getNiveau()]);
+			int hauteurTemp = t.setHauteur(this.ensTacheMaxNiveau[t.getNiveau()]);
+
 			if( hauteurTemp> this.ensTacheMaxNiveau[t.getNiveau()])
-			{
 				this.ensTacheMaxNiveau[t.getNiveau()] =hauteurTemp;
-			}
+			
 			this.ensTacheMaxNiveau[t.getNiveau()]++;
 			//System.out.println("" +this.ensTacheMaxNiveau[t.getNiveau()]);
 		}
@@ -311,7 +381,7 @@ public class Projet
 			this.erreur.add(new Erreur(e.getMessage() ) );  
 		}
 
-		System.out.println(str);
+		
 		return str;
 	}	
 
@@ -329,7 +399,7 @@ public class Projet
 			if(t.getNom().equals("Début"))
 			{
 				t.forceSetDateMin(0);
-				t.forceSetDateMax(-1);
+				t.forceSetDateMax(0);
 			}
 			else
 			{
@@ -337,12 +407,13 @@ public class Projet
 				t.forceSetDateMin(-1);
 			}
 		}
+		
 		this.trierTachesParNiveau();
 		this.setDateMin();
 		this.setDateMax();
 
-		for(Tache t : this.lstTache)
-			System.out.println(t);
+		//for(Tache t : this.lstTache)
+		//	System.out.println(t);
 		
 	}
 
@@ -431,8 +502,8 @@ public class Projet
 		
 		if (nbSeparateurs != 2)
 		{
-			System.out.println(
-					"Erreur de format à la ligne " + numLigne + " : " + ligne + " (doit contenir 2 séparateurs '|')");
+			//System.out.println(
+			//		"Erreur de format à la ligne " + numLigne + " : " + ligne + " (doit contenir 2 séparateurs '|')");
 			this.erreur.add(new Erreur(ligne, numLigne, 1));
 			return false;
 		}
@@ -460,7 +531,7 @@ public class Projet
 			return true;
 		} catch (NumberFormatException e)
 		{
-			System.out.println("Erreur de durée à la ligne " + numLigne + " : " + parties[1] + " n'est pas un nombre");
+			//System.out.println("Erreur de durée à la ligne " + numLigne + " : " + parties[1] + " n'est pas un nombre");
 			this.erreur.add(new Erreur(ligne, numLigne, 2));
 			return false;
 		}
@@ -481,7 +552,7 @@ public class Projet
 		{
 			if (t.getNom().equals(nom))
 			{
-				System.out.println("Erreur de nom en double à la ligne " + numLigne + " : " + nom);
+				//System.out.println("Erreur de nom en double à la ligne " + numLigne + " : " + nom);
 				this.erreur.add(new Erreur(ligne, numLigne, 3)); // code 3 pour doublon
 				return false;
 			}
@@ -501,7 +572,7 @@ public class Projet
 		String[] parties = ligne.split("\\|");
 		if (parties.length < 1 || parties[0].trim().isEmpty()) //trim permet de retirer les espaces 
 		{
-			System.out.println("Erreur : nom de tâche vide à la ligne " + numLigne);
+			//System.out.println("Erreur : nom de tâche vide à la ligne " + numLigne);
 			this.erreur.add(new Erreur(ligne, numLigne, 5)); // code 5 pour nom vide
 			return false;
 		}
@@ -526,7 +597,7 @@ public class Projet
 		{
 			if (nom.trim().isEmpty())
 			{
-				System.out.println("Erreur : prédécesseur mal formé à la ligne " + numLigne + " : " + ligne);
+				//System.out.println("Erreur : prédécesseur mal formé à la ligne " + numLigne + " : " + ligne);
 				this.erreur.add(new Erreur(ligne, numLigne, 6)); 
 				return false;
 			}
@@ -544,7 +615,7 @@ public class Projet
 	{
 		if (this.getNbNiveau() > 202) // 200 niveaux + 2 (Début et Fin)
 		{
-			System.out.println("Erreur : trop de niveaux (plus de 200) - Nombre de niveaux : " + this.getNbNiveau());
+			//System.out.println("Erreur : trop de niveaux (plus de 200) - Nombre de niveaux : " + this.getNbNiveau());
 			this.erreur.add(new Erreur( 8));
 			return false;
 		}
@@ -562,7 +633,7 @@ public class Projet
 		File fichier = new File(chemin); 
 		if (fichier.exists() && fichier.length() == 0  )
 		{
-			System.out.println("Le fichier : " + chemin + "est vide : " );
+			//System.out.println("Le fichier : " + chemin + "est vide : " );
 			this.erreur.add(new Erreur(9));
 			return true;
 		}
@@ -578,7 +649,7 @@ public class Projet
 				 
 				if (contenu.trim().isEmpty()) // <-- Utilise trim() pour enlever les espaces inutiles
 				{
-					System.out.println("Le fichier : " + chemin + " est vide." );
+					//System.out.println("Le fichier : " + chemin + " est vide." );
 					this.erreur.add(new Erreur(9));
 					return true;
 				}
@@ -626,7 +697,7 @@ public class Projet
 					pw.println(e.toString());
 				
 				pw.close();
-				System.out.println("Erreurs enregistrées dans erreurs.log");
+				//System.out.println("Erreurs enregistrées dans erreurs.log");
 			}
 			catch (Exception e)
 			{
@@ -638,34 +709,39 @@ public class Projet
 
 	public void supprimerTache(Tache tacheASupprimer)
 	{
+		int niveauTacheSuprimee = tacheASupprimer.getNiveau();
+		
 		for(int cpt = 0; cpt < tacheASupprimer.getNbPrc(); cpt++)
+		{
 			tacheASupprimer.getLstPrc().get(cpt).getLstSvt().remove(tacheASupprimer);
+		}
 		
 		for(int cpt = 0; cpt < tacheASupprimer.getNbSvt(); cpt++)
+		{
 			tacheASupprimer.getLstSvt().get(cpt).getLstPrc().remove(tacheASupprimer);
+		}
 		
 		this.lstTache.remove(tacheASupprimer);
-
-		for(Tache t : this.lstTache) 
+		
+		for(Tache t : this.lstTache)
+		{
 			t.setNiveau(t.getLstPrc());
+		}
 		
 		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
-
-		if(tacheASupprimer.getNiveau() == tacheFin.getNiveau() - 1) 
+		int niveauMaxActuel = 0;
+		
+		for(Tache t : this.lstTache) 
 		{
-			// Vérifier s'il existe d'autres tâches du même niveau que celle à supprimer
-			boolean autresTachesMemeNiveau = false;
-
-			for(Tache t : this.lstTache)
-				if(t != tacheASupprimer && t.getNiveau() == tacheASupprimer.getNiveau())
-					autresTachesMemeNiveau = true;
-				
-			if(! autresTachesMemeNiveau) 
-				tacheFin.setNiveau(tacheFin.getNiveau() - 1);
-			
+			if(!t.equals(tacheFin) && t.getNiveau() > niveauMaxActuel)
+			{
+				niveauMaxActuel = t.getNiveau();
+			}
 		}
+		
+		tacheFin.setNiveau(niveauMaxActuel + 1);
+		
 		this.majDate();
-			
 	}
 
 
@@ -677,8 +753,15 @@ public class Projet
 
 		this.lstTache.add(indexFin, nouvelleTache);
 
-		if(nouvelleTache.getNbPrc() == 0) 
+		if(nouvelleTache.getNbPrc() == 0)
+		{
 			nouvelleTache.addPrecedent(this.lstTache.get(0));
+		}
+		else
+		{
+			for(int cpt = 0; cpt < nouvelleTache.getNbPrc(); cpt++)
+				nouvelleTache.getLstPrc().get(cpt).getLstSvt().add(nouvelleTache);
+		}
 	
 		for(Tache t : this.lstTache) 
 			t.setNiveau(t.getLstPrc());
@@ -729,7 +812,7 @@ public class Projet
 			}
 			
 			pw.close();
-			System.out.println("Tâches sauvegardées avec succès dans " + lien);
+			//System.out.println("Tâches sauvegardées avec succès dans " + lien);
 		}
 		catch (Exception e) 
 		{ 
@@ -768,7 +851,7 @@ public class Projet
 			}
 			
 			pw.close();
-			System.out.println();
+			//System.out.println();
 		}
 		catch (Exception e) 
 		{ 

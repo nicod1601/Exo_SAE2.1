@@ -80,8 +80,20 @@ public class BoxShape
 
     
     // Setters avec validation
-    public void setLargeur(int largeur) { this.largeur = largeur;}
-    public void setHauteur(int hauteur) { this.hauteur = hauteur;}
+    public void setLargeur(int largeur)
+    { 
+        if(largeur > 60)
+            this.largeur = largeur;
+        else
+            this.largeur = 60;
+    }
+    public void setHauteur(int hauteur)
+    { 
+        if(hauteur > 60)
+            this.hauteur = hauteur;
+        else
+            this.hauteur = 60;
+    }
     
     public void setHauteurCaseSuperieure(int hauteurCaseSuperieure) {this.hauteurCaseSuperieure = hauteurCaseSuperieure;}
 
@@ -102,7 +114,8 @@ public class BoxShape
     {
         g2d.setColor(this.couleur);
         int xb;
-        int yb;
+        int yb; 
+        
 
         // Si la position n'est pas définie manuellement, calculer automatiquement
         if (!this.positionManuelle) 

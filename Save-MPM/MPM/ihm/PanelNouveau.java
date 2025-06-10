@@ -157,7 +157,7 @@ public class PanelNouveau extends JPanel implements ActionListener
                 {
                     Tache nouvelleTache = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText()));
                     
-                    ArrayList<Tache> predecesseursSelectionnes = new ArrayList<>();
+                    /*ArrayList<Tache> predecesseursSelectionnes = new ArrayList<>();
                     
                     for(int i = 0; i < this.tabPrc.size(); i++) 
                     {
@@ -169,10 +169,9 @@ public class PanelNouveau extends JPanel implements ActionListener
                             
                             for(Tache tachePrecedente : this.lstTache)
                             {
-                                if(tachePrecedente.getNom().equals(nomPredecesseur))
+                                if(! tachePrecedente.getNom().equals(nomPredecesseur))
                                 {
                                     predecesseursSelectionnes.add(tachePrecedente);
-                                    break;
                                 }
                             }
                         }
@@ -185,25 +184,17 @@ public class PanelNouveau extends JPanel implements ActionListener
                         for(Tache successeur : successeursATransferer) 
                         {
                             predecesseur.getLstSvt().remove(successeur);
-                            successeur.getLstPrc().remove(predecesseur);
+                            successeur.getLstPrc().remove(predecesseur); 
 
                         }
                         
                         nouvelleTache.addPrecedent(predecesseur);
-                    }
+                    }*/
+
 
                     this.ctrl.ajouterTache(nouvelleTache);
 
-                    boolean tacheAjoutee = false;
-
-                    for(Tache t : this.ctrl.getListeTache()) 
-                    {
-                        if(t.getNom().equals(nouvelleTache.getNom())) 
-                        {
-                            tacheAjoutee = true;
-                            break;
-                        }
-                    }
+                    
                     
                     this.frameMPM.majList();
 
