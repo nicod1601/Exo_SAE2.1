@@ -23,7 +23,7 @@ public class PanelBouton extends JPanel implements ActionListener
     private Controleur ctrl;
     private FrameMPM  frame;
 
-    public PanelBouton(Controleur ctrl, FrameMPM frame)
+    public PanelBouton(FrameMPM frame, Controleur ctrl)
     {
         this.ctrl  = ctrl;
         this.frame = frame;
@@ -34,15 +34,15 @@ public class PanelBouton extends JPanel implements ActionListener
         /*        Création des composants       */
         /*--------------------------------------*/
 
-        this.lstTache = new ArrayList<Tache>();
+        this.lstTache    = new ArrayList<Tache>();
         this.lstBoxShape = new ArrayList<BoxShape>();
-        this.niveauPrc = 0;
-        this.niveauSvt = 1;
+        this.niveauPrc   = 0;
+        this.niveauSvt   = 1;
 
-        this.btnDateMin       = new JButton("-");
-        this.btnDateMax       = new JButton("+");
-        this.btnAfficherTout  = new JButton("Tout Afficher");
-        this.btnAfficherRien  = new JButton("Tout Masquer");
+        this.btnDateMin      = new JButton("-");
+        this.btnDateMax      = new JButton("+");
+        this.btnAfficherTout = new JButton("Tout Afficher");
+        this.btnAfficherRien = new JButton("Tout Masquer");
 
         this.desactiverBouton();
 
@@ -50,8 +50,8 @@ public class PanelBouton extends JPanel implements ActionListener
         /*     Positionnement des composants    */
         /*--------------------------------------*/
 
-        this.add(this.btnDateMin);
-        this.add(this.btnDateMax);
+        this.add(this.btnDateMin     );
+        this.add(this.btnDateMax     );
         this.add(this.btnAfficherTout);
         this.add(this.btnAfficherRien);
 
@@ -59,47 +59,47 @@ public class PanelBouton extends JPanel implements ActionListener
         /*     Activation des composants        */
         /*--------------------------------------*/
 
-        this.btnDateMin.addActionListener(this);
-        this.btnDateMax.addActionListener(this);
+        this.btnDateMin     .addActionListener(this);
+        this.btnDateMax     .addActionListener(this);
         this.btnAfficherTout.addActionListener(this);
         this.btnAfficherRien.addActionListener(this);
     }
 
     public void desactiverBouton()
     {
-        this.btnDateMin.setEnabled(false);
-        this.btnDateMax.setEnabled(false);
+        this.btnDateMin     .setEnabled(false);
+        this.btnDateMax     .setEnabled(false);
         this.btnAfficherTout.setEnabled(false);
         this.btnAfficherRien.setEnabled(false);
 
-        this.btnAfficherRien.setBackground(new Color(180, 0, 0 ));
-        this.btnAfficherTout.setBackground(new Color(180, 0, 0 ));
-        this.btnDateMin.setBackground(new Color(180, 0, 0 ));
-        this.btnDateMax.setBackground(new Color(180, 0, 0 ));
+        this.btnAfficherRien.setBackground(new Color(180, 0, 0 ) );
+        this.btnAfficherTout.setBackground(new Color(180, 0, 0 ) );
+        this.btnDateMin     .setBackground(new Color(180, 0, 0 ) );
+        this.btnDateMax     .setBackground(new Color(180, 0, 0 ) );
     }
 
     public void activerBouton()
     {
-        this.btnDateMin.setEnabled(true);
+        this.btnDateMin     .setEnabled(true);
         this.btnAfficherTout.setEnabled(true);
 
-        this.btnDateMin.setBackground(new Color(101, 180, 0 ));
-        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ));
+        this.btnDateMin     .setBackground(new Color(101, 180, 0 ) );
+        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ) );
 
     }
 
     public void boutonDeBase()
     {
 
-        this.btnAfficherTout.setEnabled(true);
-        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ));
-        this.btnDateMin.setEnabled(true);
-        this.btnDateMin.setBackground(new Color(101, 180, 0 ));
-
+        this.btnAfficherTout.setEnabled(true );
+        this.btnDateMin     .setEnabled(true );
         this.btnAfficherRien.setEnabled(false);
-        this.btnAfficherRien.setBackground(new Color(180, 0, 0 ));
-        this.btnDateMax.setEnabled(false);
-        this.btnDateMax.setBackground(new Color(180, 0, 0 ));
+        this.btnDateMax     .setEnabled(false);
+
+        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ) );
+        this.btnDateMin     .setBackground(new Color(101, 180, 0 ) );
+        this.btnAfficherRien.setBackground(new Color(180, 0, 0   ) );
+        this.btnDateMax     .setBackground(new Color(180, 0, 0   ) );
     }
 
     public void resetNiveau()
@@ -126,27 +126,27 @@ public class PanelBouton extends JPanel implements ActionListener
         if(e.getSource() == this.btnDateMin)
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
-            {
-                if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
-                {
+            
+                if( this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
                     this.lstBoxShape.get(cpt).setDateMin(" "  + this.lstTache.get(cpt).getDateMin());
-                }
-            }
+                
+            
+
             this.niveauSvt++;
 
             if(this.niveauSvt >= this.ctrl.getNbNiveau())
             {
                 this.btnDateMin.setEnabled(false);
-                this.btnDateMin.setBackground(new Color(180, 0, 0 ));
+                this.btnDateMax.setEnabled(true );
 
-                this.btnDateMax.setEnabled(true);
-                this.btnDateMax.setBackground(new Color(101, 180, 0 ));
+                this.btnDateMin.setBackground(new Color(180, 0, 0   ) );
+                this.btnDateMax.setBackground(new Color(101, 180, 0 ) );
                 
                 if(this.niveauPrc < 0 && this.niveauSvt >= this.ctrl.getNbNiveau())
                 {
                     this.btnAfficherTout.setEnabled(false);
                     this.btnAfficherTout.setBackground(new Color(180, 0, 0 ));
-                    this.activerBtnAfficherRien();
+                    this                .activerBtnAfficherRien();
                 }
             }
 
@@ -156,12 +156,11 @@ public class PanelBouton extends JPanel implements ActionListener
         if(e.getSource() == this.btnDateMax)
         {
             for(int cpt = this.lstBoxShape.size() - 1; cpt >= 0; cpt--)
-            {
-                if(this.lstBoxShape.get(cpt).getNiveau() == this.niveauPrc)
-                {
+            
+                if( this.lstBoxShape.get(cpt).getNiveau() == this.niveauPrc)
                     this.lstBoxShape.get(cpt).setDateMax(" " + this.lstTache.get(cpt).getDateMax());
-                }
-            }
+                
+            
             this.niveauPrc--;
 
             if(this.niveauPrc < 0)
@@ -173,7 +172,7 @@ public class PanelBouton extends JPanel implements ActionListener
                 {
                     this.btnAfficherTout.setEnabled(false);
                     this.btnAfficherTout.setBackground(new Color(180, 0, 0 ));
-                    this.activerBtnAfficherRien();
+                    this                .activerBtnAfficherRien();
                 }
             }
 
@@ -184,13 +183,13 @@ public class PanelBouton extends JPanel implements ActionListener
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
             {
-                this.lstBoxShape.get(cpt).setDateMin( " " + this.lstTache.get(cpt).getDateMin());
-                this.lstBoxShape.get(cpt).setDateMax( " " +this.lstTache.get(cpt).getDateMax());
+                this.lstBoxShape.get(cpt).setDateMin( " " + this.lstTache.get(cpt).getDateMin() );
+                this.lstBoxShape.get(cpt).setDateMax( " " + this.lstTache.get(cpt).getDateMax() );
             }
 
             this.frame.majDessin();
 
-            this.desactiverBouton();
+            this.desactiverBouton      ();
             this.activerBtnAfficherRien();
         }
 
@@ -203,6 +202,7 @@ public class PanelBouton extends JPanel implements ActionListener
                     this.lstBoxShape.get(cpt).setDateMin( " " + this.lstTache.get(cpt).getDateMin());
                     this.lstBoxShape.get(cpt).setDateMax( " ");
                 }
+
                 else
                 {
                     this.lstBoxShape.get(cpt).setDateMin( " ");
@@ -210,12 +210,12 @@ public class PanelBouton extends JPanel implements ActionListener
                 }
             }
 
-            this.activerBouton();
+            this                .activerBouton();
             this.btnAfficherRien.setEnabled(false);
-            this.btnAfficherRien.setBackground(new Color(180, 0, 0 ));
+            this.btnAfficherRien.setBackground(new Color(180, 0, 0 ) );
 
-            this.frame.majDessin();
-            this.resetNiveau();
+            this.frame.majDessin  ();
+            this      .resetNiveau();
         }
     }
 }

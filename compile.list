@@ -5,6 +5,7 @@
 ./MPM/metier/BoxShape.java
 ./MPM/metier/Erreur.java
 ./MPM/metier/Fond.java
+./MPM/metier/Couleur.java
 
 ./MPM/ihm/FrameMPM.java
 ./MPM/ihm/PanelMPM.java
@@ -16,4 +17,3 @@
 ./MPM/ihm/PanelOptionParametre.java
 
 ./MPM/Controleur.java
-./MPM/TestProjet.java

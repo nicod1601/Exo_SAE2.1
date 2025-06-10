@@ -13,17 +13,17 @@ public class PanelNouveau extends JPanel implements ActionListener
 
     private JTextField txtNom;
     private JTextField txtDuree;
-    private JButton btnCreerTache;
+    private JButton    btnCreerTache;
 
-    private JPanel panelBox;
-    private JPanel panelChoixPrc; 
+    private JPanel     panelBox;
+    private JPanel     panelChoixPrc; 
 
-    private BoxShape boxShape;
+    private BoxShape         boxShape;
     private ArrayList<Tache> lstTache;
 
     private ArrayList<JCheckBox> tabPrc;
-    private FrameMPM frameMPM;
-    private FrameNouveau frame;
+    private FrameMPM             frameMPM;
+    private FrameNouveau         frame;
 
     public PanelNouveau(FrameMPM frameMPM,Controleur ctrl, FrameNouveau frame)
     {
@@ -32,61 +32,59 @@ public class PanelNouveau extends JPanel implements ActionListener
         /*--------------------------------------*/
         /*        Création des composants       */
         /*--------------------------------------*/
-        this.ctrl = ctrl;
+        this.ctrl     = ctrl;
         this.frameMPM = frameMPM;
-        this.frame = frame;
+        this.frame    = frame;
 
-        JPanel panelInformation = new JPanel(new GridLayout(3, 1));
+        JPanel panelAction      = new JPanel();
+        JPanel panelNom         = new JPanel(new FlowLayout() );
+        JPanel panelDuree       = new JPanel(new FlowLayout() );
+        JPanel panelInformation = new JPanel(new GridLayout(3, 1) );
 
         JLabel lblNom   = new JLabel("Nom Tache :"  , JLabel.RIGHT);
         JLabel lblDuree = new JLabel("Duree Tache :", JLabel.RIGHT);
 
-        JPanel panelNom      = new JPanel(new FlowLayout());
-        JPanel panelDuree    = new JPanel(new FlowLayout());
-        JPanel panelAction   = new JPanel();
-        
         this.panelChoixPrc = new JPanel();
-        this.panelChoixPrc.setLayout(new BoxLayout(this.panelChoixPrc, BoxLayout.Y_AXIS));
+        this.panelChoixPrc.setLayout(new BoxLayout(this.panelChoixPrc, BoxLayout.Y_AXIS) );
         
         JScrollPane scrollPaneCheckbox = new JScrollPane(this.panelChoixPrc);
-        scrollPaneCheckbox.setPreferredSize(new Dimension(200, 300));
-        scrollPaneCheckbox.setBorder(BorderFactory.createTitledBorder("Prédécesseurs"));
+
+        scrollPaneCheckbox.setPreferredSize(new Dimension(200, 300) );
+        scrollPaneCheckbox.setBorder       (BorderFactory.createTitledBorder("Prédécesseurs") );
 
         this.txtNom        = new JTextField(10);
         this.txtDuree      = new JTextField(10);
-        this.btnCreerTache = new JButton("Creer Tache");
+        this.btnCreerTache = new JButton("Créer Tache");
         //this.btnCreerTache.setEnabled(false);
 
-        this.lstTache = new ArrayList<Tache>();
-
-        this.tabPrc = new ArrayList<JCheckBox>();
+        this.lstTache = new ArrayList<Tache>    ();
+        this.tabPrc   = new ArrayList<JCheckBox>();
 
         /*--------------------------------------*/
         /*          Ajout des composants        */
         /*--------------------------------------*/;
 
-        panelNom.add(lblNom);
+        panelNom.add(lblNom     );
         panelNom.add(this.txtNom);
 
-        panelDuree.add(lblDuree);
+        panelDuree.add(lblDuree     );
         panelDuree.add(this.txtDuree);
 
         panelAction.add(this.btnCreerTache);
         
-        panelInformation.add(panelNom);
-        panelInformation.add(panelDuree);
+        panelInformation.add(panelNom   );
+        panelInformation.add(panelDuree );
         panelInformation.add(panelAction);
         
         this.add(scrollPaneCheckbox);
-        this.add(panelInformation);
-
-        
+        this.add(panelInformation  );
 
         /*--------------------------------------*/
         /*         Ajout des listeners          */
         /*--------------------------------------*/
-        this.txtNom.addActionListener(this);
-        this.txtDuree.addActionListener(this);
+
+        this.txtNom       .addActionListener(this);
+        this.txtDuree     .addActionListener(this);
         this.btnCreerTache.addActionListener(this);
     }
 
@@ -105,37 +103,32 @@ public class PanelNouveau extends JPanel implements ActionListener
                 if(! this.lstTache.get(cpt).getNom().equals("Début") && ! this.lstTache.get(cpt).getNom().equals("Fin"))
                 {
                     JCheckBox checkbox = new JCheckBox(this.lstTache.get(cpt).getNom());
-                    this.tabPrc.add(checkbox);
+
+                    this.tabPrc       .add(checkbox);
                     this.panelChoixPrc.add(checkbox);
                 }
             }
         }
         
         // Rafraîchir l'affichage
+
         this.panelChoixPrc.revalidate();
-        this.panelChoixPrc.repaint();
+        this.panelChoixPrc.repaint   ();
 
         this.verifLien();
     }
 
-    public void majPanelBoxShape()
-    {
-         this.panelBox.repaint();
-    }
+    public void majPanelBoxShape() { this.panelBox.repaint(); }
 
     public void verifLien()
     {
         String lien = this.frameMPM.getLien();
 
-        if(lien.equals("") || lien == null || lien.trim().equals(""))
-        {
+        if(lien.equals("") || lien == null || lien.trim().equals("")) 
             this.btnCreerTache.setEnabled(false);
-        }
-        else
-        {
+
+        else 
             this.btnCreerTache.setEnabled(true);
-        }
-        
     }
 
     public void actionPerformed(ActionEvent e)
@@ -155,8 +148,7 @@ public class PanelNouveau extends JPanel implements ActionListener
             {
                 try 
                 {
-                    Tache nouvelleTache = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText()));
-                    
+                    Tache           nouvelleTache              = new Tache(this.txtNom.getText(), Integer.parseInt(this.txtDuree.getText() ) );
                     ArrayList<Tache> predecesseursSelectionnes = new ArrayList<>();
                     
                     for(int i = 0; i < this.tabPrc.size(); i++) 
@@ -188,7 +180,6 @@ public class PanelNouveau extends JPanel implements ActionListener
                             successeur.getLstPrc().remove(predecesseur);
 
                         }
-                        
                         nouvelleTache.addPrecedent(predecesseur);
                     }
 
@@ -205,11 +196,9 @@ public class PanelNouveau extends JPanel implements ActionListener
                         }
                     }
                     
-                    this.frameMPM.majList();
-
-                    this.majTache();
-
-                    this.frame.setVisible(false);
+                    this.frameMPM.majList   ();
+                    this         .majTache  ();
+                    this.frame   .setVisible(false);
                     
                     
                     
@@ -228,8 +217,7 @@ public class PanelNouveau extends JPanel implements ActionListener
             }
         }
         else
-        {
             JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs", "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
+        
     }
 }

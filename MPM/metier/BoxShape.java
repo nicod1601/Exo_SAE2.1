@@ -9,12 +9,12 @@ import javax.swing.*;
  */
 public class BoxShape
 {
-    private int largeur;
-    private int hauteur;
-    private int hauteurCaseSuperieure;
+    private int    largeur;
+    private int    hauteur;
+    private int    hauteurCaseSuperieure;
     private String dateMax;
     private String dateMin;
-    private Color couleur;
+    private Color  couleur;
 
 
     private Tache  tache;
@@ -38,14 +38,14 @@ public class BoxShape
      */
     public BoxShape(Controleur ctrl)
     {
-        this.ctrl  = ctrl;
+        this.ctrl    = ctrl;
         this.largeur = 60;
         this.hauteur = 60;
-        this.hauteurCaseSuperieure = 30;
-        this.tache = new Tache();
+        this.tache   = new Tache();
         this.dateMax = " ";
         this.dateMin = " ";
         this.couleur = Color.BLACK;
+        this.hauteurCaseSuperieure = 30;
     }
 
     public BoxShape(Tache t, Controleur ctrl)
@@ -73,16 +73,15 @@ public class BoxShape
     public String getNom()    { return tache.getNom();           }
     public String getDateMin(){ return this.dateMin;  }
     public String getDateMax(){ return this.dateMax;  }
-    public int getNiveau()    { return tache.getNiveau();        }
-    public void setTaille(int taille) { this.largeur = taille; this.hauteur = taille; }
-    public Color getCouleur() { return this.couleur; }
+    public int    getNiveau() { return tache.getNiveau();        }
+    public Color  getCouleur(){ return this.couleur; }
+    public void   setTaille(int taille) { this.largeur = taille; this.hauteur = taille; }
     public void setCouleur(Color couleur) { this.couleur = couleur; }
 
     
-    
     // Setters avec validation
     public void setLargeur(int largeur) { this.largeur = largeur;}
-    public void setHauteur(int hauteur) {this.hauteur = hauteur;}
+    public void setHauteur(int hauteur) { this.hauteur = hauteur;}
     
     public void setHauteurCaseSuperieure(int hauteurCaseSuperieure) {this.hauteurCaseSuperieure = hauteurCaseSuperieure;}
 
@@ -115,7 +114,8 @@ public class BoxShape
             yb = ((int) (1.5 * this.hauteur) * nbParNiveau[1]);
 
             // Ajustement de la position en fonction du nom
-            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) {
+            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) 
+            {
                 yb = (((int) (1.5 * this.hauteur) * this.ctrl.getTailleNivMax()) + ((int) (1.5 * this.hauteur))) / 2;
             }
 
@@ -162,7 +162,7 @@ public class BoxShape
         {
             g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(Color.BLACK);
-            int textWidth = fm.stringWidth(this.tache.getNom());
+            int textWidth  = fm.stringWidth(this.tache.getNom());
             int textHeight = fm.getAscent();
             int textX = x + (largeur - textWidth) / 2;
             int textY = y + (hauteurCaseSuperieure + textHeight) / 2;
@@ -174,7 +174,7 @@ public class BoxShape
         {
             g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(new Color(59, 185, 28 ));
-            int textWidth = fm.stringWidth(this.dateMin);
+            int textWidth  = fm.stringWidth(this.dateMin);
             int textHeight = fm.getAscent();
             int textX = x + (largeurCase - textWidth) / 2;
             int textY = y + hauteurCaseSuperieure + (hauteurInferieure + textHeight) / 2;
@@ -187,7 +187,7 @@ public class BoxShape
         {
             g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(Color.RED);
-            int textWidth = fm.stringWidth(this.dateMax);
+            int textWidth  = fm.stringWidth(this.dateMax);
             int textHeight = fm.getAscent();
             int textX = x + largeurCase + (largeurCase - textWidth) / 2;
             int textY = y + hauteurCaseSuperieure + (hauteurInferieure + textHeight) / 2;
@@ -237,7 +237,8 @@ public class BoxShape
             yb = 20;
 
             // Ajustement de la position en fonction du nom
-            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) {
+            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) 
+            {
                 yb = (((int) (1.5 * this.hauteur) * this.ctrl.getTailleNivMax()) + ((int) (1.5 * this.hauteur))) / 2;
             }
         } 

@@ -4,11 +4,9 @@ import javax.swing.*;
 
 public class FrameNouveau extends JFrame
 {
-    private Controleur ctrl;
-
+    private Controleur   ctrl;
+    private FrameMPM     frame;
     private PanelNouveau panelNouveau;
-
-    private FrameMPM frame;
 
 
     public FrameNouveau(FrameMPM frame,Controleur ctrl)
@@ -22,21 +20,23 @@ public class FrameNouveau extends JFrame
         /*--------------------------------------*/
         /*        Création des composants       */
         /*--------------------------------------*/
-        this.ctrl = ctrl;
+
+        this.ctrl  = ctrl;
         this.frame = frame;
         this.panelNouveau = new PanelNouveau(this.frame,this.ctrl,this);
 
         /*--------------------------------------*/
         /*          Ajout des composants        */
         /*--------------------------------------*/
+
         this.add(this.panelNouveau);
 
+        /*--------------------------------------*/
+        /*     Activation des composants        */
+        /*--------------------------------------*/
 
         this.setVisible(false);
     }
 
     public void majTache(){this.panelNouveau.majTache();}
-
-
-
 }

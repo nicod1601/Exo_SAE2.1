@@ -25,82 +25,44 @@ public class Erreur
 	
 	public Erreur(String ligne, int numLigne, int codeErreur) 
 	{
-		this.ligne = ligne;
-		this.numLigne = numLigne;
+		this.ligne      = ligne;
+		this.numLigne   = numLigne;
 		this.codeErreur = codeErreur;
 	}
 
 	public Erreur(int codeErreur) 
 	{
-		this.codeErreur = codeErreur;
-		this.ligne = "";
-		this.numLigne = 0;
+        this ("", 0, codeErreur);
 	}
 
 	public Erreur(String message)
 	{
-		this.ligne = message;
-		this.numLigne = 0;
-		this.codeErreur = 0;
+        this (message, 0, 0);
 	}
 
 	public String getMessage() 
 	{
-		switch (this.codeErreur) 
+		return switch (this.codeErreur) 
 		{
-			case 0:
-				return "Erreur inconnue : " + this.ligne;
-			case 1:
-				return "Erreur de format dans le fichier importé à la ligne " + numLigne + " : " + ligne 
-					 + " (doit contenir 2 séparateurs '|')";
-			case 2:
-				return "La durée indiquée à la ligne "  + numLigne + " n'est pas un entier : "   + ligne;
-			case 3:
-				return "La nom de la tâche à la ligne " + numLigne + " est déjà utilisé : "      + ligne;
-			case 4:
-				return "Le prédécesseur à la ligne "    + numLigne + " n'existe pas : "          + ligne;
-			case 5:
-				return "La tâche à la ligne "           + numLigne + " n'a pas de nom : "        + ligne;
-			case 6:
-				return "Le ou les prédécesseurs de la tâche à la ligne " + numLigne + " n'ont pas de nom : " + ligne;
-			case 7:
-				return "Le fichier importé n'existe pas ou n'est pas accessible." ; 
-			case 8:
-				return "Le nombre de niveaux dépasse la limite autorisée (200 niveaux)"; 
-			case 9:
-				return "Le fichier importé est vide.";
+			case 0  -> "Erreur inconnue : " + this.ligne;
+			case 1  -> "Erreur de format dans le fichier importé à la ligne " + this.numLigne + " : " + this.ligne + " (doit contenir 2 séparateurs '|')";
+			case 2  -> "La durée indiquée à la ligne "  				      + this.numLigne + " n'est pas un entier : "   + this.ligne;
+			case 3  -> "La nom de la tâche à la ligne " 				      + this.numLigne + " est déjà utilisé : "      + this.ligne;
+			case 4  -> "Le prédécesseur à la ligne "    				      + this.numLigne + " n'existe pas : "          + this.ligne;
+			case 5  -> "La tâche à la ligne "           				      + this.numLigne + " n'a pas de nom : "        + this.ligne;
+			case 6  -> "Le ou les prédécesseurs de la tâche à la ligne " 	  + this.numLigne + " n'ont pas de nom : " 	    + this.ligne;
+			case 7  -> "Le fichier importé n'existe pas ou n'est pas accessible."; 
+			case 8  -> "Le nombre de niveaux dépasse la limite autorisée (200 niveaux)"; 
+			case 9  -> "Le fichier importé est vide.";
 			
-			default:
-				return "Erreur inconnue : " + this.ligne;
-		}
+			default -> "Erreur inconnue : " + this.ligne;
+		};
 	}
 	
-	public String getLigne()
-	{
-		return ligne;
-	}
+	public String getLigne	 	() { return this.ligne;     }
+	public int 	  getNumLigne	() { return this.numLigne;  }
+	public int 	  getCodeErreur () { return this.codeErreur;}
 
-
-
-	public int getNumLigne()
-	{
-		return numLigne;
-	}
-
-
-
-	public int getCodeErreur()
-	{
-		return codeErreur;
-	}
-
-	public String toString() 
-	{
-		return "Ligne " + this.numLigne + " : " + getMessage() +  " --> " + this.ligne;
-	}
-
-
-	
-
-	
+	public String toString() { return "Ligne " + this.numLigne + " : " + getMessage() +  " --> " + this.ligne; }
+    
 }

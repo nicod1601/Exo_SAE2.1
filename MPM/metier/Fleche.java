@@ -6,47 +6,42 @@ public class Fleche
 {
     private BoxShape origine;
     private BoxShape destination;
-    private float    epaisseur = 2.0f;
-    private int      tailleTete = 8;
-    private String   etiquette = ""  ;
+
     private Color    couleurFleche   ;
     private Color    couleurEtiquette;
-    private int      tailleTrou = 50;
+    private int      tailleTrou   = 50;   
+    private int      tailleTete   = 8; 
+    private float    epaisseur    = 2.0f;
+    private String   etiquette    = ""  ;
 
     public Fleche(BoxShape bOrig, BoxShape bDest) 
     {
-        this.origine = bOrig;
-        this.destination = bDest;
+        this.origine       = bOrig;
+        this.destination   = bDest;
         this.couleurFleche = Color.BLUE;
     }
 
+    public BoxShape getOrigine    () { return this.origine;    }
+    public BoxShape getDestination() { return this.destination;}
+
     public void setEtiquette(String etiquette) 
     {
-        this.etiquette = etiquette;
+        this.etiquette        = etiquette;
         this.couleurEtiquette = Color.RED;
     }
 
-    public void setTailleTrou(int taille) {
-        this.tailleTrou = taille;
-    }
+    public void setTailleTrou (int taille) { this.tailleTrou = taille; }
 
-    public BoxShape getOrigine() {
-        return this.origine;
-    }
-
-    public BoxShape getDestination() {
-        return this.destination;
-    }
-
-    public void supprimer(Tache tOrig, Tache tDest) {
-        this.origine.getTache().getLstSvt().remove(tDest);
+    public void supprimer(Tache tOrig, Tache tDest) 
+    {
+        this.origine    .getTache().getLstSvt().remove(tDest);
         this.destination.getTache().getLstPrc().remove(tOrig);
     }
 
     public void dessiner(Graphics2D g2) 
     {
         // 1. Trouver les points de départ et d'arrivée
-        Point pointDepart = getMilieuCoteDroit(origine);
+        Point pointDepart  = getMilieuCoteDroit (origine);
         Point pointArrivee = getMilieuCoteGauche(destination);
 
         // 2. Dessiner la ligne avec le trou
@@ -58,6 +53,26 @@ public class Fleche
         // 4. Dessiner le texte au milieu (dans le trou)
         dessinerEtiquette(g2, pointDepart, pointArrivee);
     }
+
+    /*------------------*/
+    /* MÉTHODES PRIVÉES */
+    /*------------------*/
+
+    private Point getMilieuCoteGauche(BoxShape box) 
+    {
+        Rectangle r = box.getBounds();
+        return new Point(r.x, r.y + r.height / 2);
+    }
+
+    private Point getMilieuCoteDroit(BoxShape box) 
+    {
+        Rectangle r = box.getBounds();
+        return new Point(r.x + r.width, r.y + r.height / 2);
+    }
+
+    public void setCouleurFleche   (Color couleur) { this.couleurFleche    = couleur;}
+    public void setCouleurEtiquette(Color couleur) { this.couleurEtiquette = couleur;}
+
 
     /**
      * Dessine une ligne en deux parties avec un trou au milieu
@@ -74,11 +89,11 @@ public class Fleche
         
         // Étape 2: Calculer où commence et finit le trou
         Point debutTrou = calculerPointAvantTrou(debut, fin, milieuX, milieuY);
-        Point finTrou = calculerPointApresTrou(debut, fin, milieuX, milieuY);
+        Point finTrou   = calculerPointApresTrou(debut, fin, milieuX, milieuY);
         
         // Étape 3: Dessiner les deux parties de la ligne
-        g2.drawLine(debut.x, debut.y, debutTrou.x, debutTrou.y);        // Première partie
-        g2.drawLine(finTrou.x, finTrou.y, fin.x, fin.y);               // Deuxième partie
+        g2.drawLine(debut.x  , debut.y  , debutTrou.x, debutTrou.y); // Première partie
+        g2.drawLine(finTrou.x, finTrou.y, fin.x      , fin.y      ); // Deuxième partie
     }
 
     /**
@@ -140,24 +155,6 @@ public class Fleche
             int yTexte = (debut.y + fin.y) / 2 + 5; // Centré dans le trou
             g2.drawString(etiquette, xTexte, yTexte);
         }
-    }
-
-    public void setCouleurFleche(Color couleur) {
-        this.couleurFleche = couleur;
-    }
-    
-    public void setCouleurEtiquette(Color couleur) {
-        this.couleurEtiquette = couleur;
-    }
-
-    private Point getMilieuCoteDroit(BoxShape box) {
-        Rectangle r = box.getBounds();
-        return new Point(r.x + r.width, r.y + r.height / 2);
-    }
-
-    private Point getMilieuCoteGauche(BoxShape box) {
-        Rectangle r = box.getBounds();
-        return new Point(r.x, r.y + r.height / 2);
     }
 
     /**

@@ -21,69 +21,99 @@ import java.util.ArrayList;
 
 public class CheminCritique
 {
-    private ArrayList<Tache> lstCheminCrit;
-    private ArrayList<Tache> lstTache;
+    private ArrayList<ArrayList<Tache>> lstCheminCrit;
+    private ArrayList<Tache>            lstCritique;
+    private ArrayList<Tache>            lstTache;
 
     public CheminCritique(ArrayList<Tache> lstTache) 
     {
-        this.lstTache = lstTache; 
-        this.lstCheminCrit = new ArrayList<Tache>();
+        this.lstTache      = lstTache; 
+        this.lstCritique   = new ArrayList<Tache>();
+        this.lstCheminCrit = new ArrayList<ArrayList<Tache>>();
     }
 
-    public ArrayList<Tache> getLstCheminCrit() { return this.lstCheminCrit; }
-
-    // je repère toutes les taches qui on une date de debut et de fin egale
-    public void CheminCritique()
+    public void cheminCritique()
     {
-        // parcour crittique
         for(Tache t : this.lstTache)
         {
-            if(t.getDateMax() == t.getDateMin())
-            {
-                this.lstCheminCrit.add(t);
-            }
-            
+            if(t.getDateMax() == t.getDateMin()) 
+                this.lstCritique.add(t);
         }
 
         this.trieCheminCritique();
     }
 
-    // je permet de faire tirer mon chemin critique le premier et ensuite si il en na d'autre je stocke dans une autre liste
     public void trieCheminCritique()
     {
-        int niveau = -1 ;
-        Tache t = new Tache();
-        ArrayList<Tache> tmp = new ArrayList<Tache>();
-        tmp.add(this.lstCheminCrit.get(0));
+        int niveau = -1;
+        ArrayList<Tache> copieLstCritique = new ArrayList<Tache>(this.lstCritique);
+
+        ArrayList<Tache> chemin = null;
+
+        for(Tache t : copieLstCritique)
+        {
+            if(t.getNiveau() != niveau)
+            {
+                if(chemin != null && ! chemin.isEmpty())
+                {
+                    this.lstCheminCrit.add(chemin);
+                }
+                chemin = new ArrayList<Tache>();
+                niveau = t.getNiveau();
+            }
+            chemin.add(t);
+        }
+
+        if(chemin != null && ! chemin.isEmpty())
+        {
+            this.lstCheminCrit.add(chemin);
+        }
+    }
+    
+    public String toString()
+    {
+        String sRet = "";
+        
+        for (ArrayList<Tache> chemin : this.lstCheminCrit) 
+            sRet += chemin.toString() + "\n\n";
+        
+        return sRet;
+    }
+
+    public void affichage()
+    {
+        System.out.println("====== Tache critique ======");
+        System.out.println("Nombre de taches critique : " + this.lstCritique.size());
+
+        for(Tache t : this.lstCritique)
+        {
+            System.out.println(" - " + t.getNom());
+        }
+        
+        System.out.println("====== Chemin critique ======");
+        System.out.println("Nombre de groupe de niveaux : " + this.lstCheminCrit.size());
 
         for(int cpt = 0; cpt < this.lstCheminCrit.size(); cpt++)
         {
-            if(niveau < this.lstTache.get(cpt).getNiveau())
+            System.out.println("Groupe " + (cpt + 1) + " : ");
+            for(Tache t : this.lstCheminCrit.get(cpt))
             {
-                niveau = this.lstTache.get(cpt).getNiveau();
-                t = this.lstTache.get(cpt);
-                this.lstCheminCrit.add(t);
-            }
-            else
-            {
-                tmp.add(this.lstCheminCrit.get(cpt));
-                this.lstCheminCrit.remove(t);
+                System.out.println(" - " + t.getNom());
             }
         }
-
-        tmp.add(this.lstCheminCrit.get(this.lstCheminCrit.size() - 1));
-        
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args)
+    {
         Projet p = new Projet();
 
-        p.lireFichier("/Documents/Exo_SAE2.1/class/MPM/donnee/testCr.txt");
+        p.lireFichier("/home/nicod16/Documents/Exo_SAE2.1/class/MPM/donnee/testCR.txt");
 
         CheminCritique c = new CheminCritique(p.getLstTache());
 
-        c.CheminCritique();
+        c.cheminCritique();
+
+        c.affichage();
     }
-
-
 }

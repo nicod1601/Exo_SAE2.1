@@ -2,9 +2,6 @@ package MPM.ihm;
 
 import MPM.Controleur;
 import MPM.metier.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.util.ArrayList;
 import javax.swing.*;
 
 public class FrameModifier extends JFrame
@@ -26,7 +23,7 @@ public class FrameModifier extends JFrame
         /*        Création des composants       */
         /*--------------------------------------*/
 
-        this.ctrl = ctrl;
+        this.ctrl  = ctrl;
         this.frame = frame;
 
         this.panelModifier = new PanelModifier(this.ctrl, this.frame, this);
@@ -34,20 +31,18 @@ public class FrameModifier extends JFrame
         /*--------------------------------------*/
         /*          Ajout des composants        */
         /*--------------------------------------*/
+        
         this.add(this.panelModifier);
+
+        /*--------------------------------------*/
+        /*     Activation des composants        */
+        /*--------------------------------------*/
 
         this.setVisible(false);
     }
 
-    public void setPosition(int x, int y)
-    {
-        this.setLocation(x, y + 120);
-    }
-
-    public void setModifTache(Tache tache)
-    {
-        this.panelModifier.setModifTache(tache);
-    }
+    public void setPosition  (int x, int y) { this.setLocation(x, y + 120);            }
+    public void setModifTache(Tache tache ) { this.panelModifier.setModifTache(tache); }
 
 
 }
