@@ -20,13 +20,13 @@ Ce projet est une application Java permettant de gérer la planification de proj
 
 ## Installation
 
-
-
 1. **Compilation et exécution** :
    Ouvrez un terminal à la racine du projet et lancez :
    ```sh
+   chmod +x compilation.sh
    ./compilation.sh
    ```
+   
    Le script compile tous les fichiers listés dans `compile.list` et lance l’application.
 
 3. **Logs** :
@@ -48,7 +48,8 @@ Ce projet est une application Java permettant de gérer la planification de proj
    - Erreur **5** : Une tâche dans le fichier importé n'a pas de nom. 
    - Erreur **6** : Un prédesceur dans le fichier importé n'a pas de nom. 
    - Erreur **7** : Le fichier importé n'existe pas ou n'est pas accessible.
-   - Erreur **8** : 
+   - Erreur **8** : La limite de 200 niveaux a été dépassé. 
+   - Erreur **9** : Le fichier importé est vide. 
 
 ## Organisation du code
 

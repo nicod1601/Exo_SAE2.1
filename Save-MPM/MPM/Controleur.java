@@ -97,4 +97,10 @@ public class Controleur
     {
         new Controleur();
     }
+
+
+    public ArrayList<CheminCritique> getCheminCritique()
+    {
+        return this.projet.getCheminCritique();
+    }
 }

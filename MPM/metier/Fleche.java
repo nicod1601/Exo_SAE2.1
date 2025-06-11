@@ -21,8 +21,16 @@ public class Fleche
 		this.couleurFleche = Color.BLUE;
 	}
 
-	public BoxShape getOrigine    () { return this.origine;    }
-	public BoxShape getDestination() { return this.destination;}
+	public Fleche(BoxShape bOrig, BoxShape bDest, Color couleur) 
+	{
+		this.origine       = bOrig;
+		this.destination   = bDest;
+		this.couleurFleche = couleur;
+	}
+
+	public BoxShape getOrigine      () { return this.origine      ;}
+	public BoxShape getDestination  () { return this.destination  ;}
+	public Color 	getCouleurFleche() { return this.couleurFleche;}
 
 	public void setEtiquette(String etiquette) 
 	{

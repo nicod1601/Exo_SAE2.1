@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -168,7 +169,7 @@ public class Projet
 	 * @return une chaîne représentant le chemin critique (non implémenté)
 	 * @todo Implémenter le calcul du chemin critique
 	 */
-	public String getCheminCritique() { return " "; }
+	public ArrayList<CheminCritique> getCheminCritiques() { return this.lstCheminCritique; }
 
 	public int getNbNiveau()
 	{

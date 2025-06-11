@@ -88,6 +88,10 @@ public class FrameMPM extends JFrame
     public void setModifTache        (Tache tache)                              { this.frameModifier.setModifTache(tache);                }
 
 
+    /**
+     * Méthode permettant de mettre à jour le texte
+     * dans le panel de gestion des tâches.
+     */
     public void majTxt () { this.frameOption.majTxt(); }
 
     /**
@@ -125,9 +129,16 @@ public class FrameMPM extends JFrame
     /**
      * Méthode permettant de réinitialiser le panel de gestion des tâches.
      */
- 
     public void reinitialiser () { this.panelMPM.reinitialiser();   }
     public void boutonDeBase  () { this.panelBouton.boutonDeBase(); }
 
+    /**
+     * Méthode permettant de mettre à jour le panel de gestion des tâches
+     * avec les chemins critiques.
+     * @param chemin Liste des chemins critiques
+     */
+    public void setCheminCritiques(ArrayList<CheminCritique> chemin) { this.panelMPM.setCheminCritiques(chemin); }
+
+    public void resetDefaut() { this.panelMPM.resetDefaut(); }
 
 }

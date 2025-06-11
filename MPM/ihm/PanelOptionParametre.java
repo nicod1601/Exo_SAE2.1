@@ -236,8 +236,12 @@ public class PanelOptionParametre extends JPanel implements ActionListener
 			}
 		}
 
+		int largeurBox = 60+ (int)((20*this.box.getTache().getNom().length())*0.8);
 		if(e.getSource() == this.btnValider)
-			this.frame.setModifBocks(this.box.getLargeur(), this.box.getHauteur(), this.box.getCouleur());
+			if (this.box.getLargeur()<largeurBox)
+				this.frame.setModifBocks(largeurBox, this.box.getHauteur(), this.box.getCouleur());
+			else 
+				this.frame.setModifBocks(this.box.getLargeur(), this.box.getHauteur(), this.box.getCouleur());
 		
 	}
 

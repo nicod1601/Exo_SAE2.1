@@ -1,0 +1,3 @@
+Ligne 3 : Erreur de format dans le fichier importé à la ligne 3 : C|3|A| (doit contenir 2 séparateurs '|') --> C|3|A|
+Ligne 6 : La durée indiquée à la ligne 6 n'est pas un entier : F|F| --> F|F|
+Ligne 0 : Erreur inconnue : Index 0 out of bounds for length 0 --> Index 0 out of bounds for length 0

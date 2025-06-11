@@ -116,6 +116,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 			this.ctrl .lireFichier	 (lien);
 			this.frame.majList		 ();
 			this.frame.activerBoutons();
+			this.frame.resetDefaut();
 		}
 
 	}
@@ -155,10 +156,10 @@ public class MaBarre extends JMenuBar implements ActionListener
 				else // Sinon on lit le fichier
 				{
 					this.cheminFichier = path;
-					this.ctrl.getErreur().clear(); // On vide la liste des erreurs
+					this.ctrl.getLstErreur().clear(); // On vide la liste des erreurs
 					if(!fichier.exists())
 					{
-						this.ctrl.getErreur().add(new Erreur(7));
+						this.ctrl.getLstErreur().add(new Erreur(7));
 						this.verification();
 					}
 					else
@@ -168,7 +169,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 						this	  .verification	  ();
 						this.frame.majList	   	  ();
 						this.frame.activerBoutons ();
-						this.	  activerLesOption();
+						this      .activerLesOption();
 						this.frame.setTitle("MPM - " + fichier.getName());
 					}
 				}
@@ -196,7 +197,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 				this.cheminFichier = cheminComplet;
 				this.frame.reinitialiser();
 
-				this.ctrl.getErreur().clear();
+				this.ctrl.getLstErreur().clear();
 				this.ctrl.lireFichier	 (this.cheminFichier);
 			
 				this.frame.setLien		 (this.cheminFichier);
@@ -218,7 +219,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 					"Erreur lors de la création du projet : " + e1.getMessage(), 
 					"Erreur", 
 					JOptionPane.ERROR_MESSAGE);
-				this.ctrl.getErreur().add(new Erreur(8));
+				this.ctrl.getLstErreur().add(new Erreur(8));
 				
 
 			}
@@ -226,7 +227,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 
 		if(e.getSource() == this.menuiQuitter) System.exit(0); 
 		if(e.getSource() == this.menuiNouveau) this.frame.setVisibleFrameNouveau();
-		if(e.getSource() == this.menuiRefresh) this.refresh(this.cheminFichier);
+		if(e.getSource() == this.menuiRefresh) this      .refresh(this.cheminFichier);
 		if(e.getSource() == this.menuiOption ) this.frame.setVisibleFrameOption();
 
 		if(e.getSource() == this.menuiSave)
@@ -297,7 +298,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 	 */
 	private void verification()
 	{
-		ArrayList<Erreur> erreur = this.ctrl.getErreur();
+		ArrayList<Erreur> erreur = this.ctrl.getLstErreur();
 
 		if (erreur != null && !erreur.isEmpty())
 		{

@@ -4,6 +4,7 @@ import MPM.metier.*;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class PanelModifier extends JPanel implements ActionListener
@@ -83,11 +84,29 @@ public class PanelModifier extends JPanel implements ActionListener
     {
         if (e.getSource() == this.btnModifier)
         {
-            this.ctrl         .modifierTache(this.txtNomTache.getText(), Integer.parseInt(this.txtDureeTache.getText()), this.tache);
-            this.frameMPM     .majList();
-            this.frame        .dispose();
-            this.txtNomTache  .setText("");
-            this.txtDureeTache.setText("");
+            ArrayList<Tache> taches = this.ctrl.getListeTache();
+            Tache tmp = null;
+
+
+           for(int cpt = 0; cpt < taches.size(); cpt++)
+           {
+                System.out.println(this.txtNomTache.getText().equals(taches.get(cpt).getNom() ) );
+                if(this.txtNomTache.getText().equals(taches.get(cpt).getNom() ) )
+                {
+                    JOptionPane.showMessageDialog(null, "Cette tache existe deja", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    tmp = taches.get(cpt);
+                    this.frame.dispose();
+                }
+           }
+
+           if(tmp == null)
+           {
+                this.ctrl    .modifierTache(this.txtNomTache.getText(), Integer.parseInt(this.txtDureeTache.getText()), this.tache);
+                this.frameMPM.majList();
+                this.frame   .dispose();
+           }
+
+
         }
     }
 }

@@ -1,5 +1,0 @@
-Début|0|
-A|1|Début
-B|2|Début
-Fin|0|A,B
-C|4|B

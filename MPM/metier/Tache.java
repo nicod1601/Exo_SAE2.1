@@ -187,10 +187,10 @@ public class Tache
 		return nivMax;
 	}
 
-	public void forceSetDateMin(int val) { this.dateMin = val;}
-	public void forceSetDateMax(int val) { this.dateMax = val;}
-	public void setNiveau	   (int val) { this.niveau 	= val;}
-	public int getHauteur() { return this.hauteur;}
+	public void forceSetDateMin(int val) { this.dateMin = val; }
+	public void forceSetDateMax(int val) { this.dateMax = val; }
+	public void setNiveau	   (int val) { this.niveau 	= val; }
+	public int getHauteur      ()        { return this.hauteur;}
 
 	public int setHauteur(int hauteurMaxNiv)
 	{

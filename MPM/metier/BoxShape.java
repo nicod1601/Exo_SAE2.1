@@ -63,20 +63,20 @@ public class BoxShape
     public Tache getTache() { return this.tache; }
     
     // Getters
-    public int getLargeur()                 { return largeur;                         }
-    public int getHauteur()                 { return hauteur;                         }
-    public int getHauteurCaseSuperieure()   { return hauteurCaseSuperieure;           }
-    public int getHauteurCasesInferieures() { return hauteur - hauteurCaseSuperieure; }
-    public int getLargeurCaseInferieure()   { return largeur / 2;                     }
+    public int       getLargeur()                 { return largeur;                         }
+    public int       getHauteur()                 { return hauteur;                         }
+    public int       getHauteurCaseSuperieure()   { return hauteurCaseSuperieure;           }
+    public int       getHauteurCasesInferieures() { return hauteur - hauteurCaseSuperieure; }
+    public int       getLargeurCaseInferieure()   { return largeur / 2;                     }
     public Rectangle getBounds() { return new Rectangle(this.x, this.y, this.largeur, this.hauteur);}
 
-    public String getNom()    { return tache.getNom();           }
-    public String getDateMin(){ return this.dateMin;  }
-    public String getDateMax(){ return this.dateMax;  }
-    public int    getNiveau() { return tache.getNiveau();        }
-    public Color  getCouleur(){ return this.couleur; }
-    public void   setTaille(int taille) { this.largeur = taille; this.hauteur = taille; }
-    public void setCouleur(Color couleur) { this.couleur = couleur; }
+    public String    getNom()    { return tache.getNom();           }
+    public String    getDateMin(){ return this.dateMin;  }
+    public String    getDateMax(){ return this.dateMax;  }
+    public int       getNiveau() { return tache.getNiveau();        }
+    public Color     getCouleur(){ return this.couleur; }
+    public void      setTaille(int taille) { this.largeur = taille; this.hauteur = taille; }
+    public void      setCouleur(Color couleur) { this.couleur = couleur; }
 
     
     // Setters avec validation

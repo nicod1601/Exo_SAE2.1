@@ -22,7 +22,7 @@ public class Controleur
 
 
     public String            afficherProjet()                       { return this.projet.toString()             ;}
-    public ArrayList<Erreur> getErreur()                            { return this.projet.getErreur()             ;}
+    public ArrayList<Erreur> getLstErreur  ()                       { return this.projet.getLstErreur()         ;}
     public ArrayList<Tache>  getListeTache ()                       { return this.projet.getLstTache()          ;}
     public int               getNbNiveau()                          { return this.projet.getNbNiveau()          ;}
     public int               getTailleNivMax()                      { return this.projet.getTailleNivMax()      ;}
@@ -87,6 +87,8 @@ public class Controleur
     }
 
     public void modifierTache(String nom, int duree, Tache tache) { this.projet.modifierTache(nom, duree, tache); }
+
+    public ArrayList<CheminCritique> getCheminCritiques() { return this.projet.getCheminCritiques(); }
 
     public static void main(String[] args)
     {

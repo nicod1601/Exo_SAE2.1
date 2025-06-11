@@ -13,6 +13,7 @@ public class PanelBouton extends JPanel implements ActionListener
     private JButton btnDateMax;
     private JButton btnAfficherTout;
     private JButton btnAfficherRien;
+    private JButton btnCheminCritique;
 
     private int niveauPrc;
     private int niveauSvt;
@@ -40,9 +41,16 @@ public class PanelBouton extends JPanel implements ActionListener
         this.niveauSvt   = 1;
 
         this.btnDateMin      = new JButton("-");
+        this.btnDateMin.setForeground(Color.BLACK);
         this.btnDateMax      = new JButton("+");
+        this.btnDateMax.setForeground(Color.BLACK);
         this.btnAfficherTout = new JButton("Tout Afficher");
+        this.btnAfficherTout.setForeground(Color.BLACK);
         this.btnAfficherRien = new JButton("Tout Masquer");
+        this.btnAfficherRien.setForeground(Color.BLACK);
+        this.btnCheminCritique = new JButton("Chemin critique");
+        
+
 
         this.desactiverBouton();
 
@@ -54,15 +62,17 @@ public class PanelBouton extends JPanel implements ActionListener
         this.add(this.btnDateMax     );
         this.add(this.btnAfficherTout);
         this.add(this.btnAfficherRien);
+        this.add(this.btnCheminCritique);
 
         /*--------------------------------------*/
         /*     Activation des composants        */
         /*--------------------------------------*/
 
-        this.btnDateMin     .addActionListener(this);
-        this.btnDateMax     .addActionListener(this);
-        this.btnAfficherTout.addActionListener(this);
-        this.btnAfficherRien.addActionListener(this);
+        this.btnDateMin       .addActionListener(this);
+        this.btnDateMax       .addActionListener(this);
+        this.btnAfficherTout  .addActionListener(this);
+        this.btnAfficherRien  .addActionListener(this);
+        this.btnCheminCritique.addActionListener(this);
     }
 
     public void desactiverBouton()
@@ -71,20 +81,24 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnDateMax     .setEnabled(false);
         this.btnAfficherTout.setEnabled(false);
         this.btnAfficherRien.setEnabled(false);
+        this.btnCheminCritique.setEnabled(false);
 
-        this.btnAfficherRien.setBackground(new Color(180, 0, 0 ) );
-        this.btnAfficherTout.setBackground(new Color(180, 0, 0 ) );
-        this.btnDateMin     .setBackground(new Color(180, 0, 0 ) );
-        this.btnDateMax     .setBackground(new Color(180, 0, 0 ) );
+        this.btnAfficherRien  .setBackground(new Color(100, 0, 0 ));
+        this.btnAfficherTout  .setBackground(new Color(100, 0, 0 ));
+        this.btnDateMin       .setBackground(new Color(100, 0, 0 ));
+        this.btnDateMax       .setBackground(new Color(100, 0, 0 ));
+        this.btnCheminCritique.setBackground(new Color(100, 0, 0 ));
     }
 
     public void activerBouton()
     {
-        this.btnDateMin     .setEnabled(true);
-        this.btnAfficherTout.setEnabled(true);
+        this.btnDateMin       .setEnabled(true);
+        this.btnAfficherTout  .setEnabled(true);
+        this.btnCheminCritique.setEnabled(true);
 
-        this.btnDateMin     .setBackground(new Color(101, 180, 0 ) );
-        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ) );
+        this.btnDateMin       .setBackground(new Color(100, 180, 100 ));
+        this.btnAfficherTout  .setBackground(new Color(100, 180, 100 ));
+        this.btnCheminCritique.setBackground(new Color(100, 180, 100 ));
 
     }
 
@@ -96,10 +110,10 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnAfficherRien.setEnabled(false);
         this.btnDateMax     .setEnabled(false);
 
-        this.btnAfficherTout.setBackground(new Color(101, 180, 0 ) );
-        this.btnDateMin     .setBackground(new Color(101, 180, 0 ) );
-        this.btnAfficherRien.setBackground(new Color(180, 0, 0   ) );
-        this.btnDateMax     .setBackground(new Color(180, 0, 0   ) );
+        this.btnAfficherTout.setBackground(new Color(100, 0, 0 ) );
+        this.btnDateMin     .setBackground(new Color(100, 0, 0 ) );
+        this.btnAfficherRien.setBackground(new Color(100, 180, 100   ) );
+        this.btnDateMax     .setBackground(new Color(100, 180, 100  ) );
     }
 
     public void resetNiveau()
@@ -118,7 +132,7 @@ public class PanelBouton extends JPanel implements ActionListener
     public void activerBtnAfficherRien()
     {
         this.btnAfficherRien.setEnabled(true);
-        this.btnAfficherRien.setBackground(new Color(101, 180, 0 ));
+        this.btnAfficherRien.setBackground(new Color(100, 180, 100 ));
     }
 
     public void actionPerformed(ActionEvent e)
@@ -139,13 +153,13 @@ public class PanelBouton extends JPanel implements ActionListener
                 this.btnDateMin.setEnabled(false);
                 this.btnDateMax.setEnabled(true );
 
-                this.btnDateMin.setBackground(new Color(180, 0, 0   ) );
-                this.btnDateMax.setBackground(new Color(101, 180, 0 ) );
+                this.btnDateMin.setBackground(new Color(100, 0, 0 ) );
+                this.btnDateMax.setBackground(new Color(100, 180, 100 ) );
                 
                 if(this.niveauPrc < 0 && this.niveauSvt >= this.ctrl.getNbNiveau())
                 {
                     this.btnAfficherTout.setEnabled(false);
-                    this.btnAfficherTout.setBackground(new Color(180, 0, 0 ));
+                    this.btnAfficherTout.setBackground(new Color(100, 0, 0 ));
                     this                .activerBtnAfficherRien();
                 }
             }
@@ -166,12 +180,12 @@ public class PanelBouton extends JPanel implements ActionListener
             if(this.niveauPrc < 0)
             {
                 this.btnDateMax.setEnabled(false);
-                this.btnDateMax.setBackground(new Color(180, 0, 0 ));
+                this.btnDateMax.setBackground(new Color(100, 0, 0 ));
 
                 if(this.niveauPrc < 0 && this.niveauSvt >= this.ctrl.getNbNiveau())
                 {
                     this.btnAfficherTout.setEnabled(false);
-                    this.btnAfficherTout.setBackground(new Color(180, 0, 0 ));
+                    this.btnAfficherTout.setBackground(new Color(100, 0, 0 ));
                     this                .activerBtnAfficherRien();
                 }
             }
@@ -212,10 +226,22 @@ public class PanelBouton extends JPanel implements ActionListener
 
             this                .activerBouton();
             this.btnAfficherRien.setEnabled(false);
-            this.btnAfficherRien.setBackground(new Color(180, 0, 0 ) );
+            //this.btnAfficherRien.setForeground(new Color(0, 0, 0 ) );
+            this.btnAfficherRien.setBackground(new Color(100, 0, 0 ) );
 
             this.frame.majDessin  ();
             this      .resetNiveau();
+        }
+
+        if(e.getSource() == this.btnCheminCritique)
+        {
+            ArrayList<CheminCritique> lstCheminCritique = this.ctrl.getCheminCritiques();
+
+            frame.setCheminCritiques(lstCheminCritique);
+
+
+
+            
         }
     }
 }

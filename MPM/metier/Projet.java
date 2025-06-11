@@ -9,20 +9,21 @@ package MPM.metier;
  * @author Groupe 09 - DELPECH Nicolas, FOYER Emilien, GUTU Nichita, KULPA Clément
  */
 import MPM.metier.CheminCritique;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
-import javax.smartcardio.CardChannel;
 
 
 public class Projet
 {
-	private ArrayList<Erreur> erreur;
+	private ArrayList<Erreur> lstErreur;
 	private ArrayList<Tache>  lstTache;
 	private ArrayList<CheminCritique> lstCheminCritique;
 
@@ -46,7 +47,7 @@ public class Projet
 		this.dureeProjet 	   = 0;
 		this.nbTacheMaxNiveau  = 0;
 		this.lstTache    	   = new ArrayList<Tache> ();
-		this.erreur 		   = new ArrayList<Erreur>();
+		this.lstErreur 		   = new ArrayList<Erreur>();
 		this.lstCheminCritique = new ArrayList<CheminCritique>();
 	}
 
@@ -142,7 +143,7 @@ public class Projet
 	 * @return une chaîne représentant le chemin critique (non implémenté)
 	 * @todo Implémenter le calcul du chemin critique
 	 */
-	public String getCheminCritique() { return " "; }
+	public ArrayList<CheminCritique> getCheminCritiques() { return this.lstCheminCritique; }
 
 	public int getNbNiveau()
 	{
@@ -265,7 +266,7 @@ public class Projet
 				if(!this.testTropDeNiveaux()) this.lstTache.clear();
 				else 						  this.majDate();
 				
-				afficherLstTacheCritique();
+				this.afficherLstTacheCritique();
 
 				for(CheminCritique c : this.lstCheminCritique)
 					System.out.println(c.toString());
@@ -277,7 +278,7 @@ public class Projet
 			catch ( Exception e )
 			{ 
 				e.printStackTrace();
-				this.erreur.add(new Erreur(e.getMessage()));  
+				this.lstErreur.add(new Erreur(e.getMessage()));  
 			}
 
 			this.ecrireErreursDansLog();
@@ -288,7 +289,7 @@ public class Projet
 	public void afficherLstTacheCritique() 
 	{
 		this.lstCheminCritique.clear();
-		System.out.println("afficher chmin critique");
+	
 		
 
 		for (Tache t : this.lstTache) 
@@ -303,9 +304,9 @@ public class Projet
 				//System.out.println("afficher dans le if");
 
 				determinerCheminCritique(t, chemin);
+
 			}
 		}
-		
 	}
 
 	// Méthode privée récursive qui construit les chemins critiques
@@ -320,11 +321,10 @@ public class Projet
 			}
 		}
 
-		System.out.println("apres le for ");
+		
 		if (successeursCritiques.isEmpty()) {
 			// Pas de successeur critique, c'est une fin de chemin critique
 			this.lstCheminCritique.add(new CheminCritique(new ArrayList<>(cheminActuel)));
-			System.out.println("dans le if successerus empty");
 		}
 
 		else {
@@ -332,9 +332,6 @@ public class Projet
 			for (Tache succ : successeursCritiques) {
 				determinerCheminCritique(succ, new ArrayList<>(cheminActuel));
 			}
-			System.out.println("dans le else successeurs existants");
-			
-
 		}
 	}
 
@@ -348,7 +345,7 @@ public class Projet
 			
 
 
-			int hauteurTemp = t.setHauteur(this.ensTacheMaxNiveau[t.getNiveau()]);
+			int hauteurTemp = t.setHauteur(this.ensTacheMaxNiveau[t.getNiveau()] );
 
 			if( hauteurTemp> this.ensTacheMaxNiveau[t.getNiveau()])
 				this.ensTacheMaxNiveau[t.getNiveau()] =hauteurTemp;
@@ -378,14 +375,19 @@ public class Projet
 		catch ( Exception e )
 		{ 
 			e.printStackTrace();
-			this.erreur.add(new Erreur(e.getMessage() ) );  
+			this.lstErreur.add(new Erreur(e.getMessage() ) );  
 		}
 
 		
 		return str;
 	}	
 
-	public ArrayList<Erreur> getErreur() { return this.erreur; }
+	/**
+	 * Retourne la liste des erreurs rencontrées lors de la lecture du fichier.
+	 * 
+	 * @return la liste des erreurs
+	 */
+	public ArrayList<Erreur> getLstErreur() { return this.lstErreur; }
 	
 
 	/* Cette méthode permet de parcourir la liste des tâches
@@ -504,7 +506,7 @@ public class Projet
 		{
 			//System.out.println(
 			//		"Erreur de format à la ligne " + numLigne + " : " + ligne + " (doit contenir 2 séparateurs '|')");
-			this.erreur.add(new Erreur(ligne, numLigne, 1));
+			this.lstErreur.add(new Erreur(ligne, numLigne, 1));
 			return false;
 		}
 		return true;
@@ -522,7 +524,7 @@ public class Projet
 		String[] parties = ligne.split("\\|");
 		if (parties.length < 2)
 		{
-			this.erreur.add(new Erreur(ligne, numLigne, 2));
+			this.lstErreur.add(new Erreur(ligne, numLigne, 2));
 			return false;
 		}
 		try
@@ -532,7 +534,7 @@ public class Projet
 		} catch (NumberFormatException e)
 		{
 			//System.out.println("Erreur de durée à la ligne " + numLigne + " : " + parties[1] + " n'est pas un nombre");
-			this.erreur.add(new Erreur(ligne, numLigne, 2));
+			this.lstErreur.add(new Erreur(ligne, numLigne, 2));
 			return false;
 		}
 	}
@@ -553,7 +555,7 @@ public class Projet
 			if (t.getNom().equals(nom))
 			{
 				//System.out.println("Erreur de nom en double à la ligne " + numLigne + " : " + nom);
-				this.erreur.add(new Erreur(ligne, numLigne, 3)); // code 3 pour doublon
+				this.lstErreur.add(new Erreur(ligne, numLigne, 3)); // code 3 pour doublon
 				return false;
 			}
 		}
@@ -573,7 +575,7 @@ public class Projet
 		if (parties.length < 1 || parties[0].trim().isEmpty()) //trim permet de retirer les espaces 
 		{
 			//System.out.println("Erreur : nom de tâche vide à la ligne " + numLigne);
-			this.erreur.add(new Erreur(ligne, numLigne, 5)); // code 5 pour nom vide
+			this.lstErreur.add(new Erreur(ligne, numLigne, 5)); // code 5 pour nom vide
 			return false;
 		}
 		return true;
@@ -598,7 +600,7 @@ public class Projet
 			if (nom.trim().isEmpty())
 			{
 				//System.out.println("Erreur : prédécesseur mal formé à la ligne " + numLigne + " : " + ligne);
-				this.erreur.add(new Erreur(ligne, numLigne, 6)); 
+				this.lstErreur.add(new Erreur(ligne, numLigne, 6)); 
 				return false;
 			}
 		}
@@ -616,7 +618,7 @@ public class Projet
 		if (this.getNbNiveau() > 202) // 200 niveaux + 2 (Début et Fin)
 		{
 			//System.out.println("Erreur : trop de niveaux (plus de 200) - Nombre de niveaux : " + this.getNbNiveau());
-			this.erreur.add(new Erreur( 8));
+			this.lstErreur.add(new Erreur( 8));
 			return false;
 		}
 		return true;
@@ -634,7 +636,7 @@ public class Projet
 		if (fichier.exists() && fichier.length() == 0  )
 		{
 			//System.out.println("Le fichier : " + chemin + "est vide : " );
-			this.erreur.add(new Erreur(9));
+			this.lstErreur.add(new Erreur(9));
 			return true;
 		}
 		else
@@ -650,14 +652,14 @@ public class Projet
 				if (contenu.trim().isEmpty()) // <-- Utilise trim() pour enlever les espaces inutiles
 				{
 					//System.out.println("Le fichier : " + chemin + " est vide." );
-					this.erreur.add(new Erreur(9));
+					this.lstErreur.add(new Erreur(9));
 					return true;
 				}
 			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				this.erreur.add(new Erreur(e.getMessage()));
+				this.lstErreur.add(new Erreur(e.getMessage()));
 			}
 		}
 		
@@ -671,7 +673,7 @@ public class Projet
 	 */
 	private void ecrireErreursDansLog()
 	{
-		if (!this.erreur.isEmpty())
+		if (!this.lstErreur.isEmpty())
 		{
 			try
 			{
@@ -693,7 +695,7 @@ public class Projet
 				String nomFichier = "logs/erreurs_" + date +".log";
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), "UTF8"));
 
-				for (Erreur e : this.erreur)
+				for (Erreur e : this.lstErreur)
 					pw.println(e.toString());
 				
 				pw.close();
@@ -702,7 +704,7 @@ public class Projet
 			catch (Exception e)
 			{
 				e.printStackTrace();
-				this.erreur.add(new Erreur(e.getMessage())); 
+				this.lstErreur.add(new Erreur(e.getMessage())); 
 			}
 		}
 	}
@@ -817,7 +819,7 @@ public class Projet
 		catch (Exception e) 
 		{ 
 			e.printStackTrace(); 
-			this.erreur.add(new Erreur(e.getMessage()));
+			this.lstErreur.add(new Erreur(e.getMessage()));
 		}
 	}
 
@@ -856,7 +858,7 @@ public class Projet
 		catch (Exception e) 
 		{ 
 			e.printStackTrace();
-			this.erreur.add(new Erreur(e.getMessage())); 
+			this.lstErreur.add(new Erreur(e.getMessage())); 
 		}
 	}
 
