@@ -193,9 +193,12 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			this.recupCouleur = couleur;
 			this.recupLargeur = largeur;
 			this.recupHauteur = hauteur;
+
 		}
 
 		this.majDessin();
+
+
 	}
 
 	public void resetNiveau()
@@ -443,7 +446,12 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private BoxShape trouverBoxShapeSousSouris(Point point) 
 	{
 		for (BoxShape box : this.lstBoxShape)
+		{
 			if (box.contient(point)) return box;
+			System.out.println(box);
+			
+			
+		}
 			
 		return null;
 	}
@@ -575,6 +583,9 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		{
 			this.flecheSelectionnee = flecheSousSouris;
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+			//System.out.print("Nom" : this.boxShapeSelectionnee.getNom() + " " + this)
+			System.out.println(this.boxShapeSelectionnee.toString() );
 			
 			if (!this.popMenu.isShowing())
 			{

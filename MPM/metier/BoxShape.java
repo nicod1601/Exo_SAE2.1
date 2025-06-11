@@ -46,6 +46,7 @@ public class BoxShape
         this.dateMin = " ";
         this.couleur = Color.BLACK;
         this.hauteurCaseSuperieure = 30;
+
     }
 
     public BoxShape(Tache t, Controleur ctrl)
@@ -144,7 +145,7 @@ public class BoxShape
         }
 
         // Configuration du style pour les bordures
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING     , RenderingHints.VALUE_ANTIALIAS_ON     );
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
         // Case supérieure
@@ -354,8 +355,10 @@ public class BoxShape
                "HauteurCaseSuperieure : "     + this.hauteurCaseSuperieure + "\n"  +
                "Nom : "                       + this.tache.getNom()        + "\n"  + 
                "DateMin : "                   + this.tache.getDateMin()    + "\n"  + 
-               "DateMax : "                   + this.tache.getDateMax()    + "\n" +
-               "Niveau : "                    + this.tache.getNiveau()     + "\n\n";
+               "DateMax : "                   + this.tache.getDateMax()    + "\n"  +
+               "Niveau : "                    + this.tache.getNiveau()     + "\n"  +
+               "Pos X : "                     + this.getX()                + "\n"  + 
+               "Pos Y : "                     + this.getY()                + "\n\n";    
     }
 
 
