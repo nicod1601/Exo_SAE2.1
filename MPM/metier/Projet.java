@@ -268,8 +268,6 @@ public class Projet
 				
 				this.afficherLstTacheCritique();
 
-				for(CheminCritique c : this.lstCheminCritique)
-					System.out.println(c.toString());
 
 				System.out.println(this.lstCheminCritique.size());
 				
@@ -289,47 +287,62 @@ public class Projet
 	public void afficherLstTacheCritique() 
 	{
 		this.lstCheminCritique.clear();
-	
+
 		
 
 		for (Tache t : this.lstTache) 
 		{
-			//System.out.println("afficher dans le for");
-			
-			//System.out.println(t);
-			//System.out.println("" + t.getLstPrc().isEmpty() + " " + (t.getMarge()  == 0 ));
 
-			if (t.getLstPrc().isEmpty() && t.getMarge() == 0) {
+			if (t.getLstPrc().isEmpty() && t.getMarge() == 0) 
+			{
 				ArrayList<Tache> chemin = new ArrayList<>();
-				//System.out.println("afficher dans le if");
+
+				System.out.println(chemin);
 
 				determinerCheminCritique(t, chemin);
-
+				
 			}
+		}
+
+		for(CheminCritique c : this.lstCheminCritique)
+		{
+			// vérification de la ligne des chemin si on retrouve bien la fin 
+			if(! c.getListeTacheCritique().get(c.getListeTacheCritique().size() - 1).getNom().equals("Fin"))
+			{
+				this.lstCheminCritique.remove(c);
+			}
+		}
+
+		for(CheminCritique c : this.lstCheminCritique)
+		{
+		
+			System.out.println(c.toString());
 		}
 	}
 
 	// Méthode privée récursive qui construit les chemins critiques
-	private void determinerCheminCritique(Tache tache, ArrayList<Tache> cheminActuel) {
+	private void determinerCheminCritique(Tache tache, ArrayList<Tache> cheminActuel)
+	{
 		cheminActuel.add(tache);
 
-		// Trouver les successeurs critiques (ayant la tâche actuelle comme précédent et marge == 0)
 		ArrayList<Tache> successeursCritiques = new ArrayList<>();
-		for (Tache t : this.lstTache) {
-			if (t.getLstPrc().contains(tache) && t.getMarge() == 0) {
+		for (Tache t : this.lstTache) 
+		{
+			if (t.getLstPrc().contains(tache) && t.getMarge() == 0) 
+			{
 				successeursCritiques.add(t);
 			}
 		}
 
 		
-		if (successeursCritiques.isEmpty()) {
-			// Pas de successeur critique, c'est une fin de chemin critique
+		if (successeursCritiques.isEmpty()) 
+		{
 			this.lstCheminCritique.add(new CheminCritique(new ArrayList<>(cheminActuel)));
 		}
-
-		else {
-			// Pour chaque successeur critique, continuer la récursion
-			for (Tache succ : successeursCritiques) {
+		else 
+		{
+			for (Tache succ : successeursCritiques)
+			{
 				determinerCheminCritique(succ, new ArrayList<>(cheminActuel));
 			}
 		}
@@ -680,7 +693,7 @@ public class Projet
 				File dossierLogs = new File("logs");
 				
 				if (!dossierLogs.exists()) 
-					dossierLogs .mkdirs(); // <-- Utilise mkdirs() pour créer tous les dossiers nécessaires
+					dossierLogs .mkdirs(); 
 				
 				GregorianCalendar cal 	  = new GregorianCalendar();
 				String 			  annee   = String.format("%04d", cal.get(Calendar.YEAR			) 	 );
@@ -744,6 +757,7 @@ public class Projet
 		tacheFin.setNiveau(niveauMaxActuel + 1);
 		
 		this.majDate();
+		this.afficherLstTacheCritique();
 	}
 
 
@@ -774,6 +788,7 @@ public class Projet
 			tacheFin.setNiveau(tacheFin.getNiveau() + 1);
 		
 		this.majDate();
+		this.afficherLstTacheCritique();
 
 	}
 
@@ -873,6 +888,7 @@ public class Projet
 				tmp = t;
 				t.setNom(nomTache);
 				t.setDuree(dureeTache);
+				this.afficherLstTacheCritique();
 			}
 			tabNom[this.lstTache.indexOf(t)] = t.getNom();
 		}
@@ -886,6 +902,7 @@ public class Projet
 				{
 					this.lstTache.get(i).setNom(tmp.getNom());
 					this.lstTache.get(i).setDuree(tmp.getDuree());
+					this.afficherLstTacheCritique();
 				}
 			}
 		}

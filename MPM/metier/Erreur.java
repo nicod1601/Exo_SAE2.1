@@ -44,7 +44,7 @@ public class Erreur
 	{
 		return switch (this.codeErreur) 
 		{
-			//case 0  -> "Erreur inconnue : "                                                                                 + this.ligne;
+			
 			case 1  -> "Erreur de format dans le fichier importé à la ligne " + this.numLigne + " : "                       + this.ligne + " (doit contenir 2 séparateurs '|')";
 			case 2  -> "La durée indiquée à la ligne "  				      + this.numLigne + " n'est pas un entier : "   + this.ligne;
 			case 3  -> "La nom de la tâche à la ligne " 				      + this.numLigne + " est déjà utilisé : "      + this.ligne;

@@ -1,3 +1,0 @@
-Ligne 1 : Erreur de format dans le fichier importé à la ligne 1 : A|2|| (doit contenir 2 séparateurs '|') --> A|2||
-Ligne 3 : La durée indiquée à la ligne 3 n'est pas un entier : C|Alpha|A --> C|Alpha|A
-Ligne 5 : Le ou les prédécesseurs de la tâche à la ligne 5 n'ont pas de nom : E|10|C,D, , --> E|10|C,D, ,

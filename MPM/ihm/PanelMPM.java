@@ -381,6 +381,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			this.flecheSelectionnee = null;
 
 			this      .majDessin   ();
+			this.ctrl.afficherLstTacheCritique();
 			this      .majList     ();
 			this.frame.boutonDeBase();
 		}

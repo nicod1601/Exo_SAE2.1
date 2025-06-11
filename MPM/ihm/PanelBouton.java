@@ -110,10 +110,10 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnAfficherRien.setEnabled(false);
         this.btnDateMax     .setEnabled(false);
 
-        this.btnAfficherTout.setBackground(new Color(100, 0, 0 ) );
-        this.btnDateMin     .setBackground(new Color(100, 0, 0 ) );
-        this.btnAfficherRien.setBackground(new Color(100, 180, 100   ) );
-        this.btnDateMax     .setBackground(new Color(100, 180, 100  ) );
+        this.btnAfficherTout.setBackground(new Color(100, 180, 100) );
+        this.btnDateMin     .setBackground(new Color(100, 180, 100) );
+        this.btnAfficherRien.setBackground(new Color(100, 0, 0   ) );
+        this.btnDateMax     .setBackground(new Color(100, 0, 0  ) );
     }
 
     public void resetNiveau()
@@ -134,6 +134,7 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnAfficherRien.setEnabled(true);
         this.btnAfficherRien.setBackground(new Color(100, 180, 100 ));
     }
+
 
     public void actionPerformed(ActionEvent e)
     {

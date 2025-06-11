@@ -90,6 +90,8 @@ public class Controleur
 
     public ArrayList<CheminCritique> getCheminCritiques() { return this.projet.getCheminCritiques(); }
 
+    public void afficherLstTacheCritique() { this.projet.afficherLstTacheCritique(); }
+
     public static void main(String[] args)
     {
         new Controleur();
