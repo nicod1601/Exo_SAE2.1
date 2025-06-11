@@ -15,5 +15,6 @@
 ./MPM/ihm/PanelNouveau.java
 ./MPM/ihm/FrameOption.java
 ./MPM/ihm/PanelOptionParametre.java
+./MPM/ihm/PanelInformation.java
 
 ./MPM/Controleur.java

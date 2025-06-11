@@ -15,6 +15,8 @@ public class FrameMPM extends JFrame
     private FrameOption   frameOption;
     private FrameModifier frameModifier;
 
+    private PanelInformation panelInfo;
+
     private PanelMPM      panelMPM;
     private PanelBouton   panelBouton;
 
@@ -44,12 +46,14 @@ public class FrameMPM extends JFrame
 
         this.panelMPM      = new PanelMPM     (this, this.ctrl);
         this.panelBouton   = new PanelBouton  (this, this.ctrl);
+        this.panelInfo     = new PanelInformation(this.ctrl);
 
         this.menu          = new MaBarre      (this, this.ctrl);
         this.scrollPane    = new JScrollPane  (this.panelMPM  );
 
 
-        // utilisation des flèches sur la clavier
+        // utilisation des flèches sur le clavier
+        
         this.panelMPM  .setFocusable(true);
         this.panelMPM  .requestFocusInWindow();
 
@@ -63,6 +67,7 @@ public class FrameMPM extends JFrame
         this.add(this.menu       , BorderLayout.NORTH);
         this.add(this.scrollPane ,BorderLayout.CENTER);
         this.add(this.panelBouton, BorderLayout.SOUTH);
+        this.add(this.panelInfo, BorderLayout.EAST);
 
         /*--------------------------------------*/
         /*     Activation des composants        */
