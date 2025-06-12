@@ -13,10 +13,10 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	private static final int TAILLESCROLL = 600;
 
-	private ArrayList<Tache> 	      listTache;
-	private ArrayList<BoxShape>       lstBoxShape;
+	private ArrayList<Tache> 	      listTache	 		;
+	private ArrayList<BoxShape>       lstBoxShape		;
 	private ArrayList<CheminCritique> lstCheminCritiques;
-	private ArrayList<Tache>          lstTacheCritiques;
+	private ArrayList<Tache>          lstTacheCritiques ;
 
 	private int niveauPrc;
 	private int niveauSvt;
@@ -110,6 +110,12 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
         infoLabel.setBorder	   (BorderFactory.createLineBorder(Color.BLACK));
         infoLabel.setVisible   (false);
         infoLabel.setSize      (200, 50);
+
+
+		for (BoxShape box : lstBoxShape) 
+			box.setPos();
+			
+		
 
 
 		/*--------------------------------------*/
@@ -318,8 +324,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 				}
 			}
 
-
-
 			this.frame.majTacheBox(this.listTache, this.lstBoxShape);
 			
 			
@@ -451,6 +455,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			System.out.println(box);
 			
 			
+			
 		}
 			
 		return null;
@@ -473,7 +478,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		
 		// Calcul de la distance du point à la ligne
 		double distance = distancePointLigne(point, pOrig, pDest);
-		return distance <= 5; // Tolérance de 5 pixels
+		return distance <= 10; // Tolérance de 5 pixels
 	}
 	private double distancePointLigne(Point point, Point p1, Point p2)
 	{
@@ -583,9 +588,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		{
 			this.flecheSelectionnee = flecheSousSouris;
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-			//System.out.print("Nom" : this.boxShapeSelectionnee.getNom() + " " + this)
-			System.out.println(this.boxShapeSelectionnee.toString() );
 			
 			if (!this.popMenu.isShowing())
 			{

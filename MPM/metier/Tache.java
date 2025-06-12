@@ -27,6 +27,8 @@ public class Tache
 	private int    duree;
 	private int    dateMin;
 	private int    dateMax;
+	private int    cordX;
+	private int    cordY;
 
 	private int niveau  = 0;
 	private int hauteur = 0;
@@ -61,6 +63,18 @@ public class Tache
 		this.dateMax = -1;
 		this.lstPrc  = new ArrayList<Tache>();
 		this.lstSvt  = new ArrayList<Tache>();
+	}
+
+	public Tache (String nom, int duree, int cordX, int cordY)
+	{
+		this.nom     = nom;
+		this.duree   = duree;
+		this.dateMin = -1;
+		this.dateMax = -1;
+		this.lstPrc  = new ArrayList<Tache>();
+		this.lstSvt  = new ArrayList<Tache>();
+		this.cordX   = cordX;
+		this.cordY   = cordY;
 	}
 
 	/**
@@ -100,6 +114,8 @@ public class Tache
 	 */
 	public Tache getTache(int indice, ArrayList<Tache> lst) { return lst.get(indice); }
 
+	public int   getCordX() { return this.cordX; }
+	public int   getCordY() { return this.cordY; }
 
 	/** @return la date au plus tôt pour commencer la tâche */
 	public int getDateMin() { return this.dateMin; }
@@ -186,6 +202,8 @@ public class Tache
 		}
 		return nivMax;
 	}
+	public void setCordX(int val) { this.cordX = val; }
+	public void setCordY(int val) { this.cordY = val; }
 
 	public void forceSetDateMin(int val) { this.dateMin = val; }
 	public void forceSetDateMax(int val) { this.dateMax = val; }

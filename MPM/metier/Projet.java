@@ -180,7 +180,7 @@ public class Projet
 					boolean ligneValide = true;
 					
 					if (ligne.isEmpty())                                 			 			ligneValide = false; // Ignore les lignes vides
-					if (ligneValide && !testSeparateur(ligne, numLigne)) 			 			ligneValide = false; // Vérifie le format de la ligne
+					//if (ligneValide && !testSeparateur(ligne, numLigne)) 			 			ligneValide = false; // Vérifie le format de la ligne
 					if (ligneValide && !testDureeInt  (ligne, numLigne)) 			 			ligneValide = false; // Vérifie que la durée est un entier
 					if (ligneValide && !testNomVide   (ligne, numLigne)) 			 			ligneValide = false; // Vérifie que le nom n'est pas vide
 					if (ligneValide && !testPredecesseursMalFormes(ligne, numLigne)) 			ligneValide = false; // Vérifie la liste des prédécesseurs
@@ -198,7 +198,7 @@ public class Projet
 
 						if(partie.length > 2 && ! partie[2].isEmpty() )
 						{
-							String[] prc = partie[2].split(",");
+							String[] prc = partie[2].split(","); // sépare les prédécesseurs par des virgules
 							
 
 							for(int cpt =0; cpt < prc.length; cpt++)
@@ -215,7 +215,8 @@ public class Projet
 							if(!tmp.getNom().equals("Début"))
 								tmp.addPrecedent(this.lstTache.get(0));
 						}
-
+					
+					
 
 						int posPrcDernier = 0 ;
 						int posPrcTmp     = 0 ;

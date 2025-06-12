@@ -39,6 +39,8 @@ public class Fleche
 	}
 
 	public void setTailleTrou (int taille) { this.tailleTrou = taille; }
+	public void setCouleurFleche   (Color couleur) { this.couleurFleche    = couleur;}
+	public void setCouleurEtiquette(Color couleur) { this.couleurEtiquette = couleur;}
 
 	public void supprimer(Tache tOrig, Tache tDest) 
 	{
@@ -77,9 +79,6 @@ public class Fleche
 		Rectangle r = box.getBounds();
 		return new Point(r.x + r.width, r.y + r.height / 2);
 	}
-
-	public void setCouleurFleche   (Color couleur) { this.couleurFleche    = couleur;}
-	public void setCouleurEtiquette(Color couleur) { this.couleurEtiquette = couleur;}
 
 
 	/**
