@@ -21,6 +21,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private JMenuItem menuiNvProjet;
 	
 	private FrameMPM   frame;
+	
 	private Controleur ctrl;
 
 	private JFileChooser fileChooser = new JFileChooser();
@@ -191,7 +192,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 				java.io.FileWriter writer = new java.io.FileWriter(fichier);
 
-				writer.write("Exemple|1|\n");
+				writer.write("Exemple|1| |\n");
 				writer.close();
 				
 				this.cheminFichier = cheminComplet;
@@ -237,7 +238,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 			try 
 			{
-				this.ctrl  .enregistrer	  (this.cheminFichier, this.ctrl.getListeTache());
+				this.ctrl  .enregistrer	  (this.cheminFichier, this.ctrl.getLstBoxShapes());
 				this.frame .setLien	   	  (this.cheminFichier);
 				this.ctrl  .lireFichier	  (this.cheminFichier);
 				this	   .verification  ();
@@ -274,7 +275,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 				try 
 				{
-					this.ctrl.enregistrerSous(this.cheminFichier, this.ctrl.getListeTache());
+					this.ctrl.enregistrerSous(this.cheminFichier, this.ctrl.getLstBoxShapes());
 					this.frame.setLien		 (this.cheminFichier);
 					this.ctrl.lireFichier	 (this.cheminFichier);
 					this.verification 		 ();

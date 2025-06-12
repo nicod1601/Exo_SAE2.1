@@ -27,8 +27,10 @@ public class Tache
 	private int    duree;
 	private int    dateMin;
 	private int    dateMax;
+	private int    cordX;
+	private int    cordY;
 
-	private int niveau = 0;
+	private int niveau  = 0;
 	private int hauteur = 0;
 
 	private ArrayList<Tache> lstPrc;
@@ -51,18 +53,28 @@ public class Tache
 		this.dateMax = -1;
 		this.lstPrc  = new ArrayList<Tache>();
 		this.lstSvt  = new ArrayList<Tache>();
-		this.niveau  = 0;
 	}
 
 	public Tache()
 	{
 		this.nom     = "A";
-		this.duree   = 0;
+		this.duree   =  0;
 		this.dateMin = -1;
 		this.dateMax = -1;
 		this.lstPrc  = new ArrayList<Tache>();
 		this.lstSvt  = new ArrayList<Tache>();
-		this.niveau  = 0;
+	}
+
+	public Tache (String nom, int duree, int cordX, int cordY)
+	{
+		this.nom     = nom;
+		this.duree   = duree;
+		this.dateMin = -1;
+		this.dateMax = -1;
+		this.lstPrc  = new ArrayList<Tache>();
+		this.lstSvt  = new ArrayList<Tache>();
+		this.cordX   = cordX;
+		this.cordY   = cordY;
 	}
 
 	/**
@@ -79,7 +91,6 @@ public class Tache
 		this.dateMax = t.dateMax;
 		this.lstPrc  = new ArrayList<>(t.lstPrc);
 		this.lstSvt  = new ArrayList<>(t.lstSvt);
-		this.niveau  = t.niveau;
 	}
 
 
@@ -91,7 +102,8 @@ public class Tache
 	public String getNom() { return this.nom; }
 
 	/** @return la durée de la tâche en jours */
-	public int getDuree() { return this.duree; }
+
+	public int getDuree()  { return this.duree; }
 
 	/**
 	 * Renvoie une tâche à un indice donné dans une liste.
@@ -102,6 +114,8 @@ public class Tache
 	 */
 	public Tache getTache(int indice, ArrayList<Tache> lst) { return lst.get(indice); }
 
+	public int   getCordX() { return this.cordX; }
+	public int   getCordY() { return this.cordY; }
 
 	/** @return la date au plus tôt pour commencer la tâche */
 	public int getDateMin() { return this.dateMin; }
@@ -120,7 +134,6 @@ public class Tache
 
 
 	/** @return le nombre de tâche précédentes */
-
 	public int getNbPrc()  {return this.lstPrc.size()  ;}
 
 
@@ -137,15 +150,14 @@ public class Tache
 
 	public Tache getPrc(int index){return this.lstPrc.get(index); }
 
-	public int getNiveau() { return this.niveau;}
-
+	public int getNiveau() { return this.niveau;				 }
+	public int getMarge	() { return this.dateMax - this.dateMin; }
 
 	/*-------------------------------------------------*/
 	/*                Modificateurs                    */
 	/*-------------------------------------------------*/
 
 	public void setDuree(int val) { this.duree = val; }
-	
 
 	public void setNiveau(ArrayList<Tache> lstPrc)
 	{
@@ -164,49 +176,86 @@ public class Tache
 
 		int niveauMax = 0;
 		for (Tache t : lstPrc)
+		{
 			if(t.getNiveau() > niveauMax)
+			{
 				niveauMax = t.getNiveau();
-			
+			}
+		}
+
 		this.niveau = niveauMax+1;
 			
 	}
-	//coucou nicolas devine qui cest ?
-	// c'est qui
 
-	public void forceSetDateMin(int val) 
+	public int nivSvtMax()
 	{
-		this.dateMin = val;
+		int nivMax = 0;
+		if (! this.lstPrc.isEmpty())
+		{
+			for (int i =0;i<this.lstSvt.size();i++)
+			{
+				if(nivMax <= this.lstSvt.get(i).getHauteur())
+				{
+					nivMax = this.lstSvt.get(i).getHauteur()+1;
+				}
+			}
+		}
+		return nivMax;
 	}
-	public void forceSetDateMax(int val) 
-	{
-		this.dateMax = val;
-	}
-	public void setNiveau(int val) { this.niveau = val; }
+	public void setCordX(int val) { this.cordX = val; }
+	public void setCordY(int val) { this.cordY = val; }
 
+	public void forceSetDateMin(int val) { this.dateMin = val; }
+	public void forceSetDateMax(int val) { this.dateMax = val; }
+	public void setNiveau	   (int val) { this.niveau 	= val; }
+	public int getHauteur      ()        { return this.hauteur;}
+
+	public int setHauteur(int hauteurMaxNiv)
+	{
+
+
+		//System.out.println(! this.lstPrc.isEmpty() );
+
+		if (! this.lstPrc.isEmpty() && this.hauteur ==0)
+		{
+				Tache tachePrc = this.lstPrc.get((this.lstPrc.size()) -1);
+				int hauteurTacheAuDessus = tachePrc.getLstSvt().get(tachePrc.getLstSvt().size()-1).getHauteur();
+				int hauTemp = tachePrc.getHauteur() ;
+
+				if (hauTemp < hauteurMaxNiv)
+					hauTemp = hauteurMaxNiv;
+
+
+				if(hauteurTacheAuDessus  > hauTemp)
+					hauTemp = hauteurTacheAuDessus +1;
+				
+
+				this.hauteur = hauTemp;
+			//System.out.println("il a un precedent");
+		}
+		else
+		{
+			//System.out.println("il passe par le else");
+			this.hauteur = 0;
+		}
+
+		return this.hauteur;
+
+	}
 	public void setDateMax(int val) 
 	{ 
 		if(this.dateMax == -1 || val < dateMax )
-		{
 			this.dateMax = val;
-		}
 	}
 
 	public void setDateMin(int val)
 	{ 
 		if(this.dateMin == -1 || val > dateMin)
-		{
 			this.dateMin = val;
-		}
+		
 	}
-	public void setNom(String nom)
-	{
-		this.nom = nom;
-	}
+	public void setNom(String nom) { this.nom = nom; }
 
-	public int getMarge()
-	{
-		return this.dateMax-this.dateMin;
-	}
 
 	public void addPrecedent(Tache t)
 	{
@@ -219,42 +268,40 @@ public class Tache
 	{
 		String sRet = "";
 
-		sRet += this.nom + " : ";
-		sRet += this.duree + " jour" + (this.duree > 1 ? "s" : "");
+		sRet += this.nom   + " : "   + 
+				this.duree + " jour" + 
+				(this.duree > 1 ? "s" : "");
 
 		sRet += "\n" + String.format("%20s", "  date au plus tôt  : ") +
 				String.format("%02d", this.dateMin );
 
 		sRet += "\n" + String.format("%20s", "  date au plus tard : ") +
 				String.format("%02d", this.dateMax);
+
 		sRet += "\n  marge" + String.format("%16s", " : " + this.getMarge());
 
 		if (this.lstPrc.isEmpty() || this.lstPrc.get(0).nom.equals("Début") )
-		{
 			sRet += "\n" + String.format("%25s", "pas de tâche précédente");
-		} 
-
+		
 		else
 		{
 			sRet += "\n" + String.format("%34s", "liste des tâches précédentes : \n") + "     ";
-			for (int cpt = 0; cpt < this.lstPrc.size(); cpt++)
 
+			for (int cpt = 0; cpt < this.lstPrc.size(); cpt++)
 				sRet += this.lstPrc.get(cpt).getNom() + (cpt < this.lstPrc.size() - 1 ? ", " : "");
 		}
 			
 		if ( this.lstSvt.isEmpty() || this.lstSvt.get(0).nom.equals("Fin") ) 
-		{
 			sRet += "\n" + String.format("%23s", "pas de tâche suivante");	
-		}
+		
 
 		else
 		{
 			sRet += "\n" + String.format("%32s", "liste des tâches suivantes : \n") + "     ";
-			for (int cpt = 0; cpt < this.lstSvt.size(); cpt++)
 
+			for (int cpt = 0; cpt < this.lstSvt.size(); cpt++)
 				sRet += this.lstSvt.get(cpt).getNom() + (cpt < this.lstSvt.size() - 1 ? ", " : "");
 		}
-		
 			
 		sRet += "\nNiveau : " + niveau + "\n\n";
 

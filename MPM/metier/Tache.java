@@ -97,6 +97,9 @@ public class Tache
 	/*-------------------------------------------------*/
 	/*                Accesseurs                       */
 	/*-------------------------------------------------*/
+
+	public int getPosX() { return this.cordX; }
+	public int getPosY() { return this.cordY; }
 	
 	/** @return le nom de la tâche */
 	public String getNom() { return this.nom; }

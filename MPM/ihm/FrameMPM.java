@@ -14,6 +14,7 @@ public class FrameMPM extends JFrame
     private FrameNouveau  frameNouveau;
     private FrameOption   frameOption;
     private FrameModifier frameModifier;
+    private FrameDate     frameDate;
 
     private PanelInformation panelInfo;
 
@@ -44,9 +45,9 @@ public class FrameMPM extends JFrame
         this.frameOption   = new FrameOption  (this, this.ctrl);
         this.frameModifier = new FrameModifier(this, this.ctrl);
 
-        this.panelMPM      = new PanelMPM     (this, this.ctrl);
-        this.panelBouton   = new PanelBouton  (this, this.ctrl);
-        this.panelInfo     = new PanelInformation(this.ctrl);
+        this.panelMPM      = new PanelMPM        (this, this.ctrl);
+        this.panelBouton   = new PanelBouton     (this, this.ctrl);
+        this.panelInfo     = new PanelInformation(this, this.ctrl);
 
         this.menu          = new MaBarre      (this, this.ctrl);
         this.scrollPane    = new JScrollPane  (this.panelMPM  );
@@ -64,10 +65,10 @@ public class FrameMPM extends JFrame
         /*     Positionnement des composants    */
         /*--------------------------------------*/
 
-        this.add(this.menu       , BorderLayout.NORTH);
-        this.add(this.scrollPane ,BorderLayout.CENTER);
-        this.add(this.panelBouton, BorderLayout.SOUTH);
-        this.add(this.panelInfo, BorderLayout.EAST);
+        this.add(this.menu       , BorderLayout.NORTH );
+        this.add(this.scrollPane , BorderLayout.CENTER);
+        this.add(this.panelBouton, BorderLayout.SOUTH );
+
 
         /*--------------------------------------*/
         /*     Activation des composants        */
@@ -75,6 +76,45 @@ public class FrameMPM extends JFrame
 
         this.setVisible(true);
     }
+
+    public void changerFondEcran(Color color) { this.panelMPM.changerFondEcran(color); }
+
+    public void creerFrameDate() { this.frameDate = new FrameDate(this.panelBouton, this.panelMPM, this);}
+
+    public void afficherDate()
+    {   
+        System.out.println(this.frameDate.getTexteDebut() );
+        
+        for (BoxShape box : this.ctrl.getLstBoxShapes() ) 
+        {
+            //DateFr dateMin
+            DateFr dateMax = this.ctrl.setDate(this.frameDate.getTexteDebut() );
+
+            dateMax.add(dateMax.DAY_OF_YEAR, box.getTache().getDateMax() );
+            box.setDateMax(dateMax );
+            
+        }
+        this.majDessin();
+    }
+
+
+    public void miseEnFormePanelInfo()
+    {
+        this.add(this.panelInfo, BorderLayout.EAST);
+        this.revalidate();
+        this.repaint();
+    }
+
+    public void effacerPanelInfo()
+    {
+        this.remove(this.panelInfo);
+
+        this.revalidate();
+        this.repaint   ();
+    }
+
+
+    public void setDonneeInfoTache(BoxShape box) { this.panelInfo.setDonneeInfoTache(box); }
 
     //public void refresh(String lien) {this.menu.refresh(lien);}
     public String getLien(){ return this.lien;}

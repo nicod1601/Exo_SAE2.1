@@ -9,15 +9,18 @@ import javax.swing.*;
  */
 public class BoxShape
 {
-    private int largeur;
-    private int hauteur;
-    private int hauteurCaseSuperieure;
+    private int    largeur;
+    private int    hauteur;
+    private int    hauteurCaseSuperieure;
     private String dateMax;
     private String dateMin;
-    private Color couleur;
+    private Color  couleur;
 
 
     private Tache  tache;
+
+    private int posX;
+    private int posY;
 
     private int x;
     private int y;
@@ -38,14 +41,16 @@ public class BoxShape
      */
     public BoxShape(Controleur ctrl)
     {
-        this.ctrl  = ctrl;
+        this.ctrl    = ctrl;
         this.largeur = 60;
         this.hauteur = 60;
-        this.hauteurCaseSuperieure = 30;
-        this.tache = new Tache();
+        this.tache   = new Tache();
         this.dateMax = " ";
         this.dateMin = " ";
         this.couleur = Color.BLACK;
+        this.hauteurCaseSuperieure = 30;
+
+
     }
 
     public BoxShape(Tache t, Controleur ctrl)
@@ -55,43 +60,61 @@ public class BoxShape
         this.largeur               = 60+ (int)((20*this.tache.getNom().length())*0.8);
         this.hauteur               = 60;
         this.hauteurCaseSuperieure = 30;
-        this.dateMax = " " + t.getDateMax();
-        this.dateMin = " " + t.getDateMin();
-        this.couleur = Color.BLACK;
+        this.dateMax               = " " + t.getDateMax();
+        this.dateMin               = " " + t.getDateMin();
+        this.couleur               = Color.BLACK;
     }
 
     public Tache getTache() { return this.tache; }
     
     // Getters
-    public int getLargeur()                 { return largeur;                         }
-    public int getHauteur()                 { return hauteur;                         }
-    public int getHauteurCaseSuperieure()   { return hauteurCaseSuperieure;           }
-    public int getHauteurCasesInferieures() { return hauteur - hauteurCaseSuperieure; }
-    public int getLargeurCaseInferieure()   { return largeur / 2;                     }
+    public int       getLargeur()                 { return this.largeur;                         }
+    public int       getHauteur()                 { return this.hauteur;                         }
+    public int       getHauteurCaseSuperieure()   { return this.hauteurCaseSuperieure;           }
+    public int       getHauteurCasesInferieures() { return this.hauteur - hauteurCaseSuperieure; }
+    public int       getLargeurCaseInferieure()   { return this.largeur / 2;                     }
+
     public Rectangle getBounds() { return new Rectangle(this.x, this.y, this.largeur, this.hauteur);}
 
-    public String getNom()    { return tache.getNom();           }
-    public String getDateMin(){ return this.dateMin;  }
-    public String getDateMax(){ return this.dateMax;  }
-    public int getNiveau()    { return tache.getNiveau();        }
-    public void setTaille(int taille) { this.largeur = taille; this.hauteur = taille; }
-    public Color getCouleur() { return this.couleur; }
-    public void setCouleur(Color couleur) { this.couleur = couleur; }
+    public String    getNom    ()              { return tache.getNom();           }
+    public String    getDateMin()              { return this.dateMin;  }
+    public String    getDateMax()              { return this.dateMax;  }
+    public int       getNiveau ()              { return tache.getNiveau();        }
+    public Color     getCouleur()              { return this.couleur; }
+    public void      setTaille (int taille)    { this.largeur = taille; this.hauteur = taille; }
+    public void      setCouleur(Color couleur) { this.couleur = couleur; }
 
     
-    
     // Setters avec validation
-    public void setLargeur(int largeur) { this.largeur = largeur;}
-    public void setHauteur(int hauteur) {this.hauteur = hauteur;}
+    public void setLargeur(int largeur)
+    { 
+        if(largeur > 60)
+            this.largeur = largeur;
+        else
+            this.largeur = 60;
+    }
+    public void setHauteur(int hauteur)
+    { 
+        if(hauteur > 60)
+            this.hauteur = hauteur;
+        else
+            this.hauteur = 60;
+    }
     
     public void setHauteurCaseSuperieure(int hauteurCaseSuperieure) {this.hauteurCaseSuperieure = hauteurCaseSuperieure;}
 
-    public void setNom    (String nom       ) { this.tache.setNom(nom) ;}
-    public void setDateMin(String txtDateMin) { this.dateMin = txtDateMin;}
+    public void setNom    (String nom       ) { this.tache.setNom(nom) ;   }
+    public void setDateMin(String txtDateMin) { this.dateMin = txtDateMin; }
     public void setDateMax(String txtDateMax) { this.dateMax = txtDateMax; }
 
     public int getX() { return x; }
     public int getY() { return y; }
+
+    public void setPos()
+    {
+        this.posX = this.getX();
+        this.posY = this.getY();
+    }
     
     /**
      * Méthode pour dessiner la forme sur un Graphics2D
@@ -103,7 +126,8 @@ public class BoxShape
     {
         g2d.setColor(this.couleur);
         int xb;
-        int yb;
+        int yb; 
+        
 
         // Si la position n'est pas définie manuellement, calculer automatiquement
         if (!this.positionManuelle) 
@@ -115,7 +139,8 @@ public class BoxShape
             yb = ((int) (1.5 * this.hauteur) * nbParNiveau[1]);
 
             // Ajustement de la position en fonction du nom
-            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) {
+            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) 
+            {
                 yb = (((int) (1.5 * this.hauteur) * this.ctrl.getTailleNivMax()) + ((int) (1.5 * this.hauteur))) / 2;
             }
 
@@ -131,7 +156,7 @@ public class BoxShape
         }
 
         // Configuration du style pour les bordures
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING     , RenderingHints.VALUE_ANTIALIAS_ON     );
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         
         // Case supérieure
@@ -162,20 +187,21 @@ public class BoxShape
         {
             g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(Color.BLACK);
-            int textWidth = fm.stringWidth(this.tache.getNom());
+            int textWidth  = fm.stringWidth(this.tache.getNom());
             int textHeight = fm.getAscent();
             int textX = x + (largeur - textWidth) / 2;
             int textY = y + (hauteurCaseSuperieure + textHeight) / 2;
-            g2d.drawString(this.tache.getNom(), textX, textY);
+            g2d.drawString(this.tache.getNom() , textX, textY);
         }
         
         // Texte case inférieure gauche
-        if (!this.dateMin.isEmpty())
+        if (!this.dateMin.isEmpty() )
         {
             g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(new Color(59, 185, 28 ));
-            int textWidth = fm.stringWidth(this.dateMin);
+            int textWidth  = fm.stringWidth(this.dateMin);
             int textHeight = fm.getAscent();
+
             int textX = x + (largeurCase - textWidth) / 2;
             int textY = y + hauteurCaseSuperieure + (hauteurInferieure + textHeight) / 2;
             g2d.drawString(this.dateMin, textX, textY);
@@ -187,8 +213,9 @@ public class BoxShape
         {
             g2d.setFont(new Font("Arial", Font.BOLD, 15));
             g2d.setColor(Color.RED);
-            int textWidth = fm.stringWidth(this.dateMax);
+            int textWidth  = fm.stringWidth(this.dateMax);
             int textHeight = fm.getAscent();
+            
             int textX = x + largeurCase + (largeurCase - textWidth) / 2;
             int textY = y + hauteurCaseSuperieure + (hauteurInferieure + textHeight) / 2;
             g2d.drawString(this.dateMax, textX, textY);
@@ -237,9 +264,9 @@ public class BoxShape
             yb = 20;
 
             // Ajustement de la position en fonction du nom
-            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) {
+            if (this.tache.getNom().equals("Début") || this.tache.getNom().equals("Fin")) 
                 yb = (((int) (1.5 * this.hauteur) * this.ctrl.getTailleNivMax()) + ((int) (1.5 * this.hauteur))) / 2;
-            }
+            
         } 
         else 
         {
@@ -297,6 +324,7 @@ public class BoxShape
      * @param x nouvelle coordonnée X
      * @param y nouvelle coordonnée Y
      */
+
     public void setPosition(int x, int y) 
     {
         this.x = x;
@@ -307,32 +335,21 @@ public class BoxShape
      * Définit la coordonnée X de la BoxShape
      * @param x nouvelle coordonnée X
      */
-    public void setX(int x) 
-    {
-        this.x = x;
-    }
+    public void setX(int x) { this.x = x; }
 
     /**
      * Définit la coordonnée Y de la BoxShape
      * @param y nouvelle coordonnée Y
      */
-    public void setY(int y) 
-    {
-        this.y = y;
-    }
-    
 
+    public void setY(int y) { this.y = y; }
+    
     /**
      * Active/désactive le positionnement manuel
      * @param manuel true pour utiliser les coordonnées définies manuellement
      */
-    public void setPositionManuelle(boolean manuel) 
-    {
-        this.positionManuelle = manuel;
-    }
+    public void setPositionManuelle(boolean manuel) { this.positionManuelle = manuel; }
 
-
-    
     public String toString() 
     {
         return "Largeur: "                    + this.largeur               + "\n"  + 
@@ -340,9 +357,8 @@ public class BoxShape
                "HauteurCaseSuperieure : "     + this.hauteurCaseSuperieure + "\n"  +
                "Nom : "                       + this.tache.getNom()        + "\n"  + 
                "DateMin : "                   + this.tache.getDateMin()    + "\n"  + 
-               "DateMax : "                   + this.tache.getDateMax()    + "\n" +
-               "Niveau : "                    + this.tache.getNiveau()     + "\n\n";
+               "DateMax : "                   + this.tache.getDateMax()    + "\n"  +
+               "Pos X : "                     + this.getX()                + "\n"  + 
+               "Pos Y : "                     + this.getY()                + "\n\n";    
     }
-
-
 }

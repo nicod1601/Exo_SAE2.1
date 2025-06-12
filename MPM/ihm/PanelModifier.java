@@ -76,8 +76,8 @@ public class PanelModifier extends JPanel implements ActionListener
     public void setModifTache(Tache tache)
     {
         this.tache = tache;
-        this.txtNomTache  .setText(tache.getNom());
-        this.txtDureeTache.setText(String.valueOf(tache.getDuree()));
+        //this.txtNomTache  .setText(tache.getNom());
+        //this.txtDureeTache.setText(String.valueOf(tache.getDuree()));
     }
 
     public void actionPerformed (ActionEvent e)
@@ -101,7 +101,14 @@ public class PanelModifier extends JPanel implements ActionListener
 
            if(tmp == null)
            {
-                this.ctrl    .modifierTache(this.txtNomTache.getText(), Integer.parseInt(this.txtDureeTache.getText()), this.tache);
+                try 
+                { 
+                    this.ctrl    .modifierTache(this.txtNomTache.getText(), Integer.parseInt(this.txtDureeTache.getText()), this.tache);
+                }
+                catch (Exception ex) 
+                {
+                    this.ctrl    .modifierTache(this.txtNomTache.getText(), 0, this.tache);
+                }
                 this.frameMPM.majList();
                 this.frame   .dispose();
            }

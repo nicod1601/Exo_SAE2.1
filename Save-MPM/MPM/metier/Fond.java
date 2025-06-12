@@ -2,89 +2,69 @@ package MPM.metier;
 
 import java.awt.Color;
 
+
 public class Fond 
 {
-    private Color[][] tabCouleur;
-    private Color[]   tabColorSimple;
+	private Couleur[][] tabCouleur;
+	private Couleur[]   tabColorSimple;
 
-    public Fond()
-    {
-        this.tabCouleur = new Color[][] {
-            { new Color(255, 0, 0, 255)    , new Color(0, 255, 0, 255)  , new Color(0, 0, 255, 255)    , new Color(255, 255, 0, 255)  }, 
-            { new Color(255, 0, 255, 255)  , new Color(0, 255, 255, 255), new Color(128, 0, 0, 255)    , new Color(0, 128, 0, 255)    },
-            { new Color(0, 0, 128, 255)    , new Color(128, 128, 0, 255), new Color(128, 0, 128, 255)  , new Color(0, 128, 128, 255)  }, 
-            { new Color(192, 0, 0, 255)    , new Color(0, 192, 0, 255)  , new Color(0, 0, 192, 255)    , new Color(255, 128, 0, 255)  },
-            { new Color(255, 0, 128, 255)  , new Color(128, 255, 0, 255), new Color(0, 255, 128, 255)  , new Color(128, 128, 128, 255)},
-            { new Color(192, 192, 192, 255), new Color(0, 128, 192, 255), new Color(128, 0, 192, 255)  , new Color(192, 128, 0, 255)  },
-            { new Color(255, 255, 128, 255), new Color(0, 192, 128, 255), new Color(128, 192, 128, 255), new Color(255, 128, 255, 255)}, 
-            {new Color(128, 255, 255, 255) , new Color(192, 192, 128, 255), new Color(192, 128, 192, 255), new Color(255, 128, 128, 255)} 
-        };
+	public Fond()
+	{
+		this.tabCouleur = new Couleur[][] 
+		{
+			{ Couleur.ROUGE          , Couleur.VERT           , Couleur.BLEU         , Couleur.JAUNE         },
+			{ Couleur.MANGENTA       , Couleur.BLEU_CLAIR     , Couleur.BORDEAUX     , Couleur.VERT_FONCE    },
+			{ Couleur.BLEU_MARINE    , Couleur.CORAIL_CLAIR   , Couleur.VIOLET       , Couleur.BLEU_SARCELLE },
+			{ Couleur.ROUGE_FONCE    , Couleur.VERT_FEUILLE   , Couleur.CYAN         , Couleur.ORANGE        },
+			{ Couleur.ROSE_FONCE     , Couleur.VERT_CITRON    , Couleur.VERT_SARCELLE, Couleur.GRIS          },
+			{ Couleur.GRIS_CLAIR     , Couleur.BLEU_OCEAN     , Couleur.VIOLET_ROYAL , Couleur.OCRE          },
+			{ Couleur.JAUNE_PALE     , Couleur.JAUNE_OLIVE    , Couleur.VERT_MENTHE  , Couleur.MAGENTA_CLAIR },
+			{ Couleur.TURQUOISE_CLAIR, Couleur.TURQUOISE_FONCE, Couleur.MAUVE        , Couleur.ROSE_SAUMON   }
 
-        this.tabColorSimple = new Color[] {
-             new Color(255, 0, 0, 255)    , new Color(0, 255, 0, 255)  , new Color(0, 0, 255, 255)    , new Color(255, 255, 0, 255),
-             new Color(255, 0, 255, 255)  , new Color(0, 255, 255, 255), new Color(128, 0, 0, 255)    , new Color(0, 128, 0, 255)    ,
-             new Color(0, 0, 128, 255)    , new Color(128, 128, 0, 255), new Color(128, 0, 128, 255)  , new Color(0, 128, 128, 255)  ,
-             new Color(192, 0, 0, 255)    , new Color(0, 192, 0, 255)  , new Color(0, 0, 192, 255)    , new Color(255, 128, 0, 255)  ,
-             new Color(255, 0, 128, 255)  , new Color(128, 255, 0, 255), new Color(0, 255, 128, 255)  , new Color(128, 128, 128, 255),
-             new Color(192, 192, 192, 255), new Color(0, 128, 192, 255), new Color(128, 0, 192, 255)  , new Color(192, 128, 0, 255)  ,
-             new Color(255, 255, 128, 255), new Color(0, 192, 128, 255), new Color(128, 192, 128, 255), new Color(255, 128, 255, 255),
-             new Color(128, 255, 255, 255) , new Color(192, 192, 128, 255), new Color(192, 128, 192, 255), new Color(255, 128, 128, 255)
-            };
-    }
+		};
 
-    public int getTailleSimple()
-    {
-        return this.tabColorSimple.length;
-    }
+		this.tabColorSimple = new Couleur[] 
+		{
+			Couleur.ROUGE          , Couleur.VERT           , Couleur.BLEU         , Couleur.JAUNE         ,
+			Couleur.MANGENTA       , Couleur.BLEU_CLAIR     , Couleur.BORDEAUX     , Couleur.VERT_FONCE    ,
+			Couleur.BLEU_MARINE    , Couleur.CORAIL_CLAIR   , Couleur.VIOLET       , Couleur.BLEU_SARCELLE ,
+			Couleur.ROUGE_FONCE    , Couleur.VERT_FEUILLE   , Couleur.CYAN         , Couleur.ORANGE        ,
+			Couleur.ROSE_FONCE     , Couleur.VERT_CITRON    , Couleur.VERT_SARCELLE, Couleur.GRIS          ,
+			Couleur.GRIS_CLAIR     , Couleur.BLEU_OCEAN     , Couleur.VIOLET_ROYAL , Couleur.OCRE          ,
+			Couleur.JAUNE_PALE     , Couleur.JAUNE_OLIVE    , Couleur.VERT_MENTHE  , Couleur.MAGENTA_CLAIR ,
+			Couleur.TURQUOISE_CLAIR, Couleur.TURQUOISE_FONCE, Couleur.MAUVE        , Couleur.ROSE_SAUMON   
 
-    public int getLigne()
-    {
-        return this.tabCouleur.length;
-    }
+		};
+	}
 
-    public int getColonne()
-    {
-        return this.tabCouleur[0].length;
-    }
+	public int     getTailleSimple()                       { return this.tabColorSimple.length;     }
+	public int     getLigne       ()                       { return this.tabCouleur.length;         }
+	public int     getColonne     ()                       { return this.tabCouleur[0].length;      }
+	public Couleur getCouleur     (int ligne, int colonne) { return this.tabCouleur[ligne][colonne];}
 
-    public Color getCouleur(int ligne, int colonne)
-    {
-        return this.tabCouleur[ligne][colonne];
-    }
+	public Couleur getCouleur(int indice)
+	{
+		for(int cpt=0; cpt<this.tabCouleur.length; cpt++)
+			for(int cpt2=0; cpt2<this.tabCouleur[cpt].length; cpt2++)
 
-    public Color getCouleur(int indice)
-    {
-        for(int cpt=0; cpt<this.tabCouleur.length; cpt++)
-        {
-            for(int cpt2=0; cpt2<this.tabCouleur[cpt].length; cpt2++)
-            {
-                if(this.tabCouleur[cpt][cpt2].equals(indice))
-                    return this.tabCouleur[cpt][cpt2];
-            }
-        }
-        return null;
-    }
+				if(this.tabCouleur[cpt][cpt2].equals(indice))
+					return this.tabCouleur[cpt][cpt2];
+			
+		return null;
+	}
 
-    public Color getTabCouleur(int ligne, int colonne)
-    {
-        return this.tabCouleur[ligne][colonne];
-    }
+	public Couleur getTabCouleur(int ligne, int colonne) { return this.tabCouleur[ligne][colonne]; }
 
-    public Color getTabCouleur(Color couleur) 
-    {
-        for(int cpt=0; cpt<this.tabCouleur.length; cpt++)
-        {
-            for(int cpt2=0; cpt2<this.tabCouleur[cpt].length; cpt2++)
-            {
-                if(this.tabCouleur[cpt][cpt2].equals(couleur))
-                    return this.tabCouleur[cpt][cpt2];
-            }
-        }
-        return null;
-    }
+	public Couleur getTabCouleur(Color couleur) 
+	{
+		for(int cpt=0; cpt<this.tabCouleur.length; cpt++)
+			for(int cpt2=0; cpt2<this.tabCouleur[cpt].length; cpt2++)
+			
+				if(this.tabCouleur[cpt][cpt2].equals(couleur))
+					return this.tabCouleur[cpt][cpt2];
+		
+		return null;
+	}
 
-    public Color getCouleurSimple(int indice)
-    {
-        return this.tabColorSimple[indice];
-    }
+	public Couleur getCouleurSimple(int indice) { return this.tabColorSimple[indice]; }
 }

@@ -7,12 +7,13 @@ import java.util.ArrayList;
 public class Controleur
 {
     private FrameMPM frame;
-    private Projet projet;
+    private Projet  projet;
 
     public Controleur()
     {
         this.frame  = new FrameMPM(this);
         this.projet = new Projet();
+
     }
 
 
@@ -33,12 +34,17 @@ public class Controleur
     /*         Autre méthodes        */
     /*-------------------------------*/
 
+    public DateFr setDate(String date) { return new DateFr(date); }
+
     /*public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
     {
         this.projet.sauvegarderTaches(lstTaches, lien);
     }*/
 
+    // FIXED: Changed from this.getLstBoxShapes() to this.projet.getLstBoxShapes()
+    public ArrayList<BoxShape> getLstBoxShapes(){return this.projet.getLstBoxShapes();}
 
+    public Projet getProjet() {return this.projet;}
 
 
     public void addPrecedent(Tache tache, Tache precedent)
@@ -56,9 +62,9 @@ public class Controleur
         this.frame.majTxt();
     }
 
-    public void ajouterTache(Tache tache)
+    public void ajouterTache(Tache tache, boolean inserer)
     {
-        this.projet.ajouterTache(tache);
+        this.projet.ajouterTache(tache, inserer);
         this.frame.majList();
     }
 
@@ -74,15 +80,17 @@ public class Controleur
         return this.projet.getFichier(chemin);
     }
 
-    public void enregistrer(String lien, ArrayList<Tache> lstTaches)
+    public void enregistrer(String lien, ArrayList<BoxShape> lstBox)
     {
-        this.projet.enregistrer(lien, lstTaches);
+        this.projet.enregistrer(lien, lstBox);
         this.frame.majTxt();
     }
 
-    public void enregistrerSous(String lien, ArrayList<Tache> lstTaches)
+    public void majBox() { this.projet.majBox(); }
+
+    public void enregistrerSous(String lien, ArrayList<BoxShape> lstBox)
     {
-        this.projet.enregistrerSous(lien, lstTaches);
+        this.projet.enregistrerSous(lien, lstBox);
         this.frame.majTxt();
     }
 

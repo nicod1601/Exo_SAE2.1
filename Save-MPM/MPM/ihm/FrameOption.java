@@ -16,19 +16,26 @@ public class FrameOption extends JFrame
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        /*--------------------------------------*/
+        /*        Création des composants       */
+        /*--------------------------------------*/
+
         this.frame = frame;
         this.ctrl  = ctrl;
         this.panel = new PanelOptionParametre(this.frame,this.ctrl);
 
+        /*--------------------------------------*/
+        /*          Ajout des composants        */
+        /*--------------------------------------*/
 
         this.add(this.panel);
 
+        /*--------------------------------------*/
+        /*     Activation des composants        */
+        /*--------------------------------------*/
 
         this.setVisible(false);
     }
 
-    public void majTxt()
-    {
-        this.panel.majTxt();
-    }
+    public void majTxt(){ this.panel.majTxt(); }
 }

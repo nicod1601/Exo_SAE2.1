@@ -9,17 +9,24 @@ import javax.swing.*;
 public class PanelOptionParametre extends JPanel implements ActionListener
 {
 	private JTabbedPane tabbedPane;
+
 	private JPanel      panelMPM;
-	private JPanel      panelFondComposants;
+	private JPanel      panelFondEcran;
 	private JPanel      panelFondBox;
+
 	private JButton     btnQuitter;
+
 	private JTextPane   txtFichier;
 	private JTextField  txtLargeur;
 	private JTextField  txtHauteur;
+
 	private JButton[]   btnCouleur;
+	private JButton[][] btnCouleurFond;
+	
 	private Color       sauvColor;
 	private BoxShape    box;
 	private JButton     btnValider;
+	
 	private JLabel      lblMsgLargeur;
 	private JLabel      lblMsgHauteur;
 
@@ -41,17 +48,17 @@ public class PanelOptionParametre extends JPanel implements ActionListener
 
 		this.tabbedPane          = new JTabbedPane();
 		this.panelMPM            = new JPanel();
-		this.panelFondComposants = new JPanel();
+		this.panelFondEcran      = new JPanel();
 		this.panelFondBox        = new JPanel();
 
 		/* Ajout des onglets */
 		this.tabbedPane.addTab("Informations MPM"              , this.panelMPM           );
-		this.tabbedPane.addTab("Changer le fond des composants", this.panelFondComposants);
+		this.tabbedPane.addTab("Changer le fond d'écran"       , this.panelFondEcran     );
 		this.tabbedPane.addTab("Changer les boxes"             , this.panelFondBox       );
 
 		this.panelMPM           .setLayout(new GridLayout  (1,2) );
 		this.panelFondBox       .setLayout(new GridLayout  (1,2) );
-		this.panelFondComposants.setLayout(new BorderLayout()    );
+		this.panelFondEcran.setLayout(new BorderLayout()    );
 
 		// PanelMPM
 		JPanel panelFichier = new JPanel(new BorderLayout());
@@ -67,8 +74,22 @@ public class PanelOptionParametre extends JPanel implements ActionListener
 		this.panelMPM.add(scrollPane);
 
 
-		//PanelFondComposants
-		this.panelFondComposants.add(new JLabel("Changer le fond des composants", JLabel.CENTER));
+		//PanelFondEcrant
+
+		Fond fondCouleur = new Fond();
+		this.btnCouleurFond = new JButton[fondCouleur.getLigne()][fondCouleur.getColonne()];
+
+		this.panelFondEcran.setLayout(new GridLayout(this.btnCouleurFond.length, this.btnCouleurFond[0].length));
+
+		for(int cpt = 0; cpt < this.btnCouleurFond.length; cpt ++)
+		{
+			for(int cpt2 = 0; cpt2 < this.btnCouleurFond[cpt].length; cpt2 ++)
+			{
+				this.btnCouleurFond[cpt][cpt2] = new JButton();
+				this.btnCouleurFond[cpt][cpt2].setBackground(fondCouleur.getCouleur(cpt, cpt2).getCouleur());
+				this.panelFondEcran.add(this.btnCouleurFond[cpt][cpt2]);
+			}
+		}
 
 		//PanelFondBox
 		JPanel panelLargeur = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -111,7 +132,7 @@ public class PanelOptionParametre extends JPanel implements ActionListener
 
 		JScrollPane scrollPaneCouleur = new JScrollPane(panelCouleur);
 
-		box = new BoxShape(this.ctrl);
+		box = new BoxShape(this.ctrl.getProjet());
 
 		for(int cpt = 0; cpt < this.btnCouleur.length; cpt++)
 		{
@@ -151,6 +172,14 @@ public class PanelOptionParametre extends JPanel implements ActionListener
 
 		for(int cpt = 0; cpt < this.btnCouleur.length; cpt++)
 			this.btnCouleur[cpt].addActionListener(this);
+
+		for(int lig = 0; lig < this.btnCouleurFond.length; lig++)
+		{
+			for(int col = 0; col < this.btnCouleurFond[lig].length; col++)
+			{
+				this.btnCouleurFond[lig][col].addActionListener(this);
+			}
+		}
 
 	}
 
@@ -223,6 +252,17 @@ public class PanelOptionParametre extends JPanel implements ActionListener
 			else
 				JOptionPane.showMessageDialog(null, "La Taille doit etre un entier", "Erreur", JOptionPane.ERROR_MESSAGE);
 			
+		}
+
+		for(int lig = 0; lig < this.btnCouleurFond.length; lig++)
+		{
+			for(int col = 0; col < this.btnCouleurFond[lig].length; col++)
+			{
+				if(e.getSource() == this.btnCouleurFond[lig][col])
+				{
+					this.frame.changerFondEcran(this.btnCouleurFond[lig][col].getBackground());
+				}
+			}
 		}
 
 		for(JButton btn : this.btnCouleur)

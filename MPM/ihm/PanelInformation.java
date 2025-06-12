@@ -1,31 +1,44 @@
 package MPM.ihm;
 import MPM.Controleur;
+import MPM.metier.BoxShape;
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class PanelInformation extends JPanel
+public class PanelInformation extends JPanel implements ActionListener
 {
-    private JPanel panelInfoTache;
+    
+
+    private JButton btnQuitter;
+    
 
     private JLabel lblNomTache;
     private JLabel lblDureeTache;
     private JLabel lblMargeTache;
     private JLabel lblDateTot;
     private JLabel lblDateTard;
-    private JLabel lblPrc;
-    private JLabel lblSvt;
 
     private Controleur ctrl;
+    private FrameMPM frame;
 
-    public PanelInformation(Controleur ctrl)
+    public PanelInformation(FrameMPM frame, Controleur ctrl)
     {
         /*----------------------------------------*/
         /* Création des composants PanelInfoTache */
         /*----------------------------------------*/
-        this.ctrl = ctrl;
 
-        this.panelInfoTache = new JPanel(new GridLayout(4, 1, 5, 10));
-        this.panelInfoTache.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel panelInfoTache;
+    
+        this.ctrl = ctrl;
+        this.frame = frame;
+
+        panelInfoTache = new JPanel(new GridLayout(5, 1, 5, 10));
+        panelInfoTache.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel panelQuitter = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        this.btnQuitter = new JButton("X");
+
+        panelQuitter.add(this.btnQuitter);
         
         // Panel du haut - Informations de base
         JPanel panelHaut = new JPanel(new GridLayout(3, 2, 5, 8));
@@ -36,19 +49,19 @@ public class PanelInformation extends JPanel
         this.lblMargeTache = new JLabel("", JLabel.LEFT);
 
         // Style des labels d'étiquettes
-        JLabel lblNomEtiquette = new JLabel("Nom Tache :", JLabel.RIGHT);
-        JLabel lblDureeEtiquette = new JLabel("Duree :", JLabel.RIGHT);
-        JLabel lblMargeEtiquette = new JLabel("Marge :", JLabel.RIGHT);
+        JLabel lblNomEtiquette   = new JLabel("Nom Tache :", JLabel.RIGHT);
+        JLabel lblDureeEtiquette = new JLabel("Duree :"    , JLabel.RIGHT);
+        JLabel lblMargeEtiquette = new JLabel("Marge :"    , JLabel.RIGHT);
         
-        lblNomEtiquette.setFont(new Font("Arial", Font.BOLD, 12));
-        lblDureeEtiquette.setFont(new Font("Arial", Font.BOLD, 12));
-        lblMargeEtiquette.setFont(new Font("Arial", Font.BOLD, 12));
+        lblNomEtiquette  .setFont(new Font("Arial", Font.BOLD, 12) );
+        lblDureeEtiquette.setFont(new Font("Arial", Font.BOLD, 12) );
+        lblMargeEtiquette.setFont(new Font("Arial", Font.BOLD, 12) );
 
-        panelHaut.add(lblNomEtiquette);
-        panelHaut.add(this.lblNomTache);
-        panelHaut.add(lblDureeEtiquette);
+        panelHaut.add(lblNomEtiquette   );
+        panelHaut.add(this.lblNomTache  );
+        panelHaut.add(lblDureeEtiquette );
         panelHaut.add(this.lblDureeTache);
-        panelHaut.add(lblMargeEtiquette);
+        panelHaut.add(lblMargeEtiquette );
         panelHaut.add(this.lblMargeTache);
 
         // Panel du centre - Dates
@@ -59,7 +72,7 @@ public class PanelInformation extends JPanel
         this.lblDateTard = new JLabel("", JLabel.CENTER);
 
         // Style des en-têtes de dates
-        JLabel lblDateTotEtiquette = new JLabel("Date au Plus Tot", JLabel.CENTER);
+        JLabel lblDateTotEtiquette  = new JLabel("Date au Plus Tot" , JLabel.CENTER);
         JLabel lblDateTardEtiquette = new JLabel("Date au Plus Tard", JLabel.CENTER);
         
         lblDateTotEtiquette.setFont(new Font("Arial", Font.BOLD, 11));
@@ -73,23 +86,15 @@ public class PanelInformation extends JPanel
         panelCentre.add(this.lblDateTard);
 
         // Panel du bas - Listes
-        JPanel panelBas = new JPanel(new GridLayout(2, 2, 5, 8));
-        panelBas.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        this.lblPrc = new JLabel("", JLabel.LEFT);
-        this.lblSvt = new JLabel("", JLabel.LEFT);
+        JPanel panelBas = new JPanel(new GridLayout(6, 1, 5, 5) );
 
-        JLabel lblPrcEtiquette = new JLabel("Liste PRC :", JLabel.RIGHT);
-        JLabel lblSvtEtiquette = new JLabel("Liste SVT :", JLabel.RIGHT);
-        
-        lblPrcEtiquette.setFont(new Font("Arial", Font.BOLD, 12));
-        lblSvtEtiquette.setFont(new Font("Arial", Font.BOLD, 12));
-
-        panelBas.add(lblPrcEtiquette);
-        panelBas.add(this.lblPrc);
-        panelBas.add(lblSvtEtiquette);
-        panelBas.add(this.lblSvt);
-
+        panelBas.add(new JLabel("Nom tâche         : Le nom de la tâche ") );
+        panelBas.add(new JLabel("Durée             : Combien de temps il faut pour finaliser la tâche ") );
+        panelBas.add(new JLabel("Marge             : La différence de jour qu'il y a entre la date au plus tard et la date au plus tôt de la tâche ") );
+        panelBas.add(new JLabel("Date au plus tôt  : La date à laquelle peut être commencé la tâche ") );
+        panelBas.add(new JLabel("Date au plus tard : La date maximale à laquelle il faut finir la tâche  ") );
+        panelBas.add(new JLabel("Chemin Critique   : Indique les tâches qui ne possèdent aucune marge  "  ) );
         /*----------------------------------------*/
         /* Ajout des composants PanelInfoTache    */
         /*----------------------------------------*/
@@ -100,30 +105,56 @@ public class PanelInformation extends JPanel
         titreLabel.setForeground(new Color(0, 51, 102));
         titreLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        this.panelInfoTache.add(titreLabel);
-        this.panelInfoTache.add(panelHaut);
-        this.panelInfoTache.add(panelCentre);
-        this.panelInfoTache.add(panelBas);
+        panelInfoTache.add(panelQuitter);
+        panelInfoTache.add(titreLabel);
+        panelInfoTache.add(panelHaut);
+        panelInfoTache.add(panelCentre);
+        panelInfoTache.add(panelBas);
 
         // Style des labels de données
         styleDataLabels();
 
         // Ajout du panel principal
-        this.add(this.panelInfoTache);
+        this.add(panelInfoTache);
         
         // Style du panel principal
         this.setBackground(new Color(245, 245, 245));
-        this.panelInfoTache.setBackground(Color.WHITE);
+        panelInfoTache.setBackground(Color.WHITE);
         this.setBorder(BorderFactory.createRaisedBevelBorder());
+
+
+        /*---------------------------------------------*/
+        /* Activation des composants PanelInfoTache    */
+        /*---------------------------------------------*/
+        this.btnQuitter.addActionListener(this);
+    }
+
+
+    public void actionPerformed(ActionEvent e)
+    {
+        if(e.getSource() == this.btnQuitter)
+        {
+            this.frame.effacerPanelInfo();
+            System.out.println("Quitter");
+        }
+    }
+
+    public void setDonneeInfoTache(BoxShape box)
+    {
+        this.lblNomTache  .setText(box.getNom());
+        this.lblDureeTache.setText("" + box.getTache().getDuree()   );
+        this.lblMargeTache.setText("" + box.getTache().getMarge()   );
+        this.lblDateTot   .setText("" + box.getTache().getDateMin() );
+        this.lblDateTard  .setText("" + box.getTache().getDateMax() );
     }
 
     private void styleDataLabels()
     {
-        Font dataFont = new Font("Arial", Font.PLAIN, 12);
+        Font dataFont = new Font("Arial", Font.PLAIN, 15);
         Color dataColor = new Color(51, 51, 51);
 
         // Style pour les données principales
-        this.lblNomTache.setFont(new Font("Arial", Font.BOLD, 12));
+        this.lblNomTache.setFont(new Font("Arial", Font.BOLD, 20));
         this.lblNomTache.setForeground(new Color(0, 102, 204));
         
         this.lblDureeTache.setFont(dataFont);
@@ -146,10 +177,10 @@ public class PanelInformation extends JPanel
         this.lblDateTard.setBackground(new Color(255, 240, 240));
 
         // Style pour les listes
-        this.lblPrc.setFont(dataFont);
+        /*this.lblPrc.setFont(dataFont);
         this.lblPrc.setForeground(dataColor);
         
         this.lblSvt.setFont(dataFont);
-        this.lblSvt.setForeground(dataColor);
+        this.lblSvt.setForeground(dataColor);*/
     }
 }

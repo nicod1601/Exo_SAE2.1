@@ -22,12 +22,12 @@ public class Controleur
 
 
     public String            afficherProjet()                       { return this.projet.toString()             ;}
+    public ArrayList<Erreur> getLstErreur  ()                       { return this.projet.getLstErreur()         ;}
     public ArrayList<Tache>  getListeTache ()                       { return this.projet.getLstTache()          ;}
     public int               getNbNiveau()                          { return this.projet.getNbNiveau()          ;}
     public int               getTailleNivMax()                      { return this.projet.getTailleNivMax()      ;}
     public int[]             getNbParNiveau (int niv, String nom)   { return this.projet.getNbParNiveau(niv,nom);}
-    public ArrayList<Erreur> getErreur()                            {return this.projet.getErreur()             ;}
-
+    
 
     /*-------------------------------*/
     /*         Autre méthodes        */
@@ -49,19 +49,18 @@ public class Controleur
 
     public void majDate() {this.projet.majDate();}
 
-    public void ajouterTache(Tache tache)
-    {
-        this.projet.ajouterTache(tache);
-        this.frame.majList();
-
-    }
-
+    
      public void lireFichier(String chemin)
      {
         this.projet.lireFichier(chemin);
         this.frame.majTxt();
     }
 
+    public void ajouterTache(Tache tache)
+    {
+        this.projet.ajouterTache(tache);
+        this.frame.majList();
+    }
 
     public void supprimerTache(Tache tache)
     {
@@ -87,20 +86,14 @@ public class Controleur
         this.frame.majTxt();
     }
 
-    public void modifierTache(String nom, int duree, Tache tache)
-    {
-        this.projet.modifierTache(nom, duree, tache);
-        //this.frame.majList();
-    }
+    public void modifierTache(String nom, int duree, Tache tache) { this.projet.modifierTache(nom, duree, tache); }
+
+    public ArrayList<CheminCritique> getCheminCritiques() { return this.projet.getCheminCritiques(); }
+
+    public void afficherLstTacheCritique() { this.projet.afficherLstTacheCritique(); }
 
     public static void main(String[] args)
     {
         new Controleur();
-    }
-
-
-    public ArrayList<CheminCritique> getCheminCritique()
-    {
-        return this.projet.getCheminCritique();
     }
 }
