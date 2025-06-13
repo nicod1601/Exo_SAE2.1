@@ -1,0 +1,1 @@
+Ligne 0 : Erreur inconnue : Cannot invoke "java.util.ArrayList.clear()" because "this.lstCheminCritique" is null --> Cannot invoke "java.util.ArrayList.clear()" because "this.lstCheminCritique" is null
