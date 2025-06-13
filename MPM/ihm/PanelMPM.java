@@ -19,6 +19,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private ArrayList<BoxShape>       lstBoxShape		;
 	private ArrayList<CheminCritique> lstCheminCritiques;
 	private ArrayList<Tache>          lstTacheCritiques ;
+	private boolean                   cheminCritAffiche ;
 
 	private int niveauPrc;
 	private int niveauSvt;
@@ -31,6 +32,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	private BoxShape boxShapeSelectionnee = null;
 	private Point    pointClique 	  	  = null;
 	private boolean  enDeplacement 		  = false;
+	private ArrayList<BoxShape> ancienBox;
 
 	//flèche
 	private ArrayList<Fleche> lstFleche;
@@ -79,6 +81,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.lstTacheCritiques  = new ArrayList<Tache>();
 		this.niveauPrc          = 0;
 		this.niveauSvt          = 0;
+		this.cheminCritAffiche  = false;
 
 		this.popMenu	   = new JPopupMenu();
 
@@ -115,6 +118,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
         infoLabel.setVisible   (false);
         infoLabel.setSize      (200, 50);
 
+		this.ancienBox = new ArrayList<BoxShape>();
 
 		for (BoxShape box : lstBoxShape) 
 			box.setPosition(box.getX(), box.getY());
@@ -160,7 +164,78 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 	public void setCheminCritiques(ArrayList<CheminCritique> lstCheminCritiques) 
 	{
 		this.lstCheminCritiques = lstCheminCritiques;
-		this.majList();
+
+		System.out.println(this.lstCheminCritiques);
+
+		for(CheminCritique c : this.lstCheminCritiques)
+		{
+			
+			ArrayList<Tache> tmpLstTache = c.getListeTacheCritique();
+
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+			System.out.println(tmpLstTache);
+			
+			for(BoxShape b : this.lstBoxShape)
+			{
+				for(Tache t : tmpLstTache)
+				{
+					if(b.getTache().getNom().equals(t.getNom() ) )
+					{
+						if(this.cheminCritAffiche == true)
+						{
+							
+							b.setCouleur(this.recupCouleur);
+
+							System.out.println("couleur defaut" + b.getNom());
+							
+						}
+						else
+						{
+							
+							b.setCouleur(new Color(255,0,0));
+							
+						}
+						
+						//this.lstTacheCritiques.add(t);
+					}
+				}
+				
+			}
+
+			for(Fleche f : this.lstFleche)
+			{
+				//System.out.println( "" +(f.getOrigine().getTache().getMarge() == 0 ) +  (f.getDestination().getTache().getMarge() == 0) );
+				if( f.getOrigine().getTache().getMarge() == 0  &&  f.getDestination().getTache().getMarge() == 0 )
+				{
+					if(this.cheminCritAffiche == true)
+					{
+						f.setCouleurFleche(Color.BLUE );
+					}
+					else
+					{
+						f.setCouleurFleche((new Color(255,0,0) ) );
+
+						System.out.println("je suis rouge");
+					}
+					
+				}		
+			}
+		}
+
+		this.cheminCritAffiche = !this.cheminCritAffiche;
+		this.majDessin();
+	}
+
+	public void sauvegardePositionBox()
+	{
+		this.ancienBox.clear();
+
+		for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
+		{
+			BoxShape b = this.lstBoxShape.get(cpt);
+
+			this.ancienBox.add(b);
+		}
 	}
 
 
@@ -197,6 +272,9 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 				}
 			}
 		}
+
+		if(this.ctrl.getProjet() != null)
+			this.ctrl.afficherLstTacheCritique();
 
 	}
 
@@ -240,6 +318,11 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 		this.ctrl.majBox();
 		this.lstBoxShape = this.ctrl.getLstBoxShapes();
 
+		if(! this.ancienBox.isEmpty())
+		{
+			this.lstBoxShape = this.ancienBox;
+		}
+
 		if(! this.lstBoxShape.isEmpty() && this.lstBoxShape != null)
 		{
 			this.ctrl       .majDate();
@@ -250,8 +333,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 			
 			for(BoxShape b : this.lstBoxShape)
 			{
-				
-
 				if(this.recupCouleur != null && this.recupLargeur != 0 && this.recupHauteur != 0)
 				{
 					b.setTaille (this.recupLargeur);
@@ -305,12 +386,10 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 			//System.out.print("Nombre de chemin critiques : " + this.lstCheminCritiques.size() + "\n");
 
-			for(CheminCritique c : this.lstCheminCritiques)
+			/*for(CheminCritique c : this.lstCheminCritiques)
 			{
 				
 				ArrayList<Tache> tmpLstTache = c.getListeTacheCritique();
-
-				//System.out.println(tmpLstTache.get(0).getNom() );
 				
 				for(BoxShape b : this.lstBoxShape)
 				{
@@ -333,7 +412,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 						f.setCouleurFleche((new Color(255,0,0) ) );
 					}		
 				}
-			}
+			}*/
 
 			this.frame.majTacheBox(this.listTache, this.lstBoxShape);
 			
@@ -346,6 +425,7 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 	public void reinitialiser()
 	{
+		this.sauvegardePositionBox();
 		this.listTache  .clear();
 		this.lstBoxShape.clear();
 		this.lstFleche  .clear();
@@ -416,20 +496,6 @@ public class PanelMPM extends JPanel implements MouseListener, MouseMotionListen
 
 		if(this.boxShapeSelectionnee != null)
 		{
-			/*Tache t = this.boxShapeSelectionnee.getTache();
-			ArrayList<Tache> lstPrc = t.getLstPrc();
-
-			for (int cpt = 0; cpt < lstPrc.size(); cpt++)
-			{
-				lstPrc.get(cpt).getLstSvt().remove(t);
-			}
-
-			ArrayList<Tache> lstSvt = t.getLstSvt();
-
-			for (int cpt = 0; cpt < lstSvt.size(); cpt++)
-			{
-				lstSvt.get(cpt).getLstPrc().remove(t);
-			}*/
 
 			this.ctrl     .supprimerTache(this.boxShapeSelectionnee.getTache() );
 			this.listTache.remove        (this.boxShapeSelectionnee.getTache() );

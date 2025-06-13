@@ -14,7 +14,6 @@ public class FrameMPM extends JFrame
     private FrameNouveau  frameNouveau;
     private FrameOption   frameOption;
     private FrameModifier frameModifier;
-    private FrameDate     frameDate;
 
     private PanelInformation panelInfo;
 
@@ -78,24 +77,6 @@ public class FrameMPM extends JFrame
     }
 
     public void changerFondEcran(Color color) { this.panelMPM.changerFondEcran(color); }
-
-    public void creerFrameDate() { this.frameDate = new FrameDate(this.panelBouton, this.panelMPM, this);}
-
-    public void afficherDate()
-    {   
-        System.out.println(this.frameDate.getTexteDebut() );
-        
-        for (BoxShape box : this.ctrl.getLstBoxShapes() ) 
-        {
-            //DateFr dateMin
-            DateFr dateMax = this.ctrl.setDate(this.frameDate.getTexteDebut() );
-
-            dateMax.add(dateMax.DAY_OF_YEAR, box.getTache().getDateMax() );
-            box.setDateMax(dateMax );
-            
-        }
-        this.majDessin();
-    }
 
 
     public void miseEnFormePanelInfo()

@@ -319,8 +319,7 @@ public class Projet
 	public void afficherLstTacheCritique() 
 	{
 		this.lstCheminCritique.clear();
-
-		
+		this.majDate();
 
 		for (Tache t : this.lstTache) 
 		{
@@ -334,6 +333,12 @@ public class Projet
 				
 			}
 		}
+		System.out.println("------------------------------------------------");
+		System.out.println(this.lstCheminCritique);
+		System.out.println("------------------------------------------------");
+		System.out.println();
+		System.out.println();
+
 
 		for(CheminCritique c : this.lstCheminCritique)
 		{
@@ -737,7 +742,6 @@ public class Projet
 					pw.println(e.toString());
 				
 				pw.close();
-				//System.out.println("Erreurs enregistrées dans erreurs.log");
 			}
 			catch (Exception e)
 			{
@@ -749,30 +753,22 @@ public class Projet
 
 	public void supprimerTache(Tache tacheASupprimer)
 	{
-		System.out.println("=== AVANT SUPPRESSION ===");
-		for(Tache t : this.lstTache)
-		{
-			System.out.println(t.getNom() + " - Niveau: " + t.getNiveau());
-		}
 
-		// Supprimer les liens avec les prédécesseurs
 		for (Tache tachePrecedente : tacheASupprimer.getLstPrc())
 		{
 			tachePrecedente.getLstSvt().remove(tacheASupprimer);
 		}
 
-		// Supprimer les liens avec les suivants
 		for (Tache tacheSuivant : tacheASupprimer.getLstSvt())
 		{
 			tacheSuivant.getLstPrc().remove(tacheASupprimer);
 		}
 
-		// Supprimer la tâche de la liste
 		this.lstTache.remove(tacheASupprimer);
 		
-		// Trouver la tâche Fin
 		Tache tacheFin = null;
-		for (Tache t : this.lstTache) {
+		for (Tache t : this.lstTache) 
+		{
 			if (t.getNom().equals("Fin"))
 			{
 				tacheFin = t;
@@ -780,10 +776,11 @@ public class Projet
 			}
 		}
 		
-		// Si Fin n'a plus de prédécesseurs, connecter toutes les tâches sans successeur à Fin
-		if (tacheFin != null && tacheFin.getLstPrc().isEmpty()) {
+		if (tacheFin != null && tacheFin.getLstPrc().isEmpty())
+		{
 			for (Tache t : this.lstTache) {
-				if (t.getLstSvt().isEmpty() && !t.getNom().equals("Fin") && !t.getNom().equals("Début")) {
+				if (t.getLstSvt().isEmpty() && !t.getNom().equals("Fin") && !t.getNom().equals("Début"))
+				{
 					tacheFin.addPrecedent(t);
 				}
 			}
@@ -798,15 +795,6 @@ public class Projet
 		this.majDate();
 		this.majBox();
 		this.afficherLstTacheCritique();
-		
-		System.out.println("=== APRÈS SUPPRESSION ===");
-		for(Tache t : this.lstTache)
-		{
-			System.out.println(t.getNom() + " - Niveau: " + t.getNiveau() + 
-							" - Date min: " + t.getDateMin() + 
-							" - Prédécesseurs: " + t.getLstPrc().size() +
-							" - Suivant : " + t.getLstSvt().size());
-		}
 	}
 
 
@@ -825,25 +813,20 @@ public class Projet
 	{
 		for(Tache t : this.lstTache)
 		{
-			// Supprimer les auto-références
 			t.getLstPrc().remove(t);
 			t.getLstSvt().remove(t);
 			
-			// Vérifier les références circulaires simples
 			ArrayList<Tache> predecesseursACorriger = new ArrayList<>();
 			for(Tache predecesseur : t.getLstPrc())
 			{
 				if(predecesseur.getLstPrc().contains(t))
 				{
-					// Référence circulaire détectée
 					predecesseursACorriger.add(predecesseur);
 				}
 			}
 			
-			// Supprimer les références circulaires
 			for(Tache prc : predecesseursACorriger)
 			{
-				System.out.println("Référence circulaire détectée entre " + t.getNom() + " et " + prc.getNom());
 				t.getLstPrc().remove(prc);
 				prc.getLstSvt().remove(t);
 			}
@@ -852,9 +835,10 @@ public class Projet
 
 
 	
-	public void ajouterTache(Tache nouvelleTache, boolean inserer)
+	public void ajouterTache(Tache nouvelleTache)
 	{
 		int indexFin = this.lstTache.size() - 1;
+
 		this.lstTache.add(indexFin, nouvelleTache);
 
 		if(nouvelleTache.getNbPrc() == 0)
@@ -863,76 +847,27 @@ public class Projet
 		}
 		else
 		{
-			if(inserer)
-			{
-				// Mode insertion simple : si la nouvelle tâche a des prédécesseurs ET que ces prédécesseurs ont des successeurs
-				// Créer une copie des prédécesseurs pour éviter la ConcurrentModificationException
-				ArrayList<Tache> predecesseursCopie = new ArrayList<>(nouvelleTache.getLstPrc());
-				
-				for(Tache predecesseur : predecesseursCopie)
-				{
-					if(predecesseur.getLstSvt().size() > 0)
-					{
-						// Récupérer les successeurs du prédécesseur
-						ArrayList<Tache> successeurs = new ArrayList<>(predecesseur.getLstSvt());
-						
-						// Supprimer les liens entre le prédécesseur et ses successeurs
-						predecesseur.getLstSvt().clear();
-						
-						// Lier le prédécesseur à la nouvelle tâche
-						predecesseur.getLstSvt().add(nouvelleTache);
-
-						// Traiter chaque successeur individuellement
-						for(Tache successeur : successeurs)
-						{
-							// Ajouter le successeur à la nouvelle tâche
-							nouvelleTache.getLstSvt().add(successeur);
-							
-							// Supprimer l'ancien prédécesseur du successeur
-							successeur.getLstPrc().remove(predecesseur);
-							
-							// Ajouter la nouvelle tâche comme prédécesseur du successeur
-							successeur.getLstPrc().add(nouvelleTache);
-						}
-					}
-					else
-					{
-						// Le prédécesseur n'a pas de successeur, ajout normal
-						predecesseur.getLstSvt().add(nouvelleTache);
-					}
-				}
-			}
-			else
-			{
-				// Mode ajout normal
-				for(int cpt = 0; cpt < nouvelleTache.getNbPrc(); cpt++)
-					nouvelleTache.getLstPrc().get(cpt).getLstSvt().add(nouvelleTache);
-			}
+			for(int cpt = 0; cpt < nouvelleTache.getNbPrc(); cpt++)
+				nouvelleTache.getLstPrc().get(cpt).getLstSvt().add(nouvelleTache);
 		}
-
-		// Corriger les références circulaires
-		this.corrigerReferencesCirculaires();
-
-		// Recalculer les niveaux
+	
 		for(Tache t : this.lstTache) 
 			t.setNiveau(t.getLstPrc());
-
+	
 		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
 
 		if(nouvelleTache.getNiveau() == tacheFin.getNiveau()) 
 			tacheFin.setNiveau(tacheFin.getNiveau() + 1);
 		
-		// Recalculer les dates
 		this.majDate();
-		this.majBox();
 		this.afficherLstTacheCritique();
 
-		for(int cpt = 0; cpt < this.lstTache.size(); cpt++)
+
+		for(Tache t : this.lstTache)
 		{
-			System.out.println("-----------------------------------");
-			System.out.println(this.lstTache.get(cpt));
-			System.out.println("-----------------------------------");
+			System.out.println(t.getNom() + " ");
 		}
+
 	}
 
 	
@@ -1031,33 +966,6 @@ public class Projet
 
 	public void modifierTache(String nomTache, int dureeTache, Tache tache) 
 	{
-		/*Tache tmp = null;
-		String[] tabNom = new String[this.lstTache.size()];
-		for(Tache t : this.lstTache)
-		{
-			if(t.getNom().equals(tache.getNom()))
-			{
-				tmp = t;
-				t.setNom(nomTache);
-				t.setDuree(dureeTache);
-				this.afficherLstTacheCritique();
-			}
-			tabNom[this.lstTache.indexOf(t)] = t.getNom();
-		}
-
-		// verif des nom en double
-		for(int i = 0; i < tabNom.length; i++)
-		{
-			for(int j = i + 1; j < tabNom.length; j++)
-			{
-				if(tabNom[i].equals(tabNom[j]))
-				{
-					this.lstTache.get(i).setNom(tmp.getNom());
-					this.lstTache.get(i).setDuree(tmp.getDuree());
-					this.afficherLstTacheCritique();
-				}
-			}
-		}*/
 
 		if(! nomTache.equals("") && dureeTache != 0)
 		{

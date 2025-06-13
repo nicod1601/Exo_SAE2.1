@@ -15,9 +15,6 @@ public class PanelBouton extends JPanel implements ActionListener
     private JButton btnAfficherRien;
     private JButton btnCheminCritique;
 
-    private JRadioButton rbDate;
-    private JRadioButton rbDuree;
-
     private int niveauPrc;
     private int niveauSvt;
 
@@ -55,30 +52,6 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnAfficherRien.setForeground(Color.BLACK);
         this.btnCheminCritique = new JButton("Chemin critique");
 
-
-        bgSwitch     = new ButtonGroup ();
-
-        this.rbDate  = new JRadioButton("Date");
-        this.rbDuree = new JRadioButton("Durée");
-
-        //this.rbDate .setOpaque(false);
-        //this.rbDuree.setOpaque(false);
-
-        //this.rbDate .setForeground (new Color(200, 190, 188) );
-        //this.rbDuree.setForeground(new Color(200, 190, 188) );
-
-        this.rbDate .setBackground(new Color(100, 180, 100 ) );
-        this.rbDuree.setBackground(new Color(100, 180, 100 ) );
-
-        this.rbDuree.setSelected(true);
-
-        bgSwitch.add(this.rbDate );
-        bgSwitch.add(this.rbDuree);
-
-        
-        
-
-
         this.desactiverBouton();
 
         /*--------------------------------------*/
@@ -95,9 +68,6 @@ public class PanelBouton extends JPanel implements ActionListener
         this.add(new JLabel() );
         this.add(new JLabel() );
 
-        this.add(this.rbDate );
-        this.add(this.rbDuree);
-
         /*--------------------------------------*/
         /*     Activation des composants        */
         /*--------------------------------------*/
@@ -108,11 +78,7 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnAfficherRien  .addActionListener(this);
         this.btnCheminCritique.addActionListener(this);
 
-        this.rbDate           .addActionListener(this);
-        this.rbDuree          .addActionListener(this);
     }
-
-    public JRadioButton getRbDuree() { return this.rbDuree;}
 
     public void desactiverBouton()
     {
@@ -121,8 +87,6 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnAfficherTout  .setEnabled(false);
         this.btnAfficherRien  .setEnabled(false);
         this.btnCheminCritique.setEnabled(false);
-        this.rbDuree          .setEnabled(false);
-        this.rbDate           .setEnabled(false);
 
         this.btnAfficherRien  .setBackground(new Color(100, 0, 0 ) );
         this.btnAfficherTout  .setBackground(new Color(100, 0, 0 ) );
@@ -136,8 +100,6 @@ public class PanelBouton extends JPanel implements ActionListener
         this.btnDateMin       .setEnabled(true);
         this.btnAfficherTout  .setEnabled(true);
         this.btnCheminCritique.setEnabled(true);
-        this.rbDuree          .setEnabled(true);
-        this.rbDate           .setEnabled(true);
 
         this.btnDateMin       .setBackground(new Color(100, 180, 100 ) );
         this.btnAfficherTout  .setBackground(new Color(100, 180, 100 ) );
@@ -176,15 +138,6 @@ public class PanelBouton extends JPanel implements ActionListener
     {
         this.btnAfficherRien.setEnabled(true);
         this.btnAfficherRien.setBackground(new Color(100, 180, 100 ));
-    }
-
-    public void changerAffichage()
-    {
-        if (rbDate.isEnabled() )
-        {
-            this.frame.creerFrameDate();
-        }
-
     }
 
 
@@ -277,21 +230,20 @@ public class PanelBouton extends JPanel implements ActionListener
                 }
             }
 
-            this                .activerBouton();
+            this.activerBouton();
             this.btnAfficherRien.setEnabled(false);
             //this.btnAfficherRien.setForeground(new Color(0, 0, 0 ) );
             this.btnAfficherRien.setBackground(new Color(100, 0, 0 ) );
 
             this.frame.majDessin  ();
-            this      .resetNiveau();
+            this.resetNiveau();
         }
 
         if(e.getSource() == this.btnCheminCritique)
         {
-            ArrayList<CheminCritique> lstCheminCritique = this.ctrl.getCheminCritiques();
+            ArrayList<CheminCritique> lstCheminCritique = new ArrayList<CheminCritique>(this.ctrl.getCheminCritiques());
 
             frame.setCheminCritiques(lstCheminCritique); 
         }
-        if (e.getSource() == this.rbDate )  this.changerAffichage();
     }
 }

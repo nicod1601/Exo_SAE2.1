@@ -34,14 +34,6 @@ public class Controleur
     /*         Autre méthodes        */
     /*-------------------------------*/
 
-    public DateFr setDate(String date) { return new DateFr(date); }
-
-    /*public void sauvegarderTaches(ArrayList<Tache> lstTaches, String lien)
-    {
-        this.projet.sauvegarderTaches(lstTaches, lien);
-    }*/
-
-    // FIXED: Changed from this.getLstBoxShapes() to this.projet.getLstBoxShapes()
     public ArrayList<BoxShape> getLstBoxShapes(){return this.projet.getLstBoxShapes();}
 
     public Projet getProjet() {return this.projet;}
@@ -62,9 +54,9 @@ public class Controleur
         this.frame.majTxt();
     }
 
-    public void ajouterTache(Tache tache, boolean inserer)
+    public void ajouterTache(Tache tache)
     {
-        this.projet.ajouterTache(tache, inserer);
+        this.projet.ajouterTache(tache);
         this.frame.majList();
     }
 

@@ -141,12 +141,6 @@ public class BoxShape
     public void setDateMin(String txtDateMin) { this.dateMin = txtDateMin; }
     public void setDateMax(String txtDateMax) { this.dateMax = txtDateMax; }
 
-    public void setDateMin(DateFr dateFrMin) 
-    {
-        this.dateMin = dateFrMin.getDate();
-    }
-    public void setDateMax(DateFr dateFrMax) { this.dateMax = dateFrMax.getDate(); }
-
     public void setCouleur(Color couleur)    { this.couleur = couleur; }
 
     /**
