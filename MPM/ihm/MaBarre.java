@@ -11,6 +11,11 @@ import javax.swing.*;
 
 public class MaBarre extends JMenuBar implements ActionListener
 {
+	private FrameMPM   frame;
+	private Controleur ctrl;
+
+	private JFileChooser fileChooser = new JFileChooser();
+
 	private JMenuItem menuiImporter;
 	private JMenuItem menuiRefresh;
 	private JMenuItem menuiQuitter;
@@ -20,14 +25,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 	private JMenuItem menuiSave;
 	private JMenuItem menuiNvProjet;
 	
-	private FrameMPM   frame;
-	
-	private Controleur ctrl;
-
-	private JFileChooser fileChooser = new JFileChooser();
-
 	private String 	     cheminFichier;
-
 
 	public MaBarre(FrameMPM frame, Controleur ctrl)
 	{
@@ -42,7 +40,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 
 
 		// un element de la barre de menu
-		JMenu menuFichier = new JMenu("Fichier"  );
+		JMenu menuFichier  = new JMenu("Fichier"  );
 
 
 		// les items du menu Fichier
@@ -98,14 +96,14 @@ public class MaBarre extends JMenuBar implements ActionListener
 		/* Activation des composants     */
 		/*-------------------------------*/
 
-		this.menuiImporter .addActionListener(this);
-		this.menuiQuitter  .addActionListener(this);	
-		this.menuiNouveau  .addActionListener(this);	
-		this.menuiRefresh  .addActionListener(this);
-		this.menuiSaveAs   .addActionListener(this);
-		this.menuiOption   .addActionListener(this);
-		this.menuiSave     .addActionListener(this);
-		this.menuiNvProjet .addActionListener(this);
+		this.menuiImporter.addActionListener(this);
+		this.menuiQuitter .addActionListener(this);	
+		this.menuiNouveau .addActionListener(this);	
+		this.menuiRefresh .addActionListener(this);
+		this.menuiSaveAs  .addActionListener(this);
+		this.menuiOption  .addActionListener(this);
+		this.menuiSave    .addActionListener(this);
+		this.menuiNvProjet.addActionListener(this);
 
 	}
 
@@ -117,7 +115,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 			this.ctrl .lireFichier	 (lien);
 			this.frame.majList		 ();
 			this.frame.activerBoutons();
-			this.frame.resetDefaut();
+			this.frame.resetDefaut   ();
 		}
 
 	}
@@ -147,17 +145,16 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 				String path = fichier.getPath(); 
 				String ext  = fichier.getName().substring(fichier.getName().lastIndexOf(".")); 
-			
-				// Vérification de l'extension du fichier
-				// Si le fichier n'a pas l'extension .txt, on affiche un message d'erreur
 
 				if (!ext.equals(".txt") )
+				{
 					JOptionPane.showMessageDialog(this.frame, "Le fichier doit avoir l'extension .txt", "Erreur", JOptionPane.ERROR_MESSAGE);
-				
-				else // Sinon on lit le fichier
+				}
+				else
 				{
 					this.cheminFichier = path;
-					this.ctrl.getLstErreur().clear(); // On vide la liste des erreurs
+					this.ctrl.getLstErreur().clear();
+					
 					if(!fichier.exists())
 					{
 						this.ctrl.getLstErreur().add(new Erreur(7));
@@ -165,13 +162,13 @@ public class MaBarre extends JMenuBar implements ActionListener
 					}
 					else
 					{
-						this.frame.setLien	      (this.cheminFichier);
-						this.ctrl .lireFichier    (this.cheminFichier);
-						this	  .verification	  ();
-						this.frame.majList	   	  ();
-						this.frame.activerBoutons ();
+						this.frame.setLien	       (this.cheminFichier);
+						this.ctrl .lireFichier     (this.cheminFichier);
+						this	  .verification	   ();
+						this.frame.majList	   	   ();
+						this.frame.activerBoutons  ();
 						this      .activerLesOption();
-						this.frame.setTitle("MPM - " + fichier.getName());
+						this.frame.setTitle("MPM - " + fichier.getName() );
 					}
 				}
 			}
@@ -181,8 +178,8 @@ public class MaBarre extends JMenuBar implements ActionListener
 		{
 			try 
 			{
-				String dossierBase = this.fileChooser.getCurrentDirectory() + "/Donnees/MPM";
-				String nomFichier = "nouveau_projet_" + System.currentTimeMillis() + ".txt";
+				String dossierBase   = this.fileChooser          .getCurrentDirectory() + "/Donnees/MPM";
+				String nomFichier    = "nouveau_projet_" + System.currentTimeMillis()   + ".txt";
 				String cheminComplet = dossierBase + "/" + nomFichier;
 				
 				File fichier = new File(cheminComplet);
@@ -198,20 +195,20 @@ public class MaBarre extends JMenuBar implements ActionListener
 				this.cheminFichier = cheminComplet;
 				this.frame.reinitialiser();
 
-				this.ctrl.getLstErreur().clear();
+				this.ctrl.getLstErreur   ().clear();
 				this.ctrl.lireFichier	 (this.cheminFichier);
 			
-				this.frame.setLien		 (this.cheminFichier);
-				this.frame.majList		 ();
+				this.frame.setLien       (this.cheminFichier);
+				this.frame.majList       ();
 				this.frame.activerBoutons();
 
 				this.activerLesOption	 ();
 
 				this.menuiSave.setEnabled(false);
 				
-				JOptionPane.showMessageDialog(this.frame, 
+				JOptionPane.showMessageDialog(this.frame , 
 					"Nouveau projet créé : " + nomFichier, 
-					"Nouveau Projet", 
+					"Nouveau Projet"                     , 
 					JOptionPane.INFORMATION_MESSAGE);
 			}
 			catch (Exception e1) 
@@ -226,10 +223,10 @@ public class MaBarre extends JMenuBar implements ActionListener
 			}
 		}
 
-		if(e.getSource() == this.menuiQuitter) System.exit(0); 
+		if(e.getSource() == this.menuiQuitter) System    .exit(0); 
 		if(e.getSource() == this.menuiNouveau) this.frame.setVisibleFrameNouveau();
+		if(e.getSource() == this.menuiOption ) this.frame.setVisibleFrameOption ();
 		if(e.getSource() == this.menuiRefresh) this      .refresh(this.cheminFichier);
-		if(e.getSource() == this.menuiOption ) this.frame.setVisibleFrameOption();
 
 		if(e.getSource() == this.menuiSave)
 		{
@@ -238,12 +235,12 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 			try 
 			{
-				this.ctrl  .enregistrer	  (this.cheminFichier, this.ctrl.getLstBoxShapes());
-				this.frame .setLien	   	  (this.cheminFichier);
-				this.ctrl  .lireFichier	  (this.cheminFichier);
-				this	   .verification  ();
-				this.frame .majList		  ();
-				this.frame .activerBoutons();
+				this.ctrl  .enregistrer	     (this.cheminFichier, this.ctrl.getLstBoxShapes() );
+				this.frame .setLien	   	     (this.cheminFichier);
+				this.ctrl  .lireFichier	     (this.cheminFichier);
+				this	   .verification     ();
+				this.frame .majList		     ();
+				this.frame .activerBoutons   ();
 				JOptionPane.showMessageDialog(this.frame, "Projet enregistré  " + path, "Enregistrement", JOptionPane.INFORMATION_MESSAGE);
 			} 
 			catch (Exception ex) 
@@ -263,7 +260,7 @@ public class MaBarre extends JMenuBar implements ActionListener
 			if(retour == JFileChooser.APPROVE_OPTION)
 			{
 				File fichier  = this.fileChooser.getSelectedFile();
-				String path   = fichier.getPath();
+				String path   = fichier         .getPath();
 
 				if (!path.toLowerCase().endsWith(".txt"))
 				{
@@ -275,20 +272,19 @@ public class MaBarre extends JMenuBar implements ActionListener
 				
 				try 
 				{
-					this.ctrl.enregistrerSous(this.cheminFichier, this.ctrl.getLstBoxShapes());
-					this.frame.setLien		 (this.cheminFichier);
-					this.ctrl.lireFichier	 (this.cheminFichier);
-					this.verification 		 ();
-					this.frame.majList		 ();
-					this.frame.activerBoutons();
+					this.ctrl  .enregistrerSous   (this.cheminFichier, this.ctrl.getLstBoxShapes());
+					this.frame .setLien		     (this.cheminFichier);
+					this.ctrl  .lireFichier	     (this.cheminFichier);
+					this       .verification      ();
+					this.frame .majList		     ();
+					this.frame .activerBoutons    ();
 					JOptionPane.showMessageDialog(this.frame, "Projet enregistré sous " + path, "Enregistrement", JOptionPane.INFORMATION_MESSAGE);
 				} 
-				catch (Exception e1) 
+				catch (Exception ex) 
 				{
 					JOptionPane.showMessageDialog(this.frame, "Problème lors de l'enregistrement", "Enregistrement", JOptionPane.ERROR_MESSAGE);
 				}
-				
-			
+					
 			}
 		}
 
@@ -308,12 +304,10 @@ public class MaBarre extends JMenuBar implements ActionListener
 				String message = "";
 
 				for (Erreur err : erreur)
-				{
 					if (err.getCodeErreur() == code)
+
 						message += err.getMessage() + "\n";
 					
-				}
-
 				if (!message.isEmpty())
 					JOptionPane.showMessageDialog(this.frame, message, "Code erreur " + code, JOptionPane.ERROR_MESSAGE);
 				

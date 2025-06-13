@@ -56,13 +56,7 @@ public class Projet
 	 * 
 	 * @return true si le projet ne contient aucune tâche, false sinon
 	 */
-	public boolean estVide(){return this.lstTache.isEmpty() ;}
-	
-	/**
-	 * Retourne le nombre de tâches dans le projet.
-	 * 
-	 * @return le nombre de tâches
-	 */
+
 	public int getTaille() {return this.lstTache.size();}
 
 	/**
@@ -74,6 +68,7 @@ public class Projet
 	{
 		int nbNiv =0;
 		int max   =0;
+
 		for(Tache t : this.lstTache)
 		{
 			nbNiv = this.getNbParNiveau(t.getNiveau(), t.getNom())[0];
@@ -107,7 +102,12 @@ public class Projet
 		return nb;
 	}
 
-
+	/**
+	 * Retourne le nombre de tâches à un niveau donné.
+	 * 
+	 * @param niv le niveau des tâches
+	 * @return le nombre de tâches au niveau spécifié
+	 */
 	public int getNbParNiveau(int niv)
 	{
 		int nb = 0;
@@ -121,8 +121,9 @@ public class Projet
 		return nb;
 	}
 
-	public ArrayList<BoxShape> getLstBoxShapes(){return this.lstBoxShapes;}
-
+	public ArrayList<BoxShape>       getLstBoxShapes   () { return this.lstBoxShapes     ; } /** Retourne la liste des box */
+	public ArrayList<CheminCritique> getCheminCritiques() { return this.lstCheminCritique; } /** Retourne la liste des chemins critiques */
+	public ArrayList<Erreur>         getLstErreur      () { return this.lstErreur        ; } /** Retourne la liste des erreurs rencontrées */
 
 
 	/**
@@ -137,21 +138,56 @@ public class Projet
 	 * 
 	 * @return la durée du projet en jours
 	 */
-	public int determinerDuree() {return this.dureeProjet;}
+	public int determinerDuree() { return this.dureeProjet;}
+
+	public boolean estVide() { return this.lstTache.isEmpty() ;}
+	
+
 
 	/**
 	 * Calcule et retourne le chemin critique du projet.
 	 * 
 	 * @return une chaîne représentant le chemin critique (non implémenté)
-	 * @todo Implémenter le calcul du chemin critique
 	 */
-	public ArrayList<CheminCritique> getCheminCritiques() { return this.lstCheminCritique; }
 
 	public int getNbNiveau()
 	{
 		int posDernier = this.lstTache.size()-1;
 		return this.lstTache.get(posDernier).getNiveau()+1;
 	}
+
+	
+	/**
+	 * Lit le contenu d'un fichier et retourne son contenu sous forme de chaîne.
+	 * 
+	 * @param chemin le chemin du fichier à lire
+	 * @return le contenu du fichier sous forme de chaîne
+	 */
+	public String getFichier(String chemin)
+	{
+		String str = "";
+		try
+		{
+			Scanner sc   = new Scanner ( new File ( chemin ), "UTF-8" );
+			int numLigne = 0;
+
+			while ( sc.hasNextLine() )
+			{
+				String ligne    = sc.nextLine();
+				str += ligne + "\n";
+
+			}
+		}
+		catch ( Exception e )
+		{ 
+			e.printStackTrace();
+			this.lstErreur.add(new Erreur(e.getMessage() ) );  
+		}
+
+		
+		return str;
+	}	
+
 
 
 	/**
@@ -172,19 +208,20 @@ public class Projet
 
 			try
 			{
-				Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
+				Scanner sc   = new Scanner ( new File ( chemin ), "UTF-8" );
 				int numLigne = 0;
 
 				while ( sc.hasNextLine() )
 				{
-					String ligne    = sc.nextLine();
-					numLigne++;
+					String ligne        = sc.nextLine();
 					boolean ligneValide = true;
+					numLigne++;
+					
 					
 					if (ligne.isEmpty())                                 			 			ligneValide = false; // Ignore les lignes vides
-					//if (ligneValide && !testSeparateur(ligne, numLigne)) 			 			ligneValide = false; // Vérifie le format de la ligne
-					if (ligneValide && !testDureeInt  (ligne, numLigne)) 			 			ligneValide = false; // Vérifie que la durée est un entier
-					if (ligneValide && !testNomVide   (ligne, numLigne)) 			 			ligneValide = false; // Vérifie que le nom n'est pas vide
+					if (ligneValide && !testSeparateur            (ligne, numLigne)) 			ligneValide = false; // Vérifie le format de la ligne
+					if (ligneValide && !testDureeInt              (ligne, numLigne)) 			ligneValide = false; // Vérifie que la durée est un entier
+					if (ligneValide && !testNomVide               (ligne, numLigne))			ligneValide = false; // Vérifie que le nom n'est pas vide
 					if (ligneValide && !testPredecesseursMalFormes(ligne, numLigne)) 			ligneValide = false; // Vérifie la liste des prédécesseurs
 					if (ligneValide && !testNomDoublon(ligne.split("\\|")[0], numLigne, ligne)) ligneValide = false; // Vérifie les doublons de nom
 
@@ -195,10 +232,9 @@ public class Projet
 						int posY = 0;
 
 						String[] partie = ligne.split("\\|");
-
-						String nom = partie[0];
-						
-						int duree  = Integer.parseInt(partie[1]);
+						String   nom    = partie[0];
+				
+						int duree       = Integer.parseInt(partie[1]);
 
 						
 						if (partie.length > 2 && !partie[2].isEmpty())
@@ -222,17 +258,16 @@ public class Projet
 						
 						if(partie.length > 3 && ! partie[3].isEmpty() )
 						{
-							String[] prc = partie[3].split(","); // sépare les prédécesseurs par des virgules
+							String[] prc = partie[3].split(",");   // sépare les prédécesseurs par des virgules
 							
 
 							for(int cpt =0; cpt < prc.length; cpt++)
-							{
 								for (Tache t : this.lstTache)
 								{
-									if(prc[cpt].equals(t.getNom()))
+									if(prc[cpt].equals(t.getNom())) 
 										tmp.addPrecedent(t);
 								}
-							}
+									
 						}
 						else
 						{
@@ -245,20 +280,19 @@ public class Projet
 						int posPrcDernier = 0 ;
 						int posPrcTmp     = 0 ;
 					
-						if (!this.lstTache.isEmpty() && !tmp.getNom().equals("Début") && !tmp.getLstPrc().isEmpty()
-								&& !this.lstTache.get(this.lstTache.size() - 1).getLstPrc().isEmpty()
-								&& !tmp.getLstPrc().get(0).getNom().equals("Début"))
+						if (!this.lstTache.isEmpty() && !tmp.getNom().equals("Début") && !tmp.getLstPrc().isEmpty() &&
+							!this.lstTache.get(this.lstTache.size() - 1)                     .getLstPrc().isEmpty() &&
+							!tmp.getLstPrc().get(0).getNom().equals("Début"))
 						{
 							posPrcDernier = this.lstTache.indexOf(this.lstTache.get(this.lstTache.size()-1).getLstPrc().get(0));
-							posPrcTmp = this.lstTache.indexOf(tmp.getLstPrc().get(0));
+							posPrcTmp     = this.lstTache.indexOf(tmp.getLstPrc().get(0));
 
 						}
 
 						if (posPrcTmp < posPrcDernier )
 							this.lstTache.add(posPrcDernier,tmp);
-
 						else
-							this.lstTache.add( tmp);
+							this.lstTache.add(tmp);
 
 						tmp.setNiveau(tmp.getLstPrc());
 						this.nbTache++;
@@ -269,7 +303,6 @@ public class Projet
 				Tache fin = new Tache("Fin", 0);
 
 				for(Tache t : this.lstTache)
-				
 					if(t.getNbSvt() == 0 && !t.getNom().equals("Début")) 
 						fin.addPrecedent(t);
 					
@@ -280,7 +313,6 @@ public class Projet
 				{
 					if(t.getNbPrc() == 0 && !t.getNom().equals("Début") && !t.getNom().equals("Fin"))
 						t.addPrecedent(debut);
-					
 					t.setNiveau(t.getLstPrc());
 				}
 
@@ -295,13 +327,8 @@ public class Projet
 				
 				this.afficherLstTacheCritique();
 
-
 				for(Tache t : this.getLstTache())
-				{
 					this.lstBoxShapes.add(new BoxShape(t,this));
-				}
-
-
 				
 			}
 			
@@ -315,7 +342,10 @@ public class Projet
 		}
 	}
 
-	// Méthode publique qui lance la détermination des chemins critiques à partir des tâches sans prédécesseurs (racines)
+	/**
+	 * Méthode publique qui lance la détermination des chemins 
+	 * critiques à partir des tâches sans prédécesseurs (racines) 
+	 */
 	public void afficherLstTacheCritique() 
 	{
 		this.lstCheminCritique.clear();
@@ -323,26 +353,17 @@ public class Projet
 
 		for (Tache t : this.lstTache) 
 		{
-
 			if (t.getLstPrc().isEmpty() && t.getMarge() == 0) 
 			{
 				ArrayList<Tache> chemin = new ArrayList<>();
 
-
 				determinerCheminCritique(t, chemin);
-				
 			}
 		}
-		System.out.println("------------------------------------------------");
-		System.out.println(this.lstCheminCritique);
-		System.out.println("------------------------------------------------");
-		System.out.println();
-		System.out.println();
 
 
 		for(CheminCritique c : this.lstCheminCritique)
 		{
-			// vérification de la ligne des chemin si on retrouve bien la fin 
 			if(! c.getListeTacheCritique().get(c.getListeTacheCritique().size() - 1).getNom().equals("Fin"))
 			{
 				this.lstCheminCritique.remove(c);
@@ -350,35 +371,9 @@ public class Projet
 		}
 	}
 
-	// Méthode privée récursive qui construit les chemins critiques
-	private void determinerCheminCritique(Tache tache, ArrayList<Tache> cheminActuel)
-	{
-		cheminActuel.add(tache);
-
-		ArrayList<Tache> successeursCritiques = new ArrayList<>();
-		for (Tache t : this.lstTache) 
-		{
-			if (t.getLstPrc().contains(tache) && t.getMarge() == 0) 
-			{
-				successeursCritiques.add(t);
-			}
-		}
-
-		
-		if (successeursCritiques.isEmpty()) 
-		{
-			this.lstCheminCritique.add(new CheminCritique(new ArrayList<>(cheminActuel)));
-		}
-		else 
-		{
-			for (Tache succ : successeursCritiques)
-			{
-				determinerCheminCritique(succ, new ArrayList<>(cheminActuel));
-			}
-		}
-	}
-
-
+	/**
+	 * Mettre a jour le hauteurs en fonction de combien de tache sont sur le même niveau
+	 */
 	public void majHauteur()
 	{
 		for(Tache t : this.lstTache)
@@ -386,56 +381,22 @@ public class Projet
 			if (t.getNiveau() == this.ensTacheMaxNiveau.length /* this.ensTacheMaxNiveau.length == 0*/)
 				this.ensTacheMaxNiveau[t.getNiveau()] = 0;
 			
-
-
 			int hauteurTemp = t.setHauteur(this.ensTacheMaxNiveau[t.getNiveau()] );
 
 			if( hauteurTemp> this.ensTacheMaxNiveau[t.getNiveau()])
 				this.ensTacheMaxNiveau[t.getNiveau()] =hauteurTemp;
 			
 			this.ensTacheMaxNiveau[t.getNiveau()]++;
-
-			
-
 		}
 
 	}
 
 
-	public String getFichier(String chemin)
-	{
-		String str = "";
-		try
-		{
-			Scanner sc = new Scanner ( new File ( chemin ), "UTF-8" );
-			int numLigne = 0;
 
-			while ( sc.hasNextLine() )
-			{
-				String ligne    = sc.nextLine();
-				str += ligne + "\n";
-
-			}
-		}
-		catch ( Exception e )
-		{ 
-			e.printStackTrace();
-			this.lstErreur.add(new Erreur(e.getMessage() ) );  
-		}
-
-		
-		return str;
-	}	
-
-	/**
-	 * Retourne la liste des erreurs rencontrées lors de la lecture du fichier.
-	 * 
-	 * @return la liste des erreurs
-	 */
-	public ArrayList<Erreur> getLstErreur() { return this.lstErreur; }
 	
 
-	/* Cette méthode permet de parcourir la liste des tâches
+	/* 
+	 * Cette méthode permet de parcourir la liste des tâches
 	 * pour recalculer les dates au plus tôt et au plus tard
 	 */
 	
@@ -462,6 +423,10 @@ public class Projet
 		
 	}
 
+	/**
+	 * Trie les tâches du projet par niveau croissant.
+	 */
+
 	public void trierTachesParNiveau() 
 	{
 		for (int i = 0; i < this.lstTache.size() - 1; i++)
@@ -478,6 +443,310 @@ public class Projet
 			}
 		}
 	}
+
+	/**
+	 * Supprime une tâche du projet et met à jour les relations avec ses prédécesseurs et successeurs.
+	 * Si la tâche supprimée était la dernière de son niveau, le niveau est recalculé.
+	 * 
+	 * @param tacheASupprimer la tâche à supprimer
+	 */
+	public void supprimerTache(Tache tacheASupprimer)
+	{
+
+		for (Tache tachePrecedente : tacheASupprimer.getLstPrc())
+		{
+			tachePrecedente.getLstSvt().remove(tacheASupprimer);
+		}
+
+		for (Tache tacheSuivant : tacheASupprimer.getLstSvt())
+		{
+			tacheSuivant.getLstPrc().remove(tacheASupprimer);
+		}
+
+		this.lstTache.remove(tacheASupprimer);
+		
+		Tache tacheFin = null;
+		for (Tache t : this.lstTache) 
+		{
+			if (t.getNom().equals("Fin"))
+			{
+				tacheFin = t;
+				break;
+			}
+		}
+		
+		if (tacheFin != null && tacheFin.getLstPrc().isEmpty())
+		{
+			for (Tache t : this.lstTache) {
+				if (t.getLstSvt().isEmpty() && !t.getNom().equals("Fin") && !t.getNom().equals("Début"))
+				{
+					tacheFin.addPrecedent(t);
+				}
+			}
+		}
+		
+		// Recalculer tous les niveaux
+		for (Tache t : this.lstTache)
+		{
+			t.setNiveau(t.getNiveau());
+		}
+		
+		this.majDate();
+		this.majBox();
+		this.afficherLstTacheCritique();
+	}
+
+	/**
+	 * Met à jour la liste des BoxShape en fonction des tâches actuelles.
+	 * Cette méthode est appelée après toute modification de la liste des tâches.
+	 */
+	public void majBox()
+	{
+		this.lstBoxShapes.clear();
+		
+		for(Tache t : this.lstTache)
+		{
+			this.lstBoxShapes.add(new BoxShape(t,this));
+		}
+	}
+
+	/**
+	 * Corrige les références circulaires dans les tâches.
+	 * Cette méthode parcourt chaque tâche et supprime les références circulaires
+	 * dans les listes de prédécesseurs et de successeurs.
+	 */
+	public void corrigerReferencesCirculaires()
+	{
+		for(Tache t : this.lstTache)
+		{
+			t.getLstPrc().remove(t);
+			t.getLstSvt().remove(t);
+			
+			ArrayList<Tache> predecesseursACorriger = new ArrayList<>();
+			for(Tache predecesseur : t.getLstPrc())
+			{
+				if(predecesseur.getLstPrc().contains(t))
+				{
+					predecesseursACorriger.add(predecesseur);
+				}
+			}
+			
+			for(Tache prc : predecesseursACorriger)
+			{
+				t.getLstPrc().remove(prc);
+				prc.getLstSvt().remove(t);
+			}
+		}
+	}
+
+
+	/**
+	 * Ajoute une nouvelle tâche à la liste des tâches du projet.
+	 * Met à jour les relations entre les tâches et recalcul les dates.
+	 * 
+	 * @param nouvelleTache la tâche à ajouter
+	 */
+	public void ajouterTache(Tache nouvelleTache)
+	{
+		int indexFin = this.lstTache.size() - 1;
+
+		this.lstTache.add(indexFin, nouvelleTache);
+
+		if(nouvelleTache.getNbPrc() == 0)
+		{
+			nouvelleTache.addPrecedent(this.lstTache.get(0));
+		}
+		else
+		{
+			for(int cpt = 0; cpt < nouvelleTache.getNbPrc(); cpt++)
+				nouvelleTache.getLstPrc().get(cpt).getLstSvt().add(nouvelleTache);
+		}
+	
+		for(Tache t : this.lstTache) 
+			t.setNiveau(t.getLstPrc());
+	
+		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
+
+		if(nouvelleTache.getNiveau() == tacheFin.getNiveau()) 
+			tacheFin.setNiveau(tacheFin.getNiveau() + 1);
+		
+		this.majDate();
+		this.afficherLstTacheCritique();
+
+
+		for(Tache t : this.lstTache)
+		{
+			System.out.println(t.getNom() + " ");
+		}
+
+	}
+
+	/**
+	 * Enregistre les tâches du projet dans un fichier.
+	 * Le format du fichier est : nom|durée|positionX,positionY|prédécesseurs
+	 * 
+	 * @param lien le chemin du fichier où enregistrer les tâches
+	 * @param lstBoxShape la liste des BoxShape à enregistrer
+	 */
+	public void enregistrer(String lien, ArrayList<BoxShape> lstBoxShape)
+	{
+		try
+		{
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lien), "UTF8") );
+
+			for (BoxShape box : lstBoxShape)
+			{
+				// Exclure les tâches "Début" et "Fin"
+				if (! box.getNom().equals("Début") && ! box.getNom().equals("Fin") )
+				{
+					String predecesseurs = "";
+					Tache tache = box.getTache();
+					if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
+					{
+						StringBuilder sb = new StringBuilder();
+						for (int i = 0; i < tache.getLstPrc().size(); i++)
+						{
+							// Exclure "Début" des prédécesseurs
+							if (!tache.getLstPrc().get(i).getNom().equals("Début"))
+							{
+								if (sb.length() > 0) sb.append(",");
+								sb.append(tache.getLstPrc().get(i).getNom());
+							}
+						}
+						predecesseurs = sb.toString();
+
+						pw.println(box.getNom()     + "|" + 
+						tache.getDuree() 		    + "|" + 
+						box.getX()                  + "," +
+						box.getY()                  + "|" +
+						predecesseurs);
+					}
+				}
+
+				
+			}
+			this.lstBoxShapes.clear();
+			this.lstTache.clear();
+			pw.close();
+			//System.out.println("Tâches sauvegardées avec succès dans " + lien);
+		}
+		catch (Exception e) 
+		{ 
+			e.printStackTrace(); 
+			this.lstErreur.add(new Erreur(e.getMessage()));
+		}
+	}
+
+	/**
+	 * Enregistre les tâches du projet dans un fichier avec un format spécifique.
+	 * Le format est : nom|durée|positionX,positionY|prédécesseurs
+	 * 
+	 * @param lien le chemin du fichier où enregistrer les tâches
+	 * @param lstBoxShape la liste des BoxShape à enregistrer
+	 */
+	public void enregistrerSous(String lien, ArrayList<BoxShape> lstBoxShape) 
+	{
+		try
+		{
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lien), "UTF8"));
+
+			for (int cpt = 1; cpt < lstBoxShape.size() - 1; cpt++)
+			{
+				Tache tache = lstBoxShape.get(cpt).getTache();
+				String predecesseurs = "";
+				if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
+				{
+					StringBuilder sb = new StringBuilder();
+
+					for (int i = 0; i < tache.getLstPrc().size(); i++)
+					{
+						if (i > 0) sb.append(",");
+						sb.append(tache.getLstPrc().get(i).getNom());
+					}
+					predecesseurs = sb.toString();
+				}
+
+				if(predecesseurs.equals("Début")) 
+					predecesseurs = "";
+
+				pw.println(lstBoxShape.get(cpt).getNom()   + "|" + 
+						   tache               .getDuree() + "|" +
+						   lstBoxShape.get(cpt).getX()     + "," +
+						   lstBoxShape.get(cpt).getY()     + "|" + 
+						   predecesseurs);
+			}
+			
+			pw.close();
+			this.lstBoxShapes.clear();
+			this.lstTache.clear();
+		}
+		catch (Exception e) 
+		{ 
+			e.printStackTrace();
+			this.lstErreur.add(new Erreur(e.getMessage())); 
+		}
+	}
+
+	/**
+	 * Modifie les attributs d'une tâche existante.
+	 * 
+	 * @param nomTache le nouveau nom de la tâche
+	 * @param dureeTache la nouvelle durée de la tâche
+	 * @param tache l'objet Tache à modifier
+	 */
+	public void modifierTache(String nomTache, int dureeTache, Tache tache) 
+	{
+
+		if(! nomTache.equals("") && dureeTache != 0)
+		{
+			tache.setNom(nomTache);
+			tache.setDuree(dureeTache);
+		}
+		else
+		{
+			if(dureeTache != 0)
+			{
+				tache.setDuree(dureeTache);
+			}
+			else
+			{
+				if(! nomTache.equals(""))
+				{
+					tache.setNom(nomTache);
+				}
+			}
+
+		}
+		
+	}
+
+
+	/**
+	 * Méthode privée récursive qui construit les chemins critiques
+	 * en partant d'une tâche donnée.
+	 */
+
+	private void determinerCheminCritique(Tache tache, ArrayList<Tache> cheminActuel)
+	{
+		cheminActuel.add(tache);
+
+		ArrayList<Tache> successeursCritiques = new ArrayList<>();
+		for (Tache t : this.lstTache) 
+			if (t.getLstPrc().contains(tache) && t.getMarge() == 0) 
+				successeursCritiques.add(t);
+
+		
+		if (successeursCritiques.isEmpty()) 
+		{
+			this.lstCheminCritique.add(new CheminCritique(new ArrayList<>(cheminActuel)));
+		}
+		else 
+		{
+			for (Tache succ : successeursCritiques)
+				determinerCheminCritique(succ, new ArrayList<>(cheminActuel));
+		}
+	}
+
 	/**
 	 * Calcule les dates au plus tôt pour toutes les tâches du projet.
 	 * Les tâches sans précédent commencent le 02/06/2025.
@@ -547,8 +816,6 @@ public class Projet
 		
 		if (nbSeparateurs != 3)
 		{
-			//System.out.println(
-			//		"Erreur de format à la ligne " + numLigne + " : " + ligne + " (doit contenir 2 séparateurs '|')");
 			this.lstErreur.add(new Erreur(ligne, numLigne, 1));
 			return false;
 		}
@@ -570,13 +837,14 @@ public class Projet
 			this.lstErreur.add(new Erreur(ligne, numLigne, 2));
 			return false;
 		}
+
 		try
 		{
 			Integer.parseInt(parties[1]);
 			return true;
-		} catch (NumberFormatException e)
+		} 
+		catch (NumberFormatException e)
 		{
-			//System.out.println("Erreur de durée à la ligne " + numLigne + " : " + parties[1] + " n'est pas un nombre");
 			this.lstErreur.add(new Erreur(ligne, numLigne, 2));
 			return false;
 		}
@@ -597,7 +865,6 @@ public class Projet
 		{
 			if (t.getNom().equals(nom))
 			{
-				//System.out.println("Erreur de nom en double à la ligne " + numLigne + " : " + nom);
 				this.lstErreur.add(new Erreur(ligne, numLigne, 3)); // code 3 pour doublon
 				return false;
 			}
@@ -605,7 +872,7 @@ public class Projet
 		return true;
 	}
 
-		/**
+	/**
 	 * Vérifie si le nom de la tâche est vide.
 	 * 
 	 * @param ligne la ligne à tester
@@ -617,13 +884,11 @@ public class Projet
 		String[] parties = ligne.split("\\|");
 		if (parties.length < 1 || parties[0].trim().isEmpty()) //trim permet de retirer les espaces 
 		{
-			//System.out.println("Erreur : nom de tâche vide à la ligne " + numLigne);
 			this.lstErreur.add(new Erreur(ligne, numLigne, 5)); // code 5 pour nom vide
 			return false;
 		}
 		return true;
 	}
-
 
 	/**
 	 * Vérifie si la liste des prédécesseurs est bien formée.
@@ -642,7 +907,6 @@ public class Projet
 		{
 			if (nom.trim().isEmpty())
 			{
-				//System.out.println("Erreur : prédécesseur mal formé à la ligne " + numLigne + " : " + ligne);
 				this.lstErreur.add(new Erreur(ligne, numLigne, 6)); 
 				return false;
 			}
@@ -660,7 +924,6 @@ public class Projet
 	{
 		if (this.getNbNiveau() > 202) // 200 niveaux + 2 (Début et Fin)
 		{
-			//System.out.println("Erreur : trop de niveaux (plus de 200) - Nombre de niveaux : " + this.getNbNiveau());
 			this.lstErreur.add(new Erreur( 8));
 			return false;
 		}
@@ -678,7 +941,6 @@ public class Projet
 		File fichier = new File(chemin); 
 		if (fichier.exists() && fichier.length() == 0  )
 		{
-			//System.out.println("Le fichier : " + chemin + "est vide : " );
 			this.lstErreur.add(new Erreur(9));
 			return true;
 		}
@@ -694,7 +956,6 @@ public class Projet
 				 
 				if (contenu.trim().isEmpty()) // <-- Utilise trim() pour enlever les espaces inutiles
 				{
-					//System.out.println("Le fichier : " + chemin + " est vide." );
 					this.lstErreur.add(new Erreur(9));
 					return true;
 				}
@@ -723,7 +984,7 @@ public class Projet
 				File dossierLogs = new File("logs");
 				
 				if (!dossierLogs.exists()) 
-					dossierLogs .mkdirs(); 
+					 dossierLogs.mkdirs(); 
 				
 				GregorianCalendar cal 	  = new GregorianCalendar();
 				String 			  annee   = String.format("%04d", cal.get(Calendar.YEAR			) 	 );
@@ -735,8 +996,8 @@ public class Projet
 
 				String date = annee + "-" + mois + "-" + jour + "_" + heure + "-" + minute + "-" + seconde;
 
-				String nomFichier = "logs/erreurs_" + date +".log";
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), "UTF8"));
+				String      nomFichier = "logs/erreurs_" + date +".log";
+				PrintWriter pw         = new PrintWriter(new OutputStreamWriter(new FileOutputStream(nomFichier), "UTF8"));
 
 				for (Erreur e : this.lstErreur)
 					pw.println(e.toString());
@@ -751,245 +1012,7 @@ public class Projet
 		}
 	}
 
-	public void supprimerTache(Tache tacheASupprimer)
-	{
-
-		for (Tache tachePrecedente : tacheASupprimer.getLstPrc())
-		{
-			tachePrecedente.getLstSvt().remove(tacheASupprimer);
-		}
-
-		for (Tache tacheSuivant : tacheASupprimer.getLstSvt())
-		{
-			tacheSuivant.getLstPrc().remove(tacheASupprimer);
-		}
-
-		this.lstTache.remove(tacheASupprimer);
-		
-		Tache tacheFin = null;
-		for (Tache t : this.lstTache) 
-		{
-			if (t.getNom().equals("Fin"))
-			{
-				tacheFin = t;
-				break;
-			}
-		}
-		
-		if (tacheFin != null && tacheFin.getLstPrc().isEmpty())
-		{
-			for (Tache t : this.lstTache) {
-				if (t.getLstSvt().isEmpty() && !t.getNom().equals("Fin") && !t.getNom().equals("Début"))
-				{
-					tacheFin.addPrecedent(t);
-				}
-			}
-		}
-		
-		// Recalculer tous les niveaux
-		for (Tache t : this.lstTache)
-		{
-			t.setNiveau(t.getNiveau());
-		}
-		
-		this.majDate();
-		this.majBox();
-		this.afficherLstTacheCritique();
-	}
-
-
-	public void majBox()
-	{
-		this.lstBoxShapes.clear();
-		
-		for(Tache t : this.lstTache)
-		{
-			this.lstBoxShapes.add(new BoxShape(t,this));
-		}
-	}
-
-
-	public void corrigerReferencesCirculaires()
-	{
-		for(Tache t : this.lstTache)
-		{
-			t.getLstPrc().remove(t);
-			t.getLstSvt().remove(t);
-			
-			ArrayList<Tache> predecesseursACorriger = new ArrayList<>();
-			for(Tache predecesseur : t.getLstPrc())
-			{
-				if(predecesseur.getLstPrc().contains(t))
-				{
-					predecesseursACorriger.add(predecesseur);
-				}
-			}
-			
-			for(Tache prc : predecesseursACorriger)
-			{
-				t.getLstPrc().remove(prc);
-				prc.getLstSvt().remove(t);
-			}
-		}
-	}
-
-
 	
-	public void ajouterTache(Tache nouvelleTache)
-	{
-		int indexFin = this.lstTache.size() - 1;
-
-		this.lstTache.add(indexFin, nouvelleTache);
-
-		if(nouvelleTache.getNbPrc() == 0)
-		{
-			nouvelleTache.addPrecedent(this.lstTache.get(0));
-		}
-		else
-		{
-			for(int cpt = 0; cpt < nouvelleTache.getNbPrc(); cpt++)
-				nouvelleTache.getLstPrc().get(cpt).getLstSvt().add(nouvelleTache);
-		}
-	
-		for(Tache t : this.lstTache) 
-			t.setNiveau(t.getLstPrc());
-	
-		Tache tacheFin = this.lstTache.get(this.lstTache.size() - 1);
-
-		if(nouvelleTache.getNiveau() == tacheFin.getNiveau()) 
-			tacheFin.setNiveau(tacheFin.getNiveau() + 1);
-		
-		this.majDate();
-		this.afficherLstTacheCritique();
-
-
-		for(Tache t : this.lstTache)
-		{
-			System.out.println(t.getNom() + " ");
-		}
-
-	}
-
-	
-	public void enregistrer(String lien, ArrayList<BoxShape> lstBoxShape)
-	{
-		try
-		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lien), "UTF8") );
-
-			for (BoxShape box : lstBoxShape)
-			{
-				// Exclure les tâches "Début" et "Fin"
-				if (! box.getNom().equals("Début") && ! box.getNom().equals("Fin") )
-				{
-					String predecesseurs = "";
-					Tache tache = box.getTache();
-					if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
-					{
-						StringBuilder sb = new StringBuilder();
-						for (int i = 0; i < tache.getLstPrc().size(); i++)
-						{
-							// Exclure "Début" des prédécesseurs
-							if (!tache.getLstPrc().get(i).getNom().equals("Début"))
-							{
-								if (sb.length() > 0) sb.append(",");
-								sb.append(tache.getLstPrc().get(i).getNom());
-							}
-						}
-						predecesseurs = sb.toString();
-
-						pw.println(box.getNom()     + "|" + 
-						tache.getDuree() 		    + "|" + 
-						box.getX()                  + "," +
-						box.getY()                  + "|" +
-						predecesseurs);
-					}
-				}
-
-				
-			}
-			this.lstBoxShapes.clear();
-			this.lstTache.clear();
-			pw.close();
-			//System.out.println("Tâches sauvegardées avec succès dans " + lien);
-		}
-		catch (Exception e) 
-		{ 
-			e.printStackTrace(); 
-			this.lstErreur.add(new Erreur(e.getMessage()));
-		}
-	}
-
-	public void enregistrerSous(String lien, ArrayList<BoxShape> lstBoxShape) 
-	{
-		try
-		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lien), "UTF8"));
-
-			for (int cpt = 1; cpt < lstBoxShape.size() - 1; cpt++)
-			{
-				Tache tache = lstBoxShape.get(cpt).getTache();
-				String predecesseurs = "";
-				if (tache.getLstPrc() != null && !tache.getLstPrc().isEmpty())
-				{
-					StringBuilder sb = new StringBuilder();
-
-					for (int i = 0; i < tache.getLstPrc().size(); i++)
-					{
-						if (i > 0) sb.append(",");
-						sb.append(tache.getLstPrc().get(i).getNom());
-					}
-					predecesseurs = sb.toString();
-				}
-
-				if(predecesseurs.equals("Début")) 
-					predecesseurs = "";
-
-				pw.println(lstBoxShape.get(cpt).getNom()   + "|" + 
-						   tache               .getDuree() + "|" +
-						   lstBoxShape.get(cpt).getX()     + "," +
-						   lstBoxShape.get(cpt).getY()     + "|" + 
-						   predecesseurs);
-			}
-			
-			pw.close();
-			this.lstBoxShapes.clear();
-			this.lstTache.clear();
-			//System.out.println();
-		}
-		catch (Exception e) 
-		{ 
-			e.printStackTrace();
-			this.lstErreur.add(new Erreur(e.getMessage())); 
-		}
-	}
-
-	public void modifierTache(String nomTache, int dureeTache, Tache tache) 
-	{
-
-		if(! nomTache.equals("") && dureeTache != 0)
-		{
-			tache.setNom(nomTache);
-			tache.setDuree(dureeTache);
-		}
-		else
-		{
-			if(dureeTache != 0)
-			{
-				tache.setDuree(dureeTache);
-			}
-			else
-			{
-				if(! nomTache.equals(""))
-				{
-					tache.setNom(nomTache);
-				}
-			}
-
-		}
-		
-	}
-
 	/**
 	 * Retourne une représentation textuelle du projet, incluant toutes les tâches et leurs détails.
 	 * 

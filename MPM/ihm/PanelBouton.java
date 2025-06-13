@@ -22,7 +22,7 @@ public class PanelBouton extends JPanel implements ActionListener
     private ArrayList<BoxShape> lstBoxShape;
 
     private Controleur ctrl;
-    private FrameMPM  frame;
+    private FrameMPM   frame;
 
     public PanelBouton(FrameMPM frame, Controleur ctrl)
     {
@@ -37,20 +37,20 @@ public class PanelBouton extends JPanel implements ActionListener
         /*        Création des composants       */
         /*--------------------------------------*/
 
-        this.lstTache    = new ArrayList<Tache>();
-        this.lstBoxShape = new ArrayList<BoxShape>();
-        this.niveauPrc   = 0;
-        this.niveauSvt   = 1;
-
-        this.btnDateMin      = new JButton("+ Tôt");
-        this.btnDateMin.setForeground(Color.BLACK);
-        this.btnDateMax      = new JButton("+ Tard");
-        this.btnDateMax.setForeground(Color.BLACK);
-        this.btnAfficherTout = new JButton("Tout Afficher");
-        this.btnAfficherTout.setForeground  (Color.BLACK);
-        this.btnAfficherRien = new JButton  ("Tout Masquer");
-        this.btnAfficherRien.setForeground(Color.BLACK);
+        this.lstTache          = new ArrayList<Tache>();
+        this.lstBoxShape       = new ArrayList<BoxShape>();
+        this.niveauPrc         = 0;
+        this.niveauSvt         = 1;
+        this.btnDateMin        = new JButton("+ Tôt");
+        this.btnDateMax        = new JButton("+ Tard");
+        this.btnAfficherTout   = new JButton("Tout Afficher");
+        this.btnAfficherRien   = new JButton  ("Tout Masquer");
         this.btnCheminCritique = new JButton("Chemin critique");
+
+        this.btnAfficherRien.setForeground(Color.BLACK);
+        this.btnAfficherTout.setForeground(Color.BLACK);
+        this.btnDateMax     .setForeground(Color.BLACK);
+        this.btnDateMin     .setForeground(Color.BLACK);
 
         this.desactiverBouton();
 
@@ -146,13 +146,14 @@ public class PanelBouton extends JPanel implements ActionListener
         if(e.getSource() == this.btnDateMin)
         {
             for(int cpt = 0; cpt < this.lstBoxShape.size(); cpt++)
-            
+            {
                 if( this.lstBoxShape.get(cpt).getNiveau() == this.niveauSvt)
-                    this.lstBoxShape.get(cpt).setDateMin(" "  + this.lstTache.get(cpt).getDateMin());
-                
-            
+                    this.lstBoxShape.get(cpt).setDateMin(" "  + this.lstTache.get(cpt).getDateMin() );
+                        
+            }
 
             this.niveauSvt++;
+            
 
             if(this.niveauSvt >= this.ctrl.getNbNiveau())
             {
@@ -176,11 +177,13 @@ public class PanelBouton extends JPanel implements ActionListener
         if(e.getSource() == this.btnDateMax)
         {
             for(int cpt = this.lstBoxShape.size() - 1; cpt >= 0; cpt--)
-            
+            {
                 if( this.lstBoxShape.get(cpt).getNiveau() == this.niveauPrc)
                     this.lstBoxShape.get(cpt).setDateMax(" " + this.lstTache.get(cpt).getDateMax());
                 
-            
+                    
+            }
+
             this.niveauPrc--;
 
             if(this.niveauPrc < 0)
@@ -208,9 +211,8 @@ public class PanelBouton extends JPanel implements ActionListener
             }
 
             this.frame.majDessin();
-
-            this.desactiverBouton      ();
-            this.activerBtnAfficherRien();
+            this      .desactiverBouton();
+            this      .activerBtnAfficherRien();
         }
 
         if(e.getSource() == this.btnAfficherRien)
@@ -230,19 +232,17 @@ public class PanelBouton extends JPanel implements ActionListener
                 }
             }
 
-            this.activerBouton();
+            this                .activerBouton();
             this.btnAfficherRien.setEnabled(false);
-            //this.btnAfficherRien.setForeground(new Color(0, 0, 0 ) );
             this.btnAfficherRien.setBackground(new Color(100, 0, 0 ) );
-
-            this.frame.majDessin  ();
-            this.resetNiveau();
+            this.frame          .majDessin  ();
+            this                .resetNiveau();
         }
 
         if(e.getSource() == this.btnCheminCritique)
         {
             ArrayList<CheminCritique> lstCheminCritique = new ArrayList<CheminCritique>(this.ctrl.getCheminCritiques());
-
+            
             frame.setCheminCritiques(lstCheminCritique); 
         }
     }

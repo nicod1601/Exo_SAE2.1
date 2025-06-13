@@ -60,6 +60,4 @@ public enum Couleur
 	public int getVert  () { return this.vert; }
 	public int getBleu  () { return this.bleu; }
 
-//public int getCouleur() { return this.rouge * 65536 + this.vert * 256 + this.bleu;}
-
 }

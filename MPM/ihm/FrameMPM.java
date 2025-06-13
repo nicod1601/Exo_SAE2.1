@@ -10,6 +10,7 @@ import javax.swing.*;
 public class FrameMPM extends JFrame
 {
     private Controleur    ctrl;
+    private String        lien;
 
     private FrameNouveau  frameNouveau;
     private FrameOption   frameOption;
@@ -22,8 +23,7 @@ public class FrameMPM extends JFrame
 
     private MaBarre       menu;
     private JScrollPane   scrollPane;
-    private String        lien;
-    
+
     public FrameMPM(Controleur ctrl)
     {
         this.setTitle("MPM");
@@ -48,8 +48,8 @@ public class FrameMPM extends JFrame
         this.panelBouton   = new PanelBouton     (this, this.ctrl);
         this.panelInfo     = new PanelInformation(this, this.ctrl);
 
-        this.menu          = new MaBarre      (this, this.ctrl);
-        this.scrollPane    = new JScrollPane  (this.panelMPM  );
+        this.menu          = new MaBarre    (this, this.ctrl);
+        this.scrollPane    = new JScrollPane(this.panelMPM  );
 
 
         // utilisation des flèches sur le clavier
@@ -76,28 +76,6 @@ public class FrameMPM extends JFrame
         this.setVisible(true);
     }
 
-    public void changerFondEcran(Color color) { this.panelMPM.changerFondEcran(color); }
-
-
-    public void miseEnFormePanelInfo()
-    {
-        this.add(this.panelInfo, BorderLayout.EAST);
-        this.revalidate();
-        this.repaint();
-    }
-
-    public void effacerPanelInfo()
-    {
-        this.remove(this.panelInfo);
-
-        this.revalidate();
-        this.repaint   ();
-    }
-
-
-    public void setDonneeInfoTache(BoxShape box) { this.panelInfo.setDonneeInfoTache(box); }
-
-    //public void refresh(String lien) {this.menu.refresh(lien);}
     public String getLien(){ return this.lien;}
 
     public void setVisibleFrameNouveau()
@@ -112,6 +90,29 @@ public class FrameMPM extends JFrame
     public void setVisibleFrameModif ()                                         { this.frameModifier.setVisible(true);                    }
     public void setPosition          (int x, int y)                             { this.frameModifier.setPosition(x, y);                   }
     public void setModifTache        (Tache tache)                              { this.frameModifier.setModifTache(tache);                }
+    public void setDonneeInfoTache   (BoxShape box)                             { this.panelInfo.setDonneeInfoTache(box);                 }
+    public void setCheminCritiques   (ArrayList<CheminCritique> chemin)         { this.panelMPM.setCheminCritiques(chemin);               }
+
+
+    public void effacerPanelInfo()
+    {
+        this.remove(this.panelInfo);
+
+        this.revalidate();
+        this.repaint   ();
+    }
+
+    public void changerFondEcran(Color color)
+    { 
+        this.panelMPM.changerFondEcran(color);
+    }
+
+    public void miseEnFormePanelInfo()
+    {
+        this.add(this.panelInfo, BorderLayout.EAST);
+        this.revalidate();
+        this.repaint();
+    }
 
 
     /**
@@ -156,6 +157,7 @@ public class FrameMPM extends JFrame
      * Méthode permettant de réinitialiser le panel de gestion des tâches.
      */
     public void reinitialiser () { this.panelMPM.reinitialiser();   }
+    
     public void boutonDeBase  () { this.panelBouton.boutonDeBase(); }
 
     /**
@@ -163,7 +165,7 @@ public class FrameMPM extends JFrame
      * avec les chemins critiques.
      * @param chemin Liste des chemins critiques
      */
-    public void setCheminCritiques(ArrayList<CheminCritique> chemin) { this.panelMPM.setCheminCritiques(chemin); }
+    
 
     public void resetDefaut() { this.panelMPM.resetDefaut(); }
 

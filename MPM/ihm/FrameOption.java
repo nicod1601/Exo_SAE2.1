@@ -37,5 +37,5 @@ public class FrameOption extends JFrame
         this.setVisible(false);
     }
 
-    public void majTxt(){ this.panel.majTxt(); }
+    public void majTxt(){this.panel.majTxt();}
 }

@@ -9,7 +9,9 @@ import javax.swing.*;
 
 public class PanelNouveau extends JPanel implements ActionListener
 {
-    private Controleur ctrl;
+    private Controleur   ctrl;
+    private FrameMPM     frameMPM;
+    private FrameNouveau frame;
 
     private JTextField txtNom;
     private JTextField txtDuree;
@@ -19,11 +21,9 @@ public class PanelNouveau extends JPanel implements ActionListener
     private JPanel     panelChoixPrc; 
 
     private BoxShape         boxShape;
+    
     private ArrayList<Tache> lstTache;
-
     private ArrayList<JCheckBox> tabPrc;
-    private FrameMPM             frameMPM;
-    private FrameNouveau         frame;
 
     public PanelNouveau(FrameMPM frameMPM,Controleur ctrl, FrameNouveau frame)
     {
@@ -55,7 +55,6 @@ public class PanelNouveau extends JPanel implements ActionListener
         this.txtNom        = new JTextField(10);
         this.txtDuree      = new JTextField(10);
         this.btnCreerTache = new JButton("Créer Tache");
-        //this.btnCreerTache.setEnabled(false);
 
         this.lstTache = new ArrayList<Tache>    ();
         this.tabPrc   = new ArrayList<JCheckBox>();
@@ -137,8 +136,7 @@ public class PanelNouveau extends JPanel implements ActionListener
         if(e.getSource() == this.txtNom)
         {
             this.boxShape.setNom(this.txtNom.getText());
-            System.out.println("Lien : " + this.frameMPM.getLien());
-            this.majPanelBoxShape();
+            this         .majPanelBoxShape();
         }
 
         if(!this.txtDuree.getText().equals("") && !this.txtNom.getText().equals(""))

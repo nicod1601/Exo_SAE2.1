@@ -27,20 +27,24 @@ public class Fleche
 		this.destination   = bDest;
 		this.couleurFleche = couleur;
 	}
-
-	public BoxShape getOrigine      () { return this.origine      ;}
-	public BoxShape getDestination  () { return this.destination  ;}
-	public Color 	getCouleurFleche() { return this.couleurFleche;}
-
+	
+	// Setteurs
 	public void setEtiquette(String etiquette) 
 	{
 		this.etiquette        = etiquette;
 		this.couleurEtiquette = Color.RED;
 	}
 
-	public void setTailleTrou (int taille) { this.tailleTrou = taille; }
+	public void setTailleTrou      (int taille   ) { this.tailleTrou       = taille ;} 
 	public void setCouleurFleche   (Color couleur) { this.couleurFleche    = couleur;}
 	public void setCouleurEtiquette(Color couleur) { this.couleurEtiquette = couleur;}
+
+	//Guetteur
+	public BoxShape getOrigine      () { return this.origine      ;}
+	public BoxShape getDestination  () { return this.destination  ;}
+	public Color 	getCouleurFleche() { return this.couleurFleche;}
+
+
 
 	public void supprimer(Tache tOrig, Tache tDest) 
 	{
@@ -68,6 +72,7 @@ public class Fleche
 	/* MÉTHODES PRIVÉES */
 	/*------------------*/
 
+	
 	private Point getMilieuCoteGauche(BoxShape box) 
 	{
 		Rectangle r = box.getBounds();
@@ -79,7 +84,7 @@ public class Fleche
 		Rectangle r = box.getBounds();
 		return new Point(r.x + r.width, r.y + r.height / 2);
 	}
-
+	
 
 	/**
 	 * Dessine une ligne en deux parties avec un trou au milieu

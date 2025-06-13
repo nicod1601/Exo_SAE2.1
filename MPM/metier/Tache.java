@@ -24,14 +24,14 @@ public class Tache
 {
 
 	private String nom;
+
 	private int    duree;
 	private int    dateMin;
 	private int    dateMax;
 	private int    cordX;
 	private int    cordY;
-
-	private int niveau  = 0;
-	private int hauteur = 0;
+	private int    niveau  = 0;
+	private int    hauteur = 0;
 
 	private ArrayList<Tache> lstPrc;
 	private ArrayList<Tache> lstSvt;
@@ -93,69 +93,6 @@ public class Tache
 		this.lstSvt  = new ArrayList<>(t.lstSvt);
 	}
 
-
-	/*-------------------------------------------------*/
-	/*                Accesseurs                       */
-	/*-------------------------------------------------*/
-
-	public int getPosX() { return this.cordX; }
-	public int getPosY() { return this.cordY; }
-	
-	/** @return le nom de la tâche */
-	public String getNom() { return this.nom; }
-
-	/** @return la durée de la tâche en jours */
-
-	public int getDuree()  { return this.duree; }
-
-	/**
-	 * Renvoie une tâche à un indice donné dans une liste.
-	 * 
-	 * @param indice l'indice de la tâche
-	 * @param lst    la liste contenant les tâches
-	 * @return la tâche à l’indice spécifié
-	 */
-	public Tache getTache(int indice, ArrayList<Tache> lst) { return lst.get(indice); }
-
-	public int   getCordX() { return this.cordX; }
-	public int   getCordY() { return this.cordY; }
-
-	/** @return la date au plus tôt pour commencer la tâche */
-	public int getDateMin() { return this.dateMin; }
-
-
-	/** @return la date au plus tard pour finir la tâche */
-	public int getDateMax() { return this.dateMax; }
-
-
-	/** @return la liste des tâches précédentes */
-	public ArrayList<Tache> getLstPrc() { return this.lstPrc; }
-
-
-	/** @return la liste des tâches suivantes */
-	public ArrayList<Tache> getLstSvt() { return this.lstSvt; }
-
-
-	/** @return le nombre de tâche précédentes */
-	public int getNbPrc()  {return this.lstPrc.size()  ;}
-
-
-	/** @return le nombre de tâche suivantes */
-	public int getNbSvt()  {return this.lstSvt.size()  ;}
-
-
-	/** @return la tâche suivante à l'indice sélectionné */
-
-	public Tache getSvt(int index){return this.lstSvt.get(index); }
-
-
-	/** @return la tâche précédente à l'indice sélectionné */
-
-	public Tache getPrc(int index){return this.lstPrc.get(index); }
-
-	public int getNiveau() { return this.niveau;				 }
-	public int getMarge	() { return this.dateMax - this.dateMin; }
-
 	/*-------------------------------------------------*/
 	/*                Modificateurs                    */
 	/*-------------------------------------------------*/
@@ -164,19 +101,6 @@ public class Tache
 
 	public void setNiveau(ArrayList<Tache> lstPrc)
 	{
-	
-		/*if (! this.lstPrc.isEmpty())
-		{
-			int nivTemp =0 ;
-			for (Tache t : this.lstPrc)
-			{
-				if(nivTemp 	< t.getNiveau()+1)
-					nivTemp = t.getNiveau()+1;
-			}
-
-			this.niveau = nivTemp;
-		}*/
-
 		int niveauMax = 0;
 		for (Tache t : lstPrc)
 		{
@@ -187,7 +111,6 @@ public class Tache
 		}
 
 		this.niveau = niveauMax+1;
-			
 	}
 
 	public int nivSvtMax()
@@ -211,14 +134,10 @@ public class Tache
 	public void forceSetDateMin(int val) { this.dateMin = val; }
 	public void forceSetDateMax(int val) { this.dateMax = val; }
 	public void setNiveau	   (int val) { this.niveau 	= val; }
-	public int getHauteur      ()        { return this.hauteur;}
+	
 
 	public int setHauteur(int hauteurMaxNiv)
 	{
-
-
-		//System.out.println(! this.lstPrc.isEmpty() );
-
 		if (! this.lstPrc.isEmpty() && this.hauteur ==0)
 		{
 				Tache tachePrc = this.lstPrc.get((this.lstPrc.size()) -1);
@@ -234,17 +153,14 @@ public class Tache
 				
 
 				this.hauteur = hauTemp;
-			//System.out.println("il a un precedent");
 		}
 		else
-		{
-			//System.out.println("il passe par le else");
 			this.hauteur = 0;
-		}
 
 		return this.hauteur;
 
 	}
+	
 	public void setDateMax(int val) 
 	{ 
 		if(this.dateMax == -1 || val < dateMax )
@@ -258,13 +174,41 @@ public class Tache
 		
 	}
 	public void setNom(String nom) { this.nom = nom; }
-
-
+	
 	public void addPrecedent(Tache t)
 	{
 		this.lstPrc.add(t);
 		t.lstSvt.add(this);
 	}
+
+	/*-------------------------------------------------*/
+	/*                Accesseurs                       */
+	/*-------------------------------------------------*/
+	public ArrayList<Tache> getLstPrc() { return this.lstPrc; }
+	public ArrayList<Tache> getLstSvt() { return this.lstSvt; }
+
+	public int getPosX    () { return this.cordX;   }
+	public int getPosY    () { return this.cordY;   }
+	public int getDuree   () { return this.duree;   }
+	public int getCordX   () { return this.cordX;   }
+	public int getCordY   () { return this.cordY;   }
+	public int getDateMin () { return this.dateMin; }
+	public int getDateMax () { return this.dateMax; }
+	public int getNiveau  () { return this.niveau;  }
+	public int getHauteur () { return this.hauteur; }
+	public int getNbPrc   () { return this.lstPrc.size();}
+	public int getNbSvt   () { return this.lstSvt.size();}
+	public int getMarge	  () { return this.dateMax - this.dateMin;}
+	
+
+	public String getNom() { return this.nom; }
+
+	public Tache getTache(int indice, ArrayList<Tache> lst) { return lst.get(indice); }
+	public Tache getSvt  (int index){return this.lstSvt.get(index); }
+	public Tache getPrc  (int index){return this.lstPrc.get(index); }
+
+
+
 
 	
 	public String toString()
